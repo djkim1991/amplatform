@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 import static org.hamcrest.Matchers.any;
 import static org.hamcrest.Matchers.hasValue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -73,14 +74,29 @@ public class EventControllerTests {
                 .basePrice(50000)
                 .maxPrice(10000)
                 .build();
-        String input = objectMapper.writeValueAsString(event);
 
         mockMvc.perform(post("/events")
                     .contentType(MediaType.APPLICATION_JSON_UTF8)
-                    .content(input))
+                    .content(objectMapper.writeValueAsString(event)))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
 //                .andExpect(jsonPath("$.id", hasValue(any(Integer.class))));
+    }
+
+    /**
+     * check if the validation annotations work when it gets wrong data.
+     * TODO content of bad request needs to explain why it is bad.
+     */
+    @Test
+    public void createNewEvent_bindingError() throws Exception {
+        Event event = Event.builder().build();
+
+        mockMvc.perform(post("/events")
+                    .contentType(MediaType.APPLICATION_JSON_UTF8)
+                    .content(objectMapper.writeValueAsString(event)))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
     }
 
 
