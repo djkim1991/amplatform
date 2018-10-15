@@ -36,7 +36,8 @@ public class EventController {
         Event event = modelMapper.map(eventCreate, Event.class);
         Event newEvent = eventRepository.save(event);
         Resource<Event> eventResource = new Resource<>(newEvent);
-        eventResource.add(new Link("/docs/api/events/create-event", "profile"));
+        eventResource.add(new Link("http://localhost:8080/docs/api/events/create-event", "profile"));
+        eventResource.add(linkTo(methodOn(this.getClass()).getEvent(newEvent.getId())).withRel("view-event"));
         return ResponseEntity.created(linkTo(methodOn(this.getClass()).getEvent(newEvent.getId())).toUri())
                 .body(eventResource);
     }
