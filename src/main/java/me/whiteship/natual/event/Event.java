@@ -36,6 +36,12 @@ public class Event {
     Integer limitOfEnrollment;
 
     @Transient
-    boolean isFree;
+    boolean free;
+
+    @Transient
+    boolean offline;
+
+    @Enumerated(EnumType.STRING)
+    EventStatus eventStatus;
 
 }

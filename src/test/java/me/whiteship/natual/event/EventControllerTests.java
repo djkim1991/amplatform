@@ -57,32 +57,27 @@ public class EventControllerTests {
      *   
      * Output:
      *   * data
-     *     * id: id of the created event
+     *     * Event: created event info
      *   * links
      *     * self: can get the created event resource.
+     *     * publishEvent: publish the event so that others can see it and enroll.
      *     * cancelEvent: cancel this event, can be done only before the enrollment is started.
      *     * viewAvailableEvents: show events that can enroll including already enrolled event.
      *     * viewEnrolledEvents: show all enrolled events.
      *     * viewAttendedEvents: show attended events.
      *     * viewEndedEvents: show already ended events.
+     *     * profile: link to a document that describes this API.
      *
      */
     @Test
     public void createNewEvent() throws Exception {
         // Given
-        EventDto.Create eventDto = EventDto.Create.builder()
-                .name("new event")
-                .description("test")
-                .beginEnrollmentDateTime(LocalDateTime.of(2018, 10, 15, 0, 0))
-                .closeEnrollmentDateTime(LocalDateTime.of(2018, 11, 3, 23, 59))
-                .beginEventDateTime(LocalDateTime.of(2018, 11, 10, 9, 0))
-                .endEventDateTime(LocalDateTime.of(2018, 11, 10, 14, 0))
-                .location("신촌 토즈")
-                .basePrice(50000)
-                .maxPrice(10000)
-                .build();
+        EventDto.Create eventDto = createEvent();
         Event savedEvent = Event.builder()
                 .id(1)
+                .eventStatus(EventStatus.DRAFT)
+                .offline(false)
+                .free(false)
                 .build();
         when(eventRepository.save(Mockito.any(Event.class))).thenReturn(savedEvent);
 
@@ -94,7 +89,25 @@ public class EventControllerTests {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$.id", Matchers.is(1)));
+                .andExpect(jsonPath("$.id", Matchers.is(1)))
+                .andExpect(jsonPath("$.offline", Matchers.is(false)))
+                .andExpect(jsonPath("$.free", Matchers.is(false)))
+                .andExpect(jsonPath("$.eventStatus", Matchers.is(EventStatus.DRAFT.toString())))
+        ;
+    }
+
+    private EventDto.Create createEvent() {
+        return EventDto.Create.builder()
+                    .name("new event")
+                    .description("test")
+                    .beginEnrollmentDateTime(LocalDateTime.of(2018, 10, 15, 0, 0))
+                    .closeEnrollmentDateTime(LocalDateTime.of(2018, 11, 3, 23, 59))
+                    .beginEventDateTime(LocalDateTime.of(2018, 11, 10, 9, 0))
+                    .endEventDateTime(LocalDateTime.of(2018, 11, 10, 14, 0))
+                    .location("신촌 토즈")
+                    .basePrice(50000)
+                    .maxPrice(10000)
+                    .build();
     }
 
     /**

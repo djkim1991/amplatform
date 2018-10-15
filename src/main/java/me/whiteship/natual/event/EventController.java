@@ -26,7 +26,7 @@ public class EventController {
         }
 
         System.out.println(eventCreate);
-        // TODO validation createEvent
+        // TODO validation
         Event event = modelMapper.map(eventCreate, Event.class);
         Event newEvent = eventRepository.save(event);
         return ResponseEntity.ok(newEvent);
