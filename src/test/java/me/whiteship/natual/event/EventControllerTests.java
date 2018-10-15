@@ -84,12 +84,12 @@ public class EventControllerTests {
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$.id", Matchers.is(1)))
-                .andExpect(jsonPath("$.offline", Matchers.is(false)))
-                .andExpect(jsonPath("$.free", Matchers.is(false)))
-                .andExpect(jsonPath("$.eventStatus", Matchers.is(EventStatus.DRAFT.toString())))
+                .andExpect(jsonPath("$.event.id", Matchers.is(1)))
+                .andExpect(jsonPath("$.event.offline", Matchers.is(false)))
+                .andExpect(jsonPath("$.event.free", Matchers.is(false)))
+                .andExpect(jsonPath("$.event.eventStatus", Matchers.is(EventStatus.DRAFT.toString())))
                 .andExpect(jsonPath("$._links.profile.href", Matchers.is("http://localhost:8080/docs/api/events/create-event")))
-                .andExpect(jsonPath("$._links.view-event.href", Matchers.is("http://localhost/events/1")))
+                .andExpect(jsonPath("$._links.self.href", Matchers.is("http://localhost/events/1")))
         ;
     }
 
