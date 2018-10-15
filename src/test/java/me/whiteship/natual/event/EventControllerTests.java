@@ -56,16 +56,11 @@ public class EventControllerTests {
      *   * limitOfEnrollment
      *   
      * Output:
+     *   * CREATED 201
      *   * data
      *     * Event: created event info
      *   * links
-     *     * self: can get the created event resource.
-     *     * publishEvent: publish the event so that others can see it and enroll.
-     *     * cancelEvent: cancel this event, can be done only before the enrollment is started.
-     *     * viewAvailableEvents: show events that can enroll including already enrolled event.
-     *     * viewEnrolledEvents: show all enrolled events.
-     *     * viewAttendedEvents: show attended events.
-     *     * viewEndedEvents: show already ended events.
+     *     * location: link to view the event.
      *     * profile: link to a document that describes this API.
      *
      */
@@ -87,12 +82,13 @@ public class EventControllerTests {
                     .content(objectMapper.writeValueAsString(eventDto))
                     .accept(MediaType.APPLICATION_JSON_UTF8))
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$.id", Matchers.is(1)))
                 .andExpect(jsonPath("$.offline", Matchers.is(false)))
                 .andExpect(jsonPath("$.free", Matchers.is(false)))
                 .andExpect(jsonPath("$.eventStatus", Matchers.is(EventStatus.DRAFT.toString())))
+                .andExpect(jsonPath("$._links.profile.href", Matchers.is("/docs/api/events/create-event")))
         ;
     }
 
