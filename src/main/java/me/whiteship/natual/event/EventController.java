@@ -16,6 +16,9 @@ public class EventController {
     @Autowired
     ModelMapper modelMapper;
 
+    @Autowired
+    EventRepository eventRepository;
+
     @PostMapping("/events")
     public ResponseEntity createEvent(@Valid @RequestBody EventDto.Create eventCreate, BindingResult errors) {
         if (errors.hasErrors()) {
@@ -25,8 +28,8 @@ public class EventController {
         System.out.println(eventCreate);
         // TODO validation createEvent
         Event event = modelMapper.map(eventCreate, Event.class);
-        // TODO save new event
-        return ResponseEntity.ok(event);
+        Event newEvent = eventRepository.save(event);
+        return ResponseEntity.ok(newEvent);
     }
 
 }

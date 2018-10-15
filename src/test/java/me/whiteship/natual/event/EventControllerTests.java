@@ -1,18 +1,21 @@
 package me.whiteship.natual.event;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
 
-import static org.hamcrest.Matchers.any;
 import static org.hamcrest.Matchers.hasValue;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -28,6 +31,9 @@ public class EventControllerTests {
 
     @Autowired
     ObjectMapper objectMapper;
+
+    @MockBean
+    EventRepository eventRepository;
 
     /**
      * "createNewEvent" action creates new event.
@@ -63,7 +69,8 @@ public class EventControllerTests {
      */
     @Test
     public void createNewEvent() throws Exception {
-        EventDto.Create event = EventDto.Create.builder()
+        // Given
+        EventDto.Create eventDto = EventDto.Create.builder()
                 .name("new event")
                 .description("test")
                 .beginEnrollmentDateTime(LocalDateTime.of(2018, 10, 15, 0, 0))
@@ -74,15 +81,20 @@ public class EventControllerTests {
                 .basePrice(50000)
                 .maxPrice(10000)
                 .build();
+        Event savedEvent = Event.builder()
+                .id(1)
+                .build();
+        when(eventRepository.save(Mockito.any(Event.class))).thenReturn(savedEvent);
 
+        // When & Then
         mockMvc.perform(post("/events")
                     .contentType(MediaType.APPLICATION_JSON_UTF8)
-                    .content(objectMapper.writeValueAsString(event))
+                    .content(objectMapper.writeValueAsString(eventDto))
                     .accept(MediaType.APPLICATION_JSON_UTF8))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
-//                .andExpect(jsonPath("$.id", hasValue(any(Integer.class))));
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$.id", Matchers.is(1)));
     }
 
     /**
