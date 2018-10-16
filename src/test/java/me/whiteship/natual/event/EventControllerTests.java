@@ -1,6 +1,7 @@
 package me.whiteship.natual.event;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import me.whiteship.natual.common.Description;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Rule;
@@ -9,27 +10,28 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.runner.WebApplicationContextRunner;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.JUnitRestDocumentation;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
-import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.halLinks;
-import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.linkWithRel;
-import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.links;
+import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -68,7 +70,7 @@ public class EventControllerTests {
     }
 
     /**
-     * "createNewEvent" action creates new event.
+     * "createCreateEventDto" action creates new event.
      *
      * TODO Constraints: Can be requested only by admin.
      * TODO link to profile
@@ -76,13 +78,8 @@ public class EventControllerTests {
     @Test
     public void createEvent() throws Exception {
         // Given
-        EventDto.Create eventDto = createNewEvent();
-        Event savedEvent = Event.builder()
-                .id(1)
-                .eventStatus(EventStatus.DRAFT)
-                .offline(false)
-                .free(false)
-                .build();
+        EventDto.Create eventDto = createCreateEventDto();
+        Event savedEvent = createSampleEvent();
         when(eventRepository.save(Mockito.any(Event.class))).thenReturn(savedEvent);
 
         // When & Then
@@ -131,7 +128,16 @@ public class EventControllerTests {
         ;
     }
 
-    private EventDto.Create createNewEvent() {
+    private Event createSampleEvent() {
+        return Event.builder()
+                    .id(1)
+                    .eventStatus(EventStatus.DRAFT)
+                    .offline(false)
+                    .free(false)
+                    .build();
+    }
+
+    private EventDto.Create createCreateEventDto() {
         return EventDto.Create.builder()
                     .name("new event")
                     .description("test")
@@ -160,11 +166,43 @@ public class EventControllerTests {
                 .andExpect(status().isBadRequest());
     }
 
+    @Description("Getting an event successfully.")
     @Test
-    public void mockMvcTest() {
+    public void getEvent() throws Exception {
+        // Given
+        int existingId = 1;
+        Mockito.when(eventRepository.findById(existingId)).thenReturn(Optional.of(this.createSampleEvent()));
 
+        this.mockMvc.perform(RestDocumentationRequestBuilders.get("/events/{id}", existingId))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("get-event",
+                    pathParameters(
+                        parameterWithName("id").description("identifier of an Event.")
+                    ),
+                    relaxedResponseFields(
+                        fieldWithPath("event").description("Event with the id")
+                    )
+                ))
+        ;
     }
 
+    @Description("Trying to get non-existing event.")
+    @Test
+    public void getEventFail() throws Exception {
+        // Given
+        int noneExistingId = 1;
+        Mockito.when(eventRepository.findById(noneExistingId)).thenReturn(Optional.empty());
 
+        this.mockMvc.perform(RestDocumentationRequestBuilders.get("/event/{id}", noneExistingId))
+                .andDo(print())
+                .andExpect(status().isNotFound())
+                .andDo(document("get-event-fail",
+                    pathParameters(
+                            parameterWithName("id").description("identifier of an Event.")
+                    )
+                ))
+        ;
+    }
 
 }

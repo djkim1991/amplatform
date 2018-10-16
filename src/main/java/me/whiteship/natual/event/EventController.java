@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+import java.util.Optional;
+
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
@@ -34,7 +36,14 @@ public class EventController {
 
     @GetMapping("/{id}")
     public ResponseEntity getEvent(@PathVariable Integer id) {
-        throw new UnsupportedOperationException();
+        Optional<Event> byId = eventRepository.findById(id);
+        if (!byId.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        EventResource eventResource = new EventResource(byId.get());
+        // TODO add links per roles
+        return ResponseEntity.ok().body(eventResource);
     }
 
     @PostMapping
