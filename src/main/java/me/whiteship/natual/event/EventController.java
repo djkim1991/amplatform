@@ -2,18 +2,15 @@ package me.whiteship.natual.event;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.Link;
-import org.springframework.hateoas.MediaTypes;
-import org.springframework.hateoas.Resource;
-import org.springframework.hateoas.ResourceAssembler;
-import org.springframework.hateoas.mvc.ControllerLinkBuilder;
-import org.springframework.http.MediaType;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.PagedResources;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-
 import java.util.Optional;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
@@ -30,9 +27,13 @@ public class EventController {
     EventRepository eventRepository;
 
     @GetMapping
-    public ResponseEntity all() {
+    public ResponseEntity all(Pageable pageable, PagedResourcesAssembler assembler) {
+        Page<Event> events = eventRepository.findAll(pageable);
+        if (events.hasContent()) {
+            return ResponseEntity.ok().body(assembler.toResource(events));
+        }
 
-        throw new UnsupportedOperationException();
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{id}")

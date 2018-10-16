@@ -5,26 +5,27 @@ import me.whiteship.natual.common.Description;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.restdocs.RestDocsMockMvcConfigurationCustomizer;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentationConfigurer;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
 
-import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
@@ -33,13 +34,15 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest({EventControllerTests.TestConfig.class, EventController.class})
+@SpringBootTest
+@AutoConfigureMockMvc
 @AutoConfigureRestDocs
 public class EventControllerTests {
 
@@ -62,8 +65,11 @@ public class EventControllerTests {
     @Autowired
     ObjectMapper objectMapper;
 
-    @MockBean
+    @Autowired
     EventRepository eventRepository;
+
+    @Autowired
+    ModelMapper modelMapper;
 
     /**
      * "createCreateEventDto" action creates new event.
@@ -76,8 +82,6 @@ public class EventControllerTests {
     public void createEvent() throws Exception {
         // Given
         EventDto.Create eventDto = createCreateEventDto();
-        Event savedEvent = createSampleEvent();
-        when(eventRepository.save(Mockito.any(Event.class))).thenReturn(savedEvent);
 
         // When & Then
         mockMvc.perform(post("/events")
@@ -87,12 +91,12 @@ public class EventControllerTests {
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$.event.id", Matchers.is(1)))
+                .andExpect(jsonPath("$.event.id", Matchers.notNullValue()))
                 .andExpect(jsonPath("$.event.offline", Matchers.is(false)))
                 .andExpect(jsonPath("$.event.free", Matchers.is(false)))
                 .andExpect(jsonPath("$.event.eventStatus", Matchers.is(EventStatus.DRAFT.toString())))
 //                .andExpect(jsonPath("$._links.profile.href", Matchers.is("http://localhost:8080/docs/api/events/create-event")))
-                .andExpect(jsonPath("$._links.self.href", Matchers.is("http://localhost:8080/events/1")))
+                .andExpect(jsonPath("$._links.self.href", Matchers.containsString("/events/")))
                 .andDo(document(
                     "create-event",
                     links(halLinks(),
@@ -126,23 +130,18 @@ public class EventControllerTests {
     }
 
     private Event createSampleEvent() {
-        return Event.builder()
-                    .id(1)
-                    .eventStatus(EventStatus.DRAFT)
-                    .offline(false)
-                    .free(false)
-                    .build();
+        return modelMapper.map(this.createCreateEventDto(), Event.class);
     }
 
     private EventDto.Create createCreateEventDto() {
         return EventDto.Create.builder()
-                    .name("new event")
-                    .description("test")
+                    .name("test event")
+                    .description("testing event apis")
                     .beginEnrollmentDateTime(LocalDateTime.of(2018, 10, 15, 0, 0))
                     .closeEnrollmentDateTime(LocalDateTime.of(2018, 11, 3, 23, 59))
                     .beginEventDateTime(LocalDateTime.of(2018, 11, 10, 9, 0))
                     .endEventDateTime(LocalDateTime.of(2018, 11, 10, 14, 0))
-                    .location("신촌 토즈")
+                    .location("Inflean")
                     .basePrice(50000)
                     .maxPrice(10000)
                     .build();
@@ -167,10 +166,10 @@ public class EventControllerTests {
     @Test
     public void getEvent() throws Exception {
         // Given
-        int existingId = 1;
-        Mockito.when(eventRepository.findById(existingId)).thenReturn(Optional.of(this.createSampleEvent()));
+        Event newEvent = this.eventRepository.save(this.createSampleEvent());
 
-        this.mockMvc.perform(RestDocumentationRequestBuilders.get("/events/{id}", existingId))
+        // When & Then
+        this.mockMvc.perform(RestDocumentationRequestBuilders.get("/events/{id}", newEvent.getId()))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("get-event",
@@ -189,7 +188,6 @@ public class EventControllerTests {
     public void getEventFail() throws Exception {
         // Given
         int noneExistingId = 1;
-        Mockito.when(eventRepository.findById(noneExistingId)).thenReturn(Optional.empty());
 
         this.mockMvc.perform(RestDocumentationRequestBuilders.get("/event/{id}", noneExistingId))
                 .andDo(print())
@@ -205,9 +203,25 @@ public class EventControllerTests {
     @Description("Trying to get all events.")
     @Test
     public void getEvents() throws Exception {
+        // Given
+        this.eventRepository.save(this.createSampleEvent());
+
+        // When & Then
         this.mockMvc.perform(get("/events"))
                 .andDo(print())
                 .andExpect(status().isOk())
+                .andDo(document("get-events",
+                    requestParameters(
+                        parameterWithName("page").description("page to retrieve, begin with and default is 0").optional(),
+                        parameterWithName("size").description("Sie of the page to retrieve, default 20").optional()
+                    ),
+                    relaxedResponseFields(
+                        fieldWithPath("page.number").type(JsonFieldType.NUMBER).description("The number of this page."),
+                        fieldWithPath("page.size").type(JsonFieldType.NUMBER).description("The size of this page."),
+                        fieldWithPath("page.totalPages").type(JsonFieldType.NUMBER).description("The total number of pages."),
+                        fieldWithPath("page.totalElements").type(JsonFieldType.NUMBER).description("The total number of results.")
+                    )
+                ))
         ;
     }
 
