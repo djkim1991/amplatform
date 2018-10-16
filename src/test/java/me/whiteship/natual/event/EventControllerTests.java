@@ -14,13 +14,10 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
 
-import static org.hamcrest.Matchers.hasValue;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest
@@ -57,11 +54,14 @@ public class EventControllerTests {
      *   
      * Output:
      *   * CREATED 201
-     *   * data
-     *     * Event: created event info
-     *   * links
-     *     * location: link to view the event.
-     *     * profile: link to a document that describes this API.
+     *   * HEADER
+     *      * location
+     *   * BODY
+     *     * data
+     *       * Event: created event info
+     *     * links
+     *       * self: link to view the event.
+     *       * profile: link to a document that describes this API.
      *
      */
     @Test
