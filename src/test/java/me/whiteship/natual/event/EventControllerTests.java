@@ -2,19 +2,34 @@ package me.whiteship.natual.event;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.runner.WebApplicationContextRunner;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.JUnitRestDocumentation;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.time.LocalDateTime;
 
 import static org.mockito.Mockito.when;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
+import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.halLinks;
+import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.linkWithRel;
+import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.links;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -23,8 +38,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest
 public class EventControllerTests {
 
-    @Autowired
     MockMvc mockMvc;
+
+    @Autowired
+    WebApplicationContext wac;
 
     @Autowired
     ObjectMapper objectMapper;
@@ -32,42 +49,34 @@ public class EventControllerTests {
     @MockBean
     EventRepository eventRepository;
 
+    @Rule
+    public JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation();
+
+    @Before
+    public void setUp() {
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac)
+                .apply(documentationConfiguration(this.restDocumentation)
+                    .operationPreprocessors()
+                        .withRequestDefaults(prettyPrint())
+                        .withResponseDefaults(prettyPrint())
+                        .and()
+//                    .uris()
+//                        .withScheme("http")
+//                        .withHost("api.whiteship.me")
+                )
+                .build();
+    }
+
     /**
      * "createNewEvent" action creates new event.
      *
-     * Constraints: Can be requested only by admin.
-     *
-     * Input:
-     *   * name: event name
-     *   * description: description of the event
-     *   * beginEnrollmentDateTime: date and time to begin enrollment.
-     *   * closeEnrollmentDateTime: date and time to close enrollment.
-     *   * beginEventDateTime: date and time to begin the event.
-     *   * endEventDateTime
-     *   * basePrice(optional): price of ticket to enroll.
-     *   * maxPrice(optional): maximum price of ticket to enroll,
-     *      if this value does not provided, then it means non-limited bidding will happen,
-     *      and can't expect how much it would be to enroll the event eventually.
-     *      If both basePrice and maxPrice are null or 0, it means free event.
-     *   * location
-     *   * limitOfEnrollment
-     *   
-     * Output:
-     *   * CREATED 201
-     *   * HEADER
-     *      * location
-     *   * BODY
-     *     * data
-     *       * Event: created event info
-     *     * links
-     *       * self: link to view the event.
-     *       * profile: link to a document that describes this API.
-     *
+     * TODO Constraints: Can be requested only by admin.
+     * TODO link to profile
      */
     @Test
-    public void createNewEvent() throws Exception {
+    public void createEvent() throws Exception {
         // Given
-        EventDto.Create eventDto = createEvent();
+        EventDto.Create eventDto = createNewEvent();
         Event savedEvent = Event.builder()
                 .id(1)
                 .eventStatus(EventStatus.DRAFT)
@@ -88,12 +97,41 @@ public class EventControllerTests {
                 .andExpect(jsonPath("$.event.offline", Matchers.is(false)))
                 .andExpect(jsonPath("$.event.free", Matchers.is(false)))
                 .andExpect(jsonPath("$.event.eventStatus", Matchers.is(EventStatus.DRAFT.toString())))
-                .andExpect(jsonPath("$._links.profile.href", Matchers.is("http://localhost:8080/docs/api/events/create-event")))
-                .andExpect(jsonPath("$._links.self.href", Matchers.is("http://localhost/events/1")))
+//                .andExpect(jsonPath("$._links.profile.href", Matchers.is("http://localhost:8080/docs/api/events/create-event")))
+                .andExpect(jsonPath("$._links.self.href", Matchers.is("http://localhost:8080/events/1")))
+                .andDo(document(
+                    "create-event",
+                    links(halLinks(),
+//                            linkWithRel("profile").description("Link to profile"),
+                            linkWithRel("self").description("Link to the created event"),
+                            linkWithRel("event").description("Link to view all events")),
+                    requestFields(
+                        fieldWithPath("name").description("event name"),
+                        fieldWithPath("description").description("description of the event"),
+                        fieldWithPath("beginEnrollmentDateTime").description("date and time to begin enrollment."),
+                        fieldWithPath("closeEnrollmentDateTime").description("date and time to close enrollment."),
+                        fieldWithPath("beginEventDateTime").description("date and time to begin the event."),
+                        fieldWithPath("endEventDateTime").description("date and time to end the event."),
+                        fieldWithPath("location").description("link to the place where the event hold"),
+                        fieldWithPath("basePrice").description("optional, price of ticket to enroll."),
+                        fieldWithPath("maxPrice").description("optional, maximum price of ticket to enroll. \n" +
+                                "if this value does not provided, " +
+                                "then it means non-limited bidding will happen,\n" +
+                                "and can't expect how much it would be to enroll the event eventually.\n" +
+                                "If both basePrice and maxPrice are null or 0, it means free event."),
+                        fieldWithPath("limitOfEnrollment").description("number of limit")
+                    ),
+                    relaxedResponseFields(
+                        fieldWithPath("event").description("new event")
+                    ),
+                    responseHeaders(
+                        headerWithName("location").description("new event URL")
+                    )
+                ))
         ;
     }
 
-    private EventDto.Create createEvent() {
+    private EventDto.Create createNewEvent() {
         return EventDto.Create.builder()
                     .name("new event")
                     .description("test")
@@ -120,6 +158,11 @@ public class EventControllerTests {
                     .content(objectMapper.writeValueAsString(event)))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void mockMvcTest() {
+
     }
 
 

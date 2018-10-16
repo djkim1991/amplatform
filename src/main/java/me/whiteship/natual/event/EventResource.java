@@ -12,10 +12,9 @@ public class EventResource extends ResourceSupport {
 
     private Event event;
 
-    public EventResource(Event event, String profileHref) {
+    public EventResource(Event event) {
         this.event = event;
         add(linkTo(EventController.class).withRel("event"));
         add(linkTo(methodOn(EventController.class).getEvent(event.getId())).withSelfRel());
-        add(new Link(profileHref, "profile"));
     }
 }
