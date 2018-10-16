@@ -44,4 +44,12 @@ public class Event {
     @Enumerated(EnumType.STRING)
     EventStatus eventStatus = EventStatus.DRAFT;
 
+    public void update() {
+        if (this.maxPrice == null || this.maxPrice == 0) {
+            this.free = true;
+        }
+        if (this.location != null && !this.location.trim().isEmpty()) {
+            this.offline = true;
+        }
+    }
 }

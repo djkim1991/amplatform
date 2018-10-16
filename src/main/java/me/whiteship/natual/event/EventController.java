@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
-import org.springframework.hateoas.PagedResources;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -49,15 +48,16 @@ public class EventController {
     }
 
     @PostMapping
-    public ResponseEntity createEvent(@Valid @RequestBody EventDto.Create eventCreate, BindingResult errors) {
+    public ResponseEntity createEvent(@Valid @RequestBody EventDto.CreateOrUpdate eventCreate, BindingResult errors) {
         if (errors.hasErrors()) {
+            // TODO convert error to body
             return ResponseEntity.badRequest().build();
         }
 
-        System.out.println(eventCreate);
-        // TODO validation
+        // TODO domain validation
 
         Event event = modelMapper.map(eventCreate, Event.class);
+        event.update();
         Event newEvent = eventRepository.save(event);
         EventResource eventResource = new EventResource(newEvent);
         return ResponseEntity.created(linkTo(methodOn(this.getClass()).getEvent(newEvent.getId())).toUri())
@@ -65,8 +65,24 @@ public class EventController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity put(@PathVariable Integer id, Event event) {
-        throw new UnsupportedOperationException();
+    public ResponseEntity put(@PathVariable Integer id, @Valid @RequestBody EventDto.CreateOrUpdate eventDto, BindingResult errors) {
+        if (errors.hasErrors()) {
+            // TODO convert error to body
+            return ResponseEntity.badRequest().build();
+        }
+
+        Optional<Event> byId = this.eventRepository.findById(id);
+        if (!byId.isPresent()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Event event = byId.get();
+        modelMapper.map(eventDto, event);
+        event.update();
+        // TODO domain validation
+
+        EventResource eventResource = new EventResource(event);
+        return ResponseEntity.ok().body(eventResource);
     }
 
     @DeleteMapping("/{id")

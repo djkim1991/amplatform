@@ -14,7 +14,7 @@ public class EventDto {
 
     @Data
     @Builder @AllArgsConstructor @NoArgsConstructor
-    public static class Create {
+    public static class CreateOrUpdate {
 
         @NotEmpty
         String name;
@@ -33,7 +33,6 @@ public class EventDto {
         @NotNull
         LocalDateTime endEventDateTime;
 
-        @NotEmpty
         String location;
 
         @Min(0)
