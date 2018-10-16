@@ -3,20 +3,22 @@ package me.whiteship.natual.event;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.whiteship.natual.common.Description;
 import org.hamcrest.Matchers;
-import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
+import org.springframework.boot.test.autoconfigure.restdocs.RestDocsMockMvcConfigurationCustomizer;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
-import org.springframework.restdocs.JUnitRestDocumentation;
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentationConfigurer;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.time.LocalDateTime;
@@ -27,19 +29,31 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.headerWit
 import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest
+@WebMvcTest({EventControllerTests.TestConfig.class, EventController.class})
+@AutoConfigureRestDocs
 public class EventControllerTests {
 
+    @TestConfiguration
+    static class TestConfig implements RestDocsMockMvcConfigurationCustomizer {
+        @Override
+        public void customize(MockMvcRestDocumentationConfigurer configurer) {
+            configurer.operationPreprocessors()
+                    .withResponseDefaults(prettyPrint())
+                    .withRequestDefaults(prettyPrint());
+        }
+    }
+
+    @Autowired
     MockMvc mockMvc;
 
     @Autowired
@@ -51,30 +65,13 @@ public class EventControllerTests {
     @MockBean
     EventRepository eventRepository;
 
-    @Rule
-    public JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation();
-
-    @Before
-    public void setUp() {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac)
-                .apply(documentationConfiguration(this.restDocumentation)
-                    .operationPreprocessors()
-                        .withRequestDefaults(prettyPrint())
-                        .withResponseDefaults(prettyPrint())
-                        .and()
-//                    .uris()
-//                        .withScheme("http")
-//                        .withHost("api.whiteship.me")
-                )
-                .build();
-    }
-
     /**
      * "createCreateEventDto" action creates new event.
      *
      * TODO Constraints: Can be requested only by admin.
      * TODO link to profile
      */
+    @Description("Trying to create new event with correct data.")
     @Test
     public void createEvent() throws Exception {
         // Given
@@ -152,9 +149,9 @@ public class EventControllerTests {
     }
 
     /**
-     * check if the validation annotations work when it gets wrong data.
      * TODO content of bad request needs to explain why it is bad.
      */
+    @Description("Trying to create an event with wrong data and fail.")
     @Test
     public void createNewEvent_bindingError() throws Exception {
         Event event = Event.builder().build();
@@ -202,6 +199,15 @@ public class EventControllerTests {
                             parameterWithName("id").description("identifier of an Event.")
                     )
                 ))
+        ;
+    }
+
+    @Description("Trying to get all events.")
+    @Test
+    public void getEvents() throws Exception {
+        this.mockMvc.perform(get("/events"))
+                .andDo(print())
+                .andExpect(status().isOk())
         ;
     }
 

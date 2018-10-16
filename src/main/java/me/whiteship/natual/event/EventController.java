@@ -31,6 +31,7 @@ public class EventController {
 
     @GetMapping
     public ResponseEntity all() {
+
         throw new UnsupportedOperationException();
     }
 
