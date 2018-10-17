@@ -5,6 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.PagedResources;
+import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.ResourceAssembler;
+import org.springframework.hateoas.ResourceSupport;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -26,10 +30,11 @@ public class EventController {
     EventRepository eventRepository;
 
     @GetMapping
-    public ResponseEntity all(Pageable pageable, PagedResourcesAssembler assembler) {
+    public ResponseEntity all(Pageable pageable, PagedResourcesAssembler<Event> assembler) {
         Page<Event> events = eventRepository.findAll(pageable);
         if (events.hasContent()) {
-            return ResponseEntity.ok().body(assembler.toResource(events));
+            PagedResources resources = assembler.toResource(events, entity -> new EventResource(entity));
+            return ResponseEntity.ok().body(resources);
         }
 
         return ResponseEntity.ok().build();

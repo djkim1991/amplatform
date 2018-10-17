@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import me.whiteship.natual.common.Description;
 import org.assertj.core.internal.bytebuddy.utility.RandomString;
 import org.hamcrest.Matchers;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.modelmapper.ModelMapper;
@@ -69,6 +70,11 @@ public class EventControllerTests {
     @Autowired
     ModelMapper modelMapper;
 
+    @Before
+    public void setUp() {
+        this.eventRepository.deleteAll();
+    }
+
     /**
      * "createEventDto" action creates new event.
      *
@@ -89,12 +95,12 @@ public class EventControllerTests {
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("event.id", Matchers.notNullValue()))
-                .andExpect(jsonPath("event.offline", Matchers.is(true)))
-                .andExpect(jsonPath("event.free", Matchers.is(false)))
-                .andExpect(jsonPath("event.eventStatus", Matchers.is(EventStatus.DRAFT.toString())))
+                .andExpect(jsonPath("id", Matchers.notNullValue()))
+                .andExpect(jsonPath("offline", Matchers.is(true)))
+                .andExpect(jsonPath("free", Matchers.is(false)))
+                .andExpect(jsonPath("eventStatus", Matchers.is(EventStatus.DRAFT.toString())))
+                .andExpect(jsonPath("_links.self.href", Matchers.notNullValue()))
 //                .andExpect(jsonPath("$._links.profile.href", Matchers.is("http://localhost:8080/docs/api/events/create-event")))
-                .andExpect(jsonPath("_links.self.href", Matchers.containsString("/events/")))
                 .andDo(document(
                     "create-event",
                     links(halLinks(),
@@ -104,31 +110,13 @@ public class EventControllerTests {
                             linkWithRel("event").description("Link to view all events")),
                         getRequestFieldsSnippet(),
                         relaxedResponseFields(
-                            fieldWithPath("event").description("new event")
+                            fieldWithPath("id").description("id of new event")
                         ),
                         responseHeaders(
                             headerWithName("location").description("new event URL")
                         )
                 ))
         ;
-    }
-
-    private Event createSampleEvent() {
-        return modelMapper.map(this.createEventDto(), Event.class);
-    }
-
-    private EventDto.CreateOrUpdate createEventDto() {
-        return EventDto.CreateOrUpdate.builder()
-                    .name("test event")
-                    .description("testing event apis")
-                    .beginEnrollmentDateTime(LocalDateTime.of(2018, 10, 15, 0, 0))
-                    .closeEnrollmentDateTime(LocalDateTime.of(2018, 11, 3, 23, 59))
-                    .beginEventDateTime(LocalDateTime.of(2018, 11, 10, 9, 0))
-                    .endEventDateTime(LocalDateTime.of(2018, 11, 10, 14, 0))
-                    .location("Inflean")
-                    .basePrice(50000)
-                    .maxPrice(10000)
-                    .build();
     }
 
     /**
@@ -161,7 +149,9 @@ public class EventControllerTests {
                         parameterWithName("id").description("identifier of an Event.")
                     ),
                     relaxedResponseFields(
-                        fieldWithPath("event").description("Event with the id")
+                        fieldWithPath("id").description("id of the event"),
+                        fieldWithPath("name").description("name of the event"),
+                        fieldWithPath("description").description("name of the event")
                     )
                 ))
         ;
@@ -178,7 +168,7 @@ public class EventControllerTests {
                 .andExpect(status().isNotFound())
                 .andDo(document("get-event-fail",
                     pathParameters(
-                            parameterWithName("id").description("identifier of an Event.")
+                        parameterWithName("id").description("identifier of an Event.")
                     )
                 ))
         ;
@@ -188,12 +178,14 @@ public class EventControllerTests {
     @Test
     public void getEvents() throws Exception {
         // Given
-        this.eventRepository.save(this.createSampleEvent());
+        Event event = this.eventRepository.save(this.createSampleEvent());
 
         // When & Then
         this.mockMvc.perform(get("/events"))
                 .andDo(print())
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("_embedded.eventList[0].id", Matchers.is(event.getId())))
+                .andExpect(jsonPath("_embedded.eventList[0].name", Matchers.is(event.getName())))
                 .andDo(document("get-events",
                     requestParameters(
                         parameterWithName("page").description("page to retrieve, begin with and default is 0").optional(),
@@ -226,17 +218,17 @@ public class EventControllerTests {
                 .content(objectMapper.writeValueAsString(eventDto)))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("event.id", Matchers.is(existingEvent.getId())))
-                .andExpect(jsonPath("event.name", Matchers.is(newName)))
-                .andExpect(jsonPath("event.basePrice", Matchers.is(0)))
-                .andExpect(jsonPath("event.maxPrice", Matchers.is(0)))
-                .andExpect(jsonPath("event.location", Matchers.is(Matchers.nullValue())))
-                .andExpect(jsonPath("event.free", Matchers.is(true)))
-                .andExpect(jsonPath("event.offline", Matchers.is(false)))
+                .andExpect(jsonPath("id", Matchers.is(existingEvent.getId())))
+                .andExpect(jsonPath("name", Matchers.is(newName)))
+                .andExpect(jsonPath("basePrice", Matchers.is(0)))
+                .andExpect(jsonPath("maxPrice", Matchers.is(0)))
+                .andExpect(jsonPath("location", Matchers.is(Matchers.nullValue())))
+                .andExpect(jsonPath("free", Matchers.is(true)))
+                .andExpect(jsonPath("offline", Matchers.is(false)))
                 .andDo(document("update-event",
                     getRequestFieldsSnippet(),
                     relaxedResponseFields(
-                        fieldWithPath("event").description("new event")
+                        fieldWithPath("id").description("id of the event")
                     )
                 ))
         ;
@@ -275,6 +267,24 @@ public class EventControllerTests {
                         "If both basePrice and maxPrice are null or 0, it means free event."),
                 fieldWithPath("limitOfEnrollment").description("number of limit")
         );
+    }
+
+    private Event createSampleEvent() {
+        return modelMapper.map(this.createEventDto(), Event.class);
+    }
+
+    private EventDto.CreateOrUpdate createEventDto() {
+        return EventDto.CreateOrUpdate.builder()
+                .name("test event")
+                .description("testing event apis")
+                .beginEnrollmentDateTime(LocalDateTime.of(2018, 10, 15, 0, 0))
+                .closeEnrollmentDateTime(LocalDateTime.of(2018, 11, 3, 23, 59))
+                .beginEventDateTime(LocalDateTime.of(2018, 11, 10, 9, 0))
+                .endEventDateTime(LocalDateTime.of(2018, 11, 10, 14, 0))
+                .location("Inflean")
+                .basePrice(50000)
+                .maxPrice(10000)
+                .build();
     }
 
 }
