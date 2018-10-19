@@ -259,8 +259,8 @@ public class EventControllerTests {
                 fieldWithPath("beginEventDateTime").description("date and time to begin the event."),
                 fieldWithPath("endEventDateTime").description("date and time to end the event."),
                 fieldWithPath("location").description("link to the place where the event hold"),
-                fieldWithPath("basePrice").description("optional, price of ticket to enroll."),
-                fieldWithPath("maxPrice").description("optional, maximum price of ticket to enroll. \n" +
+                fieldWithPath("basePrice").optional().description("price of ticket to enroll."),
+                fieldWithPath("maxPrice").optional().description("maximum price of ticket to enroll. \n" +
                         "if this value does not provided, " +
                         "then it means non-limited bidding will happen,\n" +
                         "and can't expect how much it would be to enroll the event eventually.\n" +
