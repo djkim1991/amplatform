@@ -1,28 +1,16 @@
 package me.whiteship.natual.event;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import me.whiteship.natual.common.BaseControllerTests;
 import me.whiteship.natual.common.Description;
 import org.assertj.core.internal.bytebuddy.utility.RandomString;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
-import org.springframework.boot.test.autoconfigure.restdocs.RestDocsMockMvcConfigurationCustomizer;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.http.MediaType;
-import org.springframework.restdocs.mockmvc.MockMvcRestDocumentationConfigurer;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.context.WebApplicationContext;
 
 import java.time.LocalDateTime;
 
@@ -30,7 +18,6 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.headerWit
 import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -38,37 +25,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
-@AutoConfigureMockMvc
-@AutoConfigureRestDocs
-@ActiveProfiles("test")
-public class EventControllerTests {
-
-    @TestConfiguration
-    static class TestConfig implements RestDocsMockMvcConfigurationCustomizer {
-        @Override
-        public void customize(MockMvcRestDocumentationConfigurer configurer) {
-            configurer.operationPreprocessors()
-                    .withResponseDefaults(prettyPrint())
-                    .withRequestDefaults(prettyPrint());
-        }
-    }
-
-    @Autowired
-    MockMvc mockMvc;
-
-    @Autowired
-    WebApplicationContext wac;
-
-    @Autowired
-    ObjectMapper objectMapper;
+public class EventControllerTests extends BaseControllerTests {
 
     @Autowired
     EventRepository eventRepository;
-
-    @Autowired
-    ModelMapper modelMapper;
 
     @Before
     public void setUp() {
@@ -258,7 +218,7 @@ public class EventControllerTests {
                 fieldWithPath("closeEnrollmentDateTime").description("date and time to close enrollment."),
                 fieldWithPath("beginEventDateTime").description("date and time to begin the event."),
                 fieldWithPath("endEventDateTime").description("date and time to end the event."),
-                fieldWithPath("location").description("link to the place where the event hold"),
+                fieldWithPath("location").optional().description("link to the place where the event hold"),
                 fieldWithPath("basePrice").optional().description("price of ticket to enroll."),
                 fieldWithPath("maxPrice").optional().description("maximum price of ticket to enroll. \n" +
                         "if this value does not provided, " +
