@@ -26,6 +26,9 @@ public class EventController {
     @Autowired
     EventRepository eventRepository;
 
+    @Autowired
+    EventValidator eventValidator;
+
     @GetMapping
     public ResponseEntity all(Pageable pageable, PagedResourcesAssembler<Event> assembler) {
         Page<Event> events = eventRepository.findAll(pageable);
@@ -56,10 +59,14 @@ public class EventController {
             return ResponseEntity.badRequest().build();
         }
 
-        // TODO domain validation
-
         Event event = modelMapper.map(eventCreate, Event.class);
         event.update();
+
+        eventValidator.validate(event, errors);
+        if (errors.hasErrors()) {
+            return ResponseEntity.badRequest().build();
+        }
+
         Event newEvent = eventRepository.save(event);
         EventResource eventResource = new EventResource(newEvent);
         return ResponseEntity.created(linkTo(methodOn(this.getClass()).getEvent(newEvent.getId())).toUri())
@@ -81,7 +88,11 @@ public class EventController {
         Event event = byId.get();
         modelMapper.map(eventDto, event);
         event.update();
-        // TODO domain validation
+
+        eventValidator.validate(event, errors);
+        if (errors.hasErrors()) {
+            return ResponseEntity.badRequest().build();
+        }
 
         EventResource eventResource = new EventResource(event);
         return ResponseEntity.ok().body(eventResource);

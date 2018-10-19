@@ -2,6 +2,7 @@ package me.whiteship.natual.common;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.whiteship.natual.event.EventRepository;
+import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs
 @ActiveProfiles("test")
+@Ignore
 public class BaseControllerTests {
 
     @TestConfiguration
