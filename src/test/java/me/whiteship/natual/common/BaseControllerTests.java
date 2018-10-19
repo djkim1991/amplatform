@@ -1,7 +1,6 @@
 package me.whiteship.natual.common;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import me.whiteship.natual.event.EventRepository;
 import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.modelmapper.ModelMapper;
