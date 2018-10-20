@@ -45,7 +45,7 @@ public class EventController {
     public ResponseEntity getEvent(@PathVariable Integer id) {
         Optional<Event> byId = eventRepository.findById(id);
         if (!byId.isPresent()) {
-            return ResponseEntity.notFound().build();
+            return notFoundResponse();
         }
 
         Event event = byId.get();
@@ -58,7 +58,7 @@ public class EventController {
     @PostMapping
     public ResponseEntity createEvent(@Valid @RequestBody EventDto.CreateOrUpdate eventCreate, BindingResult errors) {
         if (errors.hasErrors()) {
-            return ResponseEntity.badRequest().body(new ErrorResource(errors));
+            return badRequestResponse(errors);
         }
 
         Event event = modelMapper.map(eventCreate, Event.class);
@@ -66,7 +66,7 @@ public class EventController {
 
         eventValidator.validate(event, errors);
         if (errors.hasErrors()) {
-            return ResponseEntity.badRequest().body(new ErrorResource(errors));
+            return badRequestResponse(errors);
         }
 
         Event newEvent = eventRepository.save(event);
@@ -78,12 +78,12 @@ public class EventController {
     @PutMapping("/{id}")
     public ResponseEntity update(@PathVariable Integer id, @Valid @RequestBody EventDto.CreateOrUpdate eventDto, BindingResult errors) {
         if (errors.hasErrors()) {
-            return ResponseEntity.badRequest().body(new ErrorResource(errors));
+            return badRequestResponse(errors);
         }
 
         Optional<Event> byId = this.eventRepository.findById(id);
         if (!byId.isPresent()) {
-            return ResponseEntity.notFound().build();
+            return notFoundResponse();
         }
 
         Event event = byId.get();
@@ -92,7 +92,7 @@ public class EventController {
 
         eventValidator.validate(event, errors);
         if (errors.hasErrors()) {
-            return ResponseEntity.badRequest().body(new ErrorResource(errors));
+            return badRequestResponse(errors);
         }
 
         EventResource eventResource = new EventResource(event);
@@ -107,5 +107,13 @@ public class EventController {
     @PostMapping("/{id}/publish")
     public ResponseEntity publish(@PathVariable Integer id) {
         throw new UnsupportedOperationException();
+    }
+
+    private ResponseEntity<Object> notFoundResponse() {
+        return ResponseEntity.notFound().build();
+    }
+
+    private ResponseEntity<ErrorResource> badRequestResponse(BindingResult errors) {
+        return ResponseEntity.badRequest().body(new ErrorResource(errors));
     }
 }
