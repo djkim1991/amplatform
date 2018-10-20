@@ -1,5 +1,6 @@
 package me.whiteship.natual.event;
 
+import me.whiteship.natual.common.ErrorResource;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -47,7 +48,9 @@ public class EventController {
             return ResponseEntity.notFound().build();
         }
 
-        EventResource eventResource = new EventResource(byId.get());
+        Event event = byId.get();
+        EventResource eventResource = new EventResource(event);
+        eventResource.add(linkTo(methodOn(EventController.class).update(event.getId(), null, null)).withRel("update"));
         // TODO add links per roles
         return ResponseEntity.ok().body(eventResource);
     }
@@ -55,8 +58,7 @@ public class EventController {
     @PostMapping
     public ResponseEntity createEvent(@Valid @RequestBody EventDto.CreateOrUpdate eventCreate, BindingResult errors) {
         if (errors.hasErrors()) {
-            // TODO convert error to body
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(new ErrorResource(errors));
         }
 
         Event event = modelMapper.map(eventCreate, Event.class);
@@ -64,7 +66,7 @@ public class EventController {
 
         eventValidator.validate(event, errors);
         if (errors.hasErrors()) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(new ErrorResource(errors));
         }
 
         Event newEvent = eventRepository.save(event);
@@ -74,15 +76,14 @@ public class EventController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity put(@PathVariable Integer id, @Valid @RequestBody EventDto.CreateOrUpdate eventDto, BindingResult errors) {
+    public ResponseEntity update(@PathVariable Integer id, @Valid @RequestBody EventDto.CreateOrUpdate eventDto, BindingResult errors) {
         if (errors.hasErrors()) {
-            // TODO convert error to body
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(new ErrorResource(errors));
         }
 
         Optional<Event> byId = this.eventRepository.findById(id);
         if (!byId.isPresent()) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.notFound().build();
         }
 
         Event event = byId.get();
@@ -91,7 +92,7 @@ public class EventController {
 
         eventValidator.validate(event, errors);
         if (errors.hasErrors()) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(new ErrorResource(errors));
         }
 
         EventResource eventResource = new EventResource(event);

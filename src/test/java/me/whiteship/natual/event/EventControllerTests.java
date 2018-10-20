@@ -14,6 +14,7 @@ import org.springframework.restdocs.payload.RequestFieldsSnippet;
 
 import java.time.LocalDateTime;
 
+import static org.hamcrest.Matchers.notNullValue;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
@@ -55,11 +56,11 @@ public class EventControllerTests extends BaseControllerTests {
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("id", Matchers.notNullValue()))
+                .andExpect(jsonPath("id", notNullValue()))
                 .andExpect(jsonPath("offline", Matchers.is(true)))
                 .andExpect(jsonPath("free", Matchers.is(false)))
                 .andExpect(jsonPath("eventStatus", Matchers.is(EventStatus.DRAFT.toString())))
-                .andExpect(jsonPath("_links.self.href", Matchers.notNullValue()))
+                .andExpect(jsonPath("_links.self.href", notNullValue()))
 //                .andExpect(jsonPath("$._links.profile.href", Matchers.is("http://localhost:8080/docs/api/events/create-event")))
                 .andDo(document(
                     "create-event",
@@ -79,9 +80,6 @@ public class EventControllerTests extends BaseControllerTests {
         ;
     }
 
-    /**
-     * TODO content of bad request needs to explain why it is bad.
-     */
     @Description("Trying to create an event with wrong data and fail.")
     @Test
     public void createNewEvent_bindingError() throws Exception {
@@ -91,7 +89,19 @@ public class EventControllerTests extends BaseControllerTests {
                     .contentType(MediaType.APPLICATION_JSON_UTF8)
                     .content(objectMapper.writeValueAsString(event)))
                 .andDo(print())
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.content[0].defaultMessage", notNullValue()))
+                .andExpect(jsonPath("$.content[0].field", notNullValue()))
+                .andExpect(jsonPath("$.content[0].defaultMessage", notNullValue()))
+                .andExpect(jsonPath("$.content[0].rejectedValue", notNullValue()))
+                .andDo(document("errors",
+                    links(
+                        linkWithRel("index").description("Link to index")
+                    ),
+                    relaxedResponseFields(
+                        fieldWithPath("content").description("Error content")
+                    )
+                ));
     }
 
     @Description("Getting an event successfully.")
@@ -105,6 +115,9 @@ public class EventControllerTests extends BaseControllerTests {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("get-event",
+                    relaxedLinks(
+                        linkWithRel("update").description("link to update this event.")
+                    ),
                     pathParameters(
                         parameterWithName("id").description("identifier of an Event.")
                     ),

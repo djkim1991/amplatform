@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.restdocs.RestDocsMockMvcConfi
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Import;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentationConfigurer;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -23,18 +24,9 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs
 @ActiveProfiles("test")
+@Import({TestRestDocConfiguration.class})
 @Ignore
 public class BaseControllerTests {
-
-    @TestConfiguration
-    static class TestConfig implements RestDocsMockMvcConfigurationCustomizer {
-        @Override
-        public void customize(MockMvcRestDocumentationConfigurer configurer) {
-            configurer.operationPreprocessors()
-                    .withResponseDefaults(prettyPrint())
-                    .withRequestDefaults(prettyPrint());
-        }
-    }
 
     @Autowired
     protected MockMvc mockMvc;

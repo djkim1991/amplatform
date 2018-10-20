@@ -1,4 +1,4 @@
-= "Natural" RESTful API Guide
+= Natural REST API Guide
 Keesun Baik;
 :doctype: book
 :icons: font
@@ -27,8 +27,11 @@ use of HTTP verbs.
 | `POST`
 | Used to create a new resource
 
+| `PUT`
+| Used to update an existing resource
+
 | `PATCH`
-| Used to update an existing resource, including partial updates
+| Used to partual update an existing resource
 
 | `DELETE`
 | Used to delete an existing resource
@@ -66,12 +69,12 @@ use of HTTP status codes.
 Whenever an error response (status code >= 400) is returned, the body will contain a JSON object
 that describes the problem. The error object has the following structure:
 
-include::{snippets}/error-example/response-fields.adoc[]
+include::{snippets}/errors/response-fields.adoc[]
 
 For example, a request that attempts to apply a non-existent tag to a note will produce a
 `400 Bad Request` response:
 
-include::{snippets}/error-example/http-response.adoc[]
+include::{snippets}/errors/http-response.adoc[]
 
 [[overview-hypermedia]]
 == Hypermedia
@@ -99,7 +102,7 @@ The index provides the entry point into the service.
 
 A `GET` request is used to access the index
 
-operation::index-example[snippets='response-fields,http-response,links']
+operation::index[snippets='response-body,http-response,links']
 
 
 
@@ -115,108 +118,23 @@ A `GET` request will list all of the service's events.
 
 operation::get-events[snippets='response-fields,curl-request,http-response,links']
 
-[[resources-notes-create]]
+[[resources-events-create]]
 === Creating an event
 
 A `POST` request is used to create an event.
 
 operation::create-event[snippets='request-fields,curl-request,http-response,links']
 
-[[resources-tags]]
-== Tags
+[[resources-events-get]]
+=== Get an event
 
-The Tags resource is used to create and list tags.
+A `Get` request is used to get an event.
 
+operation::get-event[snippets='request-fields,curl-request,http-response,links']
 
+[[resources-events-update]]
+=== Update an event
 
-[[resources-tags-list]]
-=== Listing tags
+A `PUT` request is used to update existing event.
 
-A `GET` request will list all of the service's tags.
-
-operation::tags-list-example[snippets='response-fields,curl-request,http-response,links']
-
-
-
-[[resources-tags-create]]
-=== Creating a tag
-
-A `POST` request is used to create a note
-
-operation::tags-create-example[snippets='request-fields,curl-request,http-response']
-
-
-
-[[resources-note]]
-== Note
-
-The Note resource is used to retrieve, update, and delete individual notes
-
-
-
-[[resources-note-links]]
-=== Links
-
-include::{snippets}/note-get-example/links.adoc[]
-
-
-
-[[resources-note-retrieve]]
-=== Retrieve a note
-
-A `GET` request will retrieve the details of a note
-
-operation::note-get-example[snippets='response-fields,curl-request,http-response']
-
-
-
-[[resources-note-update]]
-=== Update a note
-
-A `PATCH` request is used to update a note
-
-==== Request structure
-
-include::{snippets}/note-update-example/request-fields.adoc[]
-
-To leave an attribute of a note unchanged, any of the above may be omitted from the request.
-
-==== Example request
-
-include::{snippets}/note-update-example/curl-request.adoc[]
-
-==== Example response
-
-include::{snippets}/note-update-example/http-response.adoc[]
-
-
-
-[[resources-tag]]
-== Tag
-
-The Tag resource is used to retrieve, update, and delete individual tags
-
-
-
-[[resources-tag-links]]
-=== Links
-
-include::{snippets}/tag-get-example/links.adoc[]
-
-
-
-[[resources-tag-retrieve]]
-=== Retrieve a tag
-
-A `GET` request will retrieve the details of a tag
-
-operation::tag-get-example[snippets='response-fields,curl-request,http-response']
-
-
-
-[[resources-tag-update]]
-=== Update a tag
-
-A `PATCH` request is used to update a tag
-
-operation::tag-update-example[snippets='request-fields,curl-request,http-response']
+operation::update-event[snippets='request-fields,curl-request,http-response,links']
