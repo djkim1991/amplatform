@@ -49,7 +49,7 @@ public class EventControllerTests extends BaseControllerTests {
         EventDto.CreateOrUpdate eventDto = createEventDto();
 
         // When & Then
-        mockMvc.perform(post("/events")
+        mockMvc.perform(post("/api/events")
                     .contentType(MediaType.APPLICATION_JSON_UTF8)
                     .content(objectMapper.writeValueAsString(eventDto))
                     .accept(MediaType.APPLICATION_JSON_UTF8))
@@ -85,7 +85,7 @@ public class EventControllerTests extends BaseControllerTests {
     public void createNewEvent_bindingError() throws Exception {
         Event event = Event.builder().build();
 
-        mockMvc.perform(post("/events")
+        mockMvc.perform(post("/api/events")
                     .contentType(MediaType.APPLICATION_JSON_UTF8)
                     .content(objectMapper.writeValueAsString(event)))
                 .andDo(print())
@@ -111,7 +111,7 @@ public class EventControllerTests extends BaseControllerTests {
         Event newEvent = this.eventRepository.save(this.createSampleEvent());
 
         // When & Then
-        this.mockMvc.perform(RestDocumentationRequestBuilders.get("/events/{id}", newEvent.getId()))
+        this.mockMvc.perform(RestDocumentationRequestBuilders.get("/api/events/{id}", newEvent.getId()))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("get-event",
@@ -136,7 +136,7 @@ public class EventControllerTests extends BaseControllerTests {
         // Given
         int noneExistingId = 1;
 
-        this.mockMvc.perform(RestDocumentationRequestBuilders.get("/event/{id}", noneExistingId))
+        this.mockMvc.perform(RestDocumentationRequestBuilders.get("/api/event/{id}", noneExistingId))
                 .andDo(print())
                 .andExpect(status().isNotFound())
                 .andDo(document("get-event-fail",
@@ -154,7 +154,7 @@ public class EventControllerTests extends BaseControllerTests {
         Event event = this.eventRepository.save(this.createSampleEvent());
 
         // When & Then
-        this.mockMvc.perform(get("/events"))
+        this.mockMvc.perform(get("/api/events"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("_embedded.eventList[0].id", Matchers.is(event.getId())))
@@ -186,7 +186,7 @@ public class EventControllerTests extends BaseControllerTests {
         eventDto.setMaxPrice(0);
         eventDto.setLocation(null);
 
-        this.mockMvc.perform(RestDocumentationRequestBuilders.put("/events/{id}", existingEvent.getId())
+        this.mockMvc.perform(RestDocumentationRequestBuilders.put("/api/events/{id}", existingEvent.getId())
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(objectMapper.writeValueAsString(eventDto)))
                 .andDo(print())
@@ -215,7 +215,7 @@ public class EventControllerTests extends BaseControllerTests {
         EventDto.CreateOrUpdate eventDto = createEventDto();
         eventDto.setName(null);
 
-        this.mockMvc.perform(RestDocumentationRequestBuilders.put("/events/{id}", existingEvent.getId())
+        this.mockMvc.perform(RestDocumentationRequestBuilders.put("/api/events/{id}", existingEvent.getId())
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(objectMapper.writeValueAsString(eventDto)))
                 .andDo(print())
