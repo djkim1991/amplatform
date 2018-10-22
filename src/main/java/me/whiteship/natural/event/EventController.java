@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.PagedResources;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -48,6 +50,7 @@ public class EventController {
         if (currentUser != null) {
             resources.add(linkTo(methodOn(EventController.class).createEvent(null, null)).withRel("create-new-events"));
         }
+        resources.add(linkToProfile("resources-events-list"));
         return ResponseEntity.ok().body(resources);
     }
 
@@ -61,6 +64,7 @@ public class EventController {
         Event event = byId.get();
         EventResource eventResource = new EventResource(event);
         eventResource.add(linkTo(methodOn(EventController.class).update(event.getId(), null, null)).withRel("update"));
+        eventResource.add(linkToProfile("resources-events-get"));
         // TODO add links per roles
         return ResponseEntity.ok().body(eventResource);
     }
@@ -81,6 +85,7 @@ public class EventController {
 
         Event newEvent = eventRepository.save(event);
         EventResource eventResource = new EventResource(newEvent);
+        eventResource.add(linkToProfile("resources-events-create"));
         return ResponseEntity.created(linkTo(methodOn(this.getClass()).getEvent(newEvent.getId())).toUri())
                 .body(eventResource);
     }
@@ -106,6 +111,7 @@ public class EventController {
         }
 
         EventResource eventResource = new EventResource(event);
+        eventResource.add(linkToProfile("resources-events-update"));
         return ResponseEntity.ok().body(eventResource);
     }
 
@@ -125,5 +131,13 @@ public class EventController {
 
     private ResponseEntity<ErrorResource> badRequestResponse(BindingResult errors) {
         return ResponseEntity.badRequest().body(new ErrorResource(errors));
+    }
+
+    private Link linkToProfile(String anchor) {
+        var linkValue = "</docs/index.html>; rel=\"profile\";";
+        if (anchor != null) {
+            linkValue = "</docs/index.html#" + anchor + ">; rel=\"profile\";";
+        }
+        return Link.valueOf(linkValue);
     }
 }

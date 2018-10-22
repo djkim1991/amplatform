@@ -29,6 +29,7 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
+import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.relaxedLinks;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
@@ -56,7 +57,6 @@ public class EventControllerTests extends BaseControllerTests {
 
     /**
      * "createEventDto" action creates new event.
-     * TODO link to profile
      */
     @Description("Trying to create new event with correct data.")
     @Test
@@ -78,12 +78,11 @@ public class EventControllerTests extends BaseControllerTests {
                 .andExpect(jsonPath("free", Matchers.is(false)))
                 .andExpect(jsonPath("eventStatus", Matchers.is(EventStatus.DRAFT.toString())))
                 .andExpect(jsonPath("_links.self.href", notNullValue()))
-//                .andExpect(jsonPath("$._links.profile.href", Matchers.is("http://localhost:8080/docs/api/events/create-event")))
+                .andExpect(jsonPath("$._links.profile.href", Matchers.is("/docs/index.html#resources-events-create")))
                 .andDo(document(
                     "create-event",
                     links(halLinks(),
-
-//                            linkWithRel("profile").description("Link to profile"),
+                            linkWithRel("profile").description("Link to profile"),
                             linkWithRel("self").description("Link to the created event"),
                             linkWithRel("event").description("Link to view all events")),
                         getRequestFieldsSnippet(),
@@ -178,6 +177,11 @@ public class EventControllerTests extends BaseControllerTests {
                 .andExpect(jsonPath("_embedded.eventList[0].id", Matchers.is(event.getId())))
                 .andExpect(jsonPath("_embedded.eventList[0].name", Matchers.is(event.getName())))
                 .andDo(document("get-events",
+                    relaxedLinks(
+                        linkWithRel("profile").description("Link to profile"),
+                        linkWithRel("self").description("Link to self"),
+                        linkWithRel("get-an-event").description("Link to get an event")
+                    ),
                     requestParameters(
                         parameterWithName("page").description("page to retrieve, begin with and default is 0").optional(),
                         parameterWithName("size").description("Sie of the page to retrieve, default 20").optional()
@@ -219,6 +223,9 @@ public class EventControllerTests extends BaseControllerTests {
                 .andExpect(jsonPath("free", Matchers.is(true)))
                 .andExpect(jsonPath("offline", Matchers.is(false)))
                 .andDo(document("update-event",
+                    relaxedLinks(
+                        linkWithRel("profile").description("Link to profile")
+                    ),
                     getRequestFieldsSnippet(),
                     relaxedResponseFields(
                         fieldWithPath("id").description("id of the event")
