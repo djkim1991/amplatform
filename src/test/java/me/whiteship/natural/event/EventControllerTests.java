@@ -55,9 +55,6 @@ public class EventControllerTests extends BaseControllerTests {
         this.eventRepository.deleteAll();
     }
 
-    /**
-     * "createEventDto" action creates new event.
-     */
     @Description("Trying to create new event with correct data.")
     @Test
     public void createEvent() throws Exception {
@@ -207,7 +204,6 @@ public class EventControllerTests extends BaseControllerTests {
         eventDto.setBasePrice(0);
         eventDto.setMaxPrice(0);
         eventDto.setLocation(null);
-
 
         this.mockMvc.perform(RestDocumentationRequestBuilders.put("/api/events/{id}", existingEvent.getId())
                 .header(HttpHeaders.AUTHORIZATION, bearer(getAccessToken()))
