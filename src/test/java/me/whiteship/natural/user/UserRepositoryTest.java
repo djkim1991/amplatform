@@ -53,7 +53,7 @@ public class UserRepositoryTest {
         User existingUser = userRepository.save(user);
 
         // When
-        Optional<User> byEmail = userRepository.findByEmail(user.getEmail());
+        Optional<User> byEmail = userRepository.findByEmailIgnoreCase(user.getEmail());
 
         // Then
         assertThat(byEmail).isNotEmpty();

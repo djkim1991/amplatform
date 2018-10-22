@@ -1,18 +1,29 @@
 package me.whiteship.natural.event;
 
+import me.whiteship.natural.common.AppSecurityProperties;
 import me.whiteship.natural.common.BaseControllerTests;
 import me.whiteship.natural.common.Description;
+import me.whiteship.natural.user.User;
+import me.whiteship.natural.user.UserRole;
+import me.whiteship.natural.user.UserService;
 import org.assertj.core.internal.bytebuddy.utility.RandomString;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
+import org.springframework.security.oauth2.common.util.Jackson2JsonParser;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 import static org.hamcrest.Matchers.notNullValue;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
@@ -21,6 +32,7 @@ import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -29,7 +41,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class EventControllerTests extends BaseControllerTests {
 
     @Autowired
+    UserService userService;
+
+    @Autowired
     EventRepository eventRepository;
+
+    @Autowired
+    AppSecurityProperties appSecurityProperties;
 
     @Before
     public void setUp() {
@@ -38,8 +56,6 @@ public class EventControllerTests extends BaseControllerTests {
 
     /**
      * "createEventDto" action creates new event.
-     *
-     * TODO Constraints: Can be requested only by admin.
      * TODO link to profile
      */
     @Description("Trying to create new event with correct data.")
@@ -50,6 +66,7 @@ public class EventControllerTests extends BaseControllerTests {
 
         // When & Then
         mockMvc.perform(post("/api/events")
+                    .header(HttpHeaders.AUTHORIZATION, bearer(getAccessToken()))
                     .contentType(MediaType.APPLICATION_JSON_UTF8)
                     .content(objectMapper.writeValueAsString(eventDto))
                     .accept(MediaType.APPLICATION_JSON_UTF8))
@@ -86,6 +103,7 @@ public class EventControllerTests extends BaseControllerTests {
         Event event = Event.builder().build();
 
         mockMvc.perform(post("/api/events")
+                    .header(HttpHeaders.AUTHORIZATION, bearer(getAccessToken()))
                     .contentType(MediaType.APPLICATION_JSON_UTF8)
                     .content(objectMapper.writeValueAsString(event)))
                 .andDo(print())
@@ -186,7 +204,9 @@ public class EventControllerTests extends BaseControllerTests {
         eventDto.setMaxPrice(0);
         eventDto.setLocation(null);
 
+
         this.mockMvc.perform(RestDocumentationRequestBuilders.put("/api/events/{id}", existingEvent.getId())
+                .header(HttpHeaders.AUTHORIZATION, bearer(getAccessToken()))
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(objectMapper.writeValueAsString(eventDto)))
                 .andDo(print())
@@ -216,6 +236,7 @@ public class EventControllerTests extends BaseControllerTests {
         eventDto.setName(null);
 
         this.mockMvc.perform(RestDocumentationRequestBuilders.put("/api/events/{id}", existingEvent.getId())
+                .header(HttpHeaders.AUTHORIZATION, bearer(getAccessToken()))
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(objectMapper.writeValueAsString(eventDto)))
                 .andDo(print())
@@ -258,6 +279,40 @@ public class EventControllerTests extends BaseControllerTests {
                 .basePrice(50000)
                 .maxPrice(10000)
                 .build();
+    }
+
+    private String bearer(String aceessToken) {
+        return "Bearer " + aceessToken;
+    }
+
+    private String getAccessToken() throws Exception {
+        String email = "User" + System.currentTimeMillis() + "@email.com";
+        String password = "pass";
+
+        var user = User.builder()
+                .email(email)
+                .password(password)
+                .roles(Set.of(UserRole.USER))
+                .build();
+
+        userService.createUser(user);
+
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("grant_type", "password");
+        params.add("username", email);
+        params.add("password", password);
+
+        // When & Then
+        var result = mockMvc.perform(post("/oauth/token")
+                .params(params)
+                .with(httpBasic(appSecurityProperties.getDefaultClientId(), appSecurityProperties.getDefaultClientSecret()))
+                .accept(MediaType.APPLICATION_JSON_UTF8))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        String resultString = result.andReturn().getResponse().getContentAsString();
+        Jackson2JsonParser parser = new Jackson2JsonParser();
+        return parser.parseMap(resultString).get("access_token").toString();
     }
 
 }

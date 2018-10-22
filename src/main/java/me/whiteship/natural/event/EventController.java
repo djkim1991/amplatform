@@ -1,5 +1,6 @@
 package me.whiteship.natural.event;
 
+import lombok.extern.slf4j.Slf4j;
 import me.whiteship.natural.common.ErrorResource;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedResources;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +25,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping(value = "/api/events")
+@Slf4j
 public class EventController {
 
     @Autowired
@@ -31,7 +38,11 @@ public class EventController {
     EventValidator eventValidator;
 
     @GetMapping
-    public ResponseEntity all(Pageable pageable, PagedResourcesAssembler<Event> assembler) {
+    public ResponseEntity all(Pageable pageable,
+                              PagedResourcesAssembler<Event> assembler,
+                              @AuthenticationPrincipal User currentUser) {
+//        log.info("current user {}", currentUser.getUsername());
+
         Page<Event> events = eventRepository.findAll(pageable);
         if (events.hasContent()) {
             PagedResources resources = assembler.toResource(events, entity -> new EventResource(entity));
