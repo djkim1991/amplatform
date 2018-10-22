@@ -41,15 +41,14 @@ public class EventController {
     public ResponseEntity all(Pageable pageable,
                               PagedResourcesAssembler<Event> assembler,
                               @AuthenticationPrincipal User currentUser) {
-//        log.info("current user {}", currentUser.getUsername());
-
         Page<Event> events = eventRepository.findAll(pageable);
-        if (events.hasContent()) {
-            PagedResources resources = assembler.toResource(events, entity -> new EventResource(entity));
-            return ResponseEntity.ok().body(resources);
+        var resources = assembler.toResource(events, entity -> new EventResource(entity));
+        resources.add(linkTo(EventController.class).withRel("events"));
+        resources.add(linkTo(methodOn(EventController.class).getEvent(null)).withRel("get-an-event"));
+        if (currentUser != null) {
+            resources.add(linkTo(methodOn(EventController.class).createEvent(null, null)).withRel("create-new-events"));
         }
-
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(resources);
     }
 
     @GetMapping("/{id}")

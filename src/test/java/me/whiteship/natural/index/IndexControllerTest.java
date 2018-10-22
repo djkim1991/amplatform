@@ -13,7 +13,7 @@ public class IndexControllerTest extends BaseControllerTests {
 
     @Test
     public void root() throws Exception {
-        this.mockMvc.perform(get("/"))
+        this.mockMvc.perform(get("/api/"))
                 .andExpect(status().isOk())
                 .andDo(document("index",
                         links(
