@@ -17,19 +17,15 @@ import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.security.oauth2.common.util.Jackson2JsonParser;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import java.time.LocalDateTime;
 import java.util.Set;
 
-import static org.hamcrest.Matchers.notNullValue;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
-import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.relaxedLinks;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
@@ -70,12 +66,12 @@ public class EventControllerTests extends BaseControllerTests {
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("id", notNullValue()))
-                .andExpect(jsonPath("offline", Matchers.is(true)))
-                .andExpect(jsonPath("free", Matchers.is(false)))
-                .andExpect(jsonPath("eventStatus", Matchers.is(EventStatus.DRAFT.toString())))
-                .andExpect(jsonPath("_links.self.href", notNullValue()))
-                .andExpect(jsonPath("$._links.profile.href", Matchers.is("/docs/index.html#resources-events-create")))
+                .andExpect(jsonPath("id").isNotEmpty())
+                .andExpect(jsonPath("offline").value(true))
+                .andExpect(jsonPath("free").value(false))
+                .andExpect(jsonPath("eventStatus").value(EventStatus.DRAFT.toString()))
+                .andExpect(jsonPath("_links.self.href").isNotEmpty())
+                .andExpect(jsonPath("$._links.profile.href").isNotEmpty())
                 .andDo(document(
                     "create-event",
                     links(halLinks(),
@@ -104,10 +100,10 @@ public class EventControllerTests extends BaseControllerTests {
                     .content(objectMapper.writeValueAsString(event)))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.content[0].defaultMessage", notNullValue()))
-                .andExpect(jsonPath("$.content[0].field", notNullValue()))
-                .andExpect(jsonPath("$.content[0].defaultMessage", notNullValue()))
-                .andExpect(jsonPath("$.content[0].rejectedValue", notNullValue()))
+                .andExpect(jsonPath("$.content[0].defaultMessage").isNotEmpty())
+                .andExpect(jsonPath("$.content[0].field").isNotEmpty())
+                .andExpect(jsonPath("$.content[0].defaultMessage").isNotEmpty())
+                .andExpect(jsonPath("$.content[0].rejectedValue").isNotEmpty())
                 .andDo(document("errors",
                     links(
                         linkWithRel("index").description("Link to index")
@@ -236,13 +232,13 @@ public class EventControllerTests extends BaseControllerTests {
                 .content(objectMapper.writeValueAsString(eventDto)))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("id", Matchers.is(existingEvent.getId())))
-                .andExpect(jsonPath("name", Matchers.is(newName)))
-                .andExpect(jsonPath("basePrice", Matchers.is(0)))
-                .andExpect(jsonPath("maxPrice", Matchers.is(0)))
-                .andExpect(jsonPath("location", Matchers.is(Matchers.nullValue())))
-                .andExpect(jsonPath("free", Matchers.is(true)))
-                .andExpect(jsonPath("offline", Matchers.is(false)))
+                .andExpect(jsonPath("id").value(existingEvent.getId()))
+                .andExpect(jsonPath("name").value(newName))
+                .andExpect(jsonPath("basePrice").value(0))
+                .andExpect(jsonPath("maxPrice").value(0))
+                .andExpect(jsonPath("location").isEmpty())
+                .andExpect(jsonPath("free").value(true))
+                .andExpect(jsonPath("offline").value(false))
                 .andDo(document("update-event",
                     relaxedLinks(
                         linkWithRel("profile").description("Link to profile")
