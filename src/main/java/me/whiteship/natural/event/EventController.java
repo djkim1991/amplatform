@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import me.whiteship.natural.common.ErrorResource;
 import me.whiteship.natural.user.CurrentUser;
 import me.whiteship.natural.user.User;
-import me.whiteship.natural.user.UserAdapter;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -12,7 +11,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.Link;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
