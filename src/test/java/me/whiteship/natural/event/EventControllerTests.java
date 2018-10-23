@@ -103,7 +103,8 @@ public class EventControllerTests extends BaseControllerTests {
                 .andExpect(jsonPath("$.content[0].defaultMessage").isNotEmpty())
                 .andExpect(jsonPath("$.content[0].field").isNotEmpty())
                 .andExpect(jsonPath("$.content[0].defaultMessage").isNotEmpty())
-                .andExpect(jsonPath("$.content[0].rejectedValue").isNotEmpty())
+                .andExpect(jsonPath("$.content[0].rejectedValue").exists())
+                .andExpect(jsonPath("$.content[0].rejectedValue").isEmpty())
                 .andDo(document("errors",
                     links(
                         linkWithRel("index").description("Link to index")
