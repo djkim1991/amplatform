@@ -115,19 +115,24 @@ public class EventControllerTests extends BaseControllerTests {
                 ));
     }
 
-    @Description("Getting an event successfully.")
+    @Description("Getting an event successfully as a user not manager of the event")
     @Test
     public void getEvent() throws Exception {
         // Given
         Event newEvent = this.eventRepository.save(this.createSampleEvent());
 
         // When & Then
-        this.mockMvc.perform(RestDocumentationRequestBuilders.get("/api/events/{id}", newEvent.getId()))
+        this.mockMvc.perform(RestDocumentationRequestBuilders.get("/api/events/{id}", newEvent.getId())
+                .header(HttpHeaders.AUTHORIZATION, bearer(getAccessToken())))
                 .andDo(print())
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("_links.self").hasJsonPath())
+                .andExpect(jsonPath("_links.update").doesNotExist())
                 .andDo(document("get-event",
                     relaxedLinks(
-                        linkWithRel("update").description("link to update this event.")
+                        linkWithRel("self").description("link to this event."),
+                        linkWithRel("event").description("link to all events."),
+                        linkWithRel("profile").description("link to profile.")
                     ),
                     pathParameters(
                         parameterWithName("id").description("identifier of an Event.")
@@ -138,6 +143,29 @@ public class EventControllerTests extends BaseControllerTests {
                         fieldWithPath("description").description("name of the event")
                     )
                 ))
+        ;
+    }
+
+    @Description("Getting an event successfully as a manager of the event")
+    @Test
+    public void getEventAsAManager() throws Exception {
+        // Given
+        String email = "manager@email.com";
+        String originalPassword = "manager";
+        User manager = userService.createUser(
+                User.builder().email(email).password(originalPassword).roles(Set.of(UserRole.USER)).build()
+        );
+        Event sampleEvent = this.createSampleEvent();
+        sampleEvent.setManager(manager);
+        Event newEvent = this.eventRepository.save(sampleEvent);
+
+        // When & Then
+        this.mockMvc.perform(RestDocumentationRequestBuilders.get("/api/events/{id}", newEvent.getId())
+                .header(HttpHeaders.AUTHORIZATION, bearer(getAccessToken(manager, originalPassword))))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("_links.self").hasJsonPath())
+                .andExpect(jsonPath("_links.update").hasJsonPath())
         ;
     }
 
@@ -320,12 +348,15 @@ public class EventControllerTests extends BaseControllerTests {
                 .roles(Set.of(UserRole.USER))
                 .build();
 
-        userService.createUser(user);
+        User newUser = userService.createUser(user);
+        return getAccessToken(newUser, password);
+    }
 
+    private String getAccessToken(User user, String originalPassword) throws Exception {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "password");
-        params.add("username", email);
-        params.add("password", password);
+        params.add("username", user.getEmail());
+        params.add("password", originalPassword);
 
         // When & Then
         var result = mockMvc.perform(post("/oauth/token")

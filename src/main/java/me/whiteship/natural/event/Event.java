@@ -1,6 +1,9 @@
 package me.whiteship.natural.event;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.*;
+import me.whiteship.natural.user.User;
+import me.whiteship.natural.user.UserSerializer;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -44,6 +47,10 @@ public class Event {
     @Enumerated(EnumType.STRING)
     EventStatus eventStatus = EventStatus.DRAFT;
 
+    @JsonSerialize(using = UserSerializer.class)
+    @ManyToOne
+    User manager;
+
     public void update() {
         if (this.maxPrice == null || this.maxPrice == 0) {
             this.free = true;
@@ -51,5 +58,10 @@ public class Event {
         if (this.location != null && !this.location.trim().isEmpty()) {
             this.offline = true;
         }
+    }
+
+    public void update(User currentUser) {
+        this.update();
+        this.manager = currentUser;
     }
 }
