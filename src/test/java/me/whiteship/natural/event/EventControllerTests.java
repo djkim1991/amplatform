@@ -168,10 +168,16 @@ public class EventControllerTests extends BaseControllerTests {
         Event event = this.eventRepository.save(this.createSampleEvent());
 
         // When & Then
-        this.mockMvc.perform(get("/api/events"))
+        this.mockMvc.perform(get("/api/events")
+                .header(HttpHeaders.AUTHORIZATION, bearer(getAccessToken())))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("_embedded.eventList[0].id", Matchers.is(event.getId())))
+                .andExpect(jsonPath("_embedded.eventList[0].id").value(event.getId()))
+                .andExpect(jsonPath("_embedded.eventList[0].name", Matchers.is(event.getName())))
+                .andExpect(jsonPath("_links.self").hasJsonPath())
+                .andExpect(jsonPath("_links.events").hasJsonPath())
+                .andExpect(jsonPath("_links.get-an-event").hasJsonPath())
+                .andExpect(jsonPath("_links.create-new-event").hasJsonPath())
                 .andExpect(jsonPath("_embedded.eventList[0].name", Matchers.is(event.getName())))
                 .andDo(document("get-events",
                     relaxedLinks(
@@ -190,6 +196,25 @@ public class EventControllerTests extends BaseControllerTests {
                         fieldWithPath("page.totalElements").type(JsonFieldType.NUMBER).description("The total number of results.")
                     )
                 ))
+        ;
+    }
+
+    @Description("Try to get events without token")
+    @Test
+    public void getEventAnonymous() throws Exception {
+        // Given
+        Event event = this.eventRepository.save(this.createSampleEvent());
+
+        // When & Then
+        this.mockMvc.perform(get("/api/events"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("_embedded.eventList[0].id").value(event.getId()))
+                .andExpect(jsonPath("_embedded.eventList[0].name").value(event.getName()))
+                .andExpect(jsonPath("_links.self").hasJsonPath())
+                .andExpect(jsonPath("_links.events").hasJsonPath())
+                .andExpect(jsonPath("_links.get-an-event").hasJsonPath())
+                .andExpect(jsonPath("_links.create-new-event").doesNotExist())
         ;
     }
 

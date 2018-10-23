@@ -2,20 +2,17 @@ package me.whiteship.natural.event;
 
 import lombok.extern.slf4j.Slf4j;
 import me.whiteship.natural.common.ErrorResource;
+import me.whiteship.natural.user.CurrentUser;
+import me.whiteship.natural.user.User;
+import me.whiteship.natural.user.UserAdapter;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.Link;
-import org.springframework.hateoas.PagedResources;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,15 +37,19 @@ public class EventController {
     EventValidator eventValidator;
 
     @GetMapping
-    public ResponseEntity all(Pageable pageable,
-                              PagedResourcesAssembler<Event> assembler,
-                              @AuthenticationPrincipal User currentUser) {
+    public ResponseEntity all(Pageable pageable, PagedResourcesAssembler<Event> assembler, @CurrentUser User currentUser) {
+        if (currentUser == null) {
+            log.debug("Current user doesn't exist");
+        } else {
+            log.debug("Current user {} {}", currentUser.getId(), currentUser.getEmail());
+        }
+
         Page<Event> events = eventRepository.findAll(pageable);
         var resources = assembler.toResource(events, entity -> new EventResource(entity));
         resources.add(linkTo(EventController.class).withRel("events"));
         resources.add(linkTo(methodOn(EventController.class).getEvent(null)).withRel("get-an-event"));
         if (currentUser != null) {
-            resources.add(linkTo(methodOn(EventController.class).createEvent(null, null)).withRel("create-new-events"));
+            resources.add(linkTo(methodOn(EventController.class).createEvent(null, null)).withRel("create-new-event"));
         }
         resources.add(linkToProfile("resources-events-list"));
         return ResponseEntity.ok().body(resources);

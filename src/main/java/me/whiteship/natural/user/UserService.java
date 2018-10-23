@@ -28,13 +28,7 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         var user = userRepository.findByEmailIgnoreCase(email).orElseThrow(() -> new UsernameNotFoundException(email));
-        return new User(user.getEmail(), user.getPassword(), authorities(user.getRoles()));
-    }
-
-    private Collection<? extends GrantedAuthority> authorities(Set<UserRole> roles) {
-        return roles.stream()
-                .map(userRole -> new SimpleGrantedAuthority("ROLE_" + userRole.name()))
-                .collect(Collectors.toSet());
+        return new UserAdapter(user);
     }
 
     public me.whiteship.natural.user.User createUser(me.whiteship.natural.user.User user) {

@@ -20,11 +20,12 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http
+            .anonymous()
+                .and()
             .authorizeRequests()
-                .mvcMatchers(HttpMethod.GET, "/api/events").permitAll()
-                .mvcMatchers(HttpMethod.GET, "/api/events/*").permitAll()
-                .mvcMatchers(HttpMethod.POST, "/api/events").authenticated()
-                .mvcMatchers(HttpMethod.PUT, "/api/events/*").authenticated()
+                .mvcMatchers(HttpMethod.GET, "/api/**").permitAll()
+                .mvcMatchers(HttpMethod.POST, "/api/**").authenticated()
+                .mvcMatchers(HttpMethod.PUT, "/api/**").authenticated()
                 .and()
             .exceptionHandling()
                 .accessDeniedHandler(new OAuth2AccessDeniedHandler());
