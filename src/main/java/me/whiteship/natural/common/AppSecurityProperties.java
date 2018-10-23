@@ -18,4 +18,8 @@ public class AppSecurityProperties {
 
     private String adminPassword;
 
+    private String userUsername;
+
+    private String userPassword;
+
 }

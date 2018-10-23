@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import java.util.Set;
 
 @Component
-public class AdminUserInitializer implements ApplicationRunner {
+public class DefaultUsersInitializer implements ApplicationRunner {
 
     @Autowired
     UserService userService;
@@ -22,9 +22,17 @@ public class AdminUserInitializer implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        User user = User.builder()
+        User admin = User.builder()
                 .email(appSecurityProperties.getAdminUsername())
                 .password(appSecurityProperties.getAdminPassword())
+                .roles(Set.of(UserRole.ADMIN, UserRole.USER))
+                .build();
+
+        userService.createUser(admin);
+
+        User user = User.builder()
+                .email(appSecurityProperties.getUserUsername())
+                .password(appSecurityProperties.getUserPassword())
                 .roles(Set.of(UserRole.ADMIN, UserRole.USER))
                 .build();
 

@@ -4,6 +4,7 @@ import me.whiteship.natural.common.AppSecurityProperties;
 import me.whiteship.natural.common.BaseControllerTests;
 import me.whiteship.natural.common.Description;
 import me.whiteship.natural.user.User;
+import me.whiteship.natural.user.UserRepository;
 import me.whiteship.natural.user.UserRole;
 import me.whiteship.natural.user.UserService;
 import org.assertj.core.internal.bytebuddy.utility.RandomString;
@@ -44,11 +45,15 @@ public class EventControllerTests extends BaseControllerTests {
     EventRepository eventRepository;
 
     @Autowired
+    UserRepository userRepository;
+
+    @Autowired
     AppSecurityProperties appSecurityProperties;
 
     @Before
     public void setUp() {
         this.eventRepository.deleteAll();
+        this.userRepository.deleteAll();
     }
 
     @Description("Trying to create new event with correct data.")
@@ -75,16 +80,18 @@ public class EventControllerTests extends BaseControllerTests {
                 .andDo(document(
                     "create-event",
                     links(halLinks(),
-                            linkWithRel("profile").description("Link to profile"),
-                            linkWithRel("self").description("Link to the created event"),
-                            linkWithRel("event").description("Link to view all events")),
-                        getRequestFieldsSnippet(),
-                        relaxedResponseFields(
-                            fieldWithPath("id").description("id of new event")
-                        ),
-                        responseHeaders(
-                            headerWithName("location").description("new event URL")
-                        )
+                        linkWithRel("profile").description("Link to profile"),
+                        linkWithRel("self").description("Link to the created event"),
+                        linkWithRel("event").description("Link to view all events"),
+                        linkWithRel("update").description("Link to update the event")
+                    ),
+                    getRequestFieldsSnippet(),
+                    relaxedResponseFields(
+                        fieldWithPath("id").description("id of new event")
+                    ),
+                    responseHeaders(
+                        headerWithName("location").description("new event URL")
+                    )
                 ))
         ;
     }
@@ -243,11 +250,20 @@ public class EventControllerTests extends BaseControllerTests {
         ;
     }
 
-    @Description("Update existing event with CreateOrUpdate DTO")
+    @Description("Manager can update existing event with correct data.")
     @Test
     public void updateEvent() throws Exception {
         // Given
-        Event existingEvent = this.eventRepository.save(this.createSampleEvent());
+        String email = "manager@email.com";
+        String originalPassword = "manager";
+        User manager = userService.createUser(
+                User.builder().email(email).password(originalPassword).roles(Set.of(UserRole.USER)).build()
+        );
+
+        Event sampleEvent = this.createSampleEvent();
+        sampleEvent.setManager(manager);
+        Event existingEvent = this.eventRepository.save(sampleEvent);
+
         String newName = RandomString.make(10);
         EventDto.CreateOrUpdate eventDto = createEventDto();
         eventDto.setName(newName);
@@ -256,7 +272,7 @@ public class EventControllerTests extends BaseControllerTests {
         eventDto.setLocation(null);
 
         this.mockMvc.perform(RestDocumentationRequestBuilders.put("/api/events/{id}", existingEvent.getId())
-                .header(HttpHeaders.AUTHORIZATION, bearer(getAccessToken()))
+                .header(HttpHeaders.AUTHORIZATION, bearer(getAccessToken(manager, originalPassword)))
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(objectMapper.writeValueAsString(eventDto)))
                 .andDo(print())
@@ -296,6 +312,44 @@ public class EventControllerTests extends BaseControllerTests {
                 .andExpect(status().isBadRequest())
         ;
     }
+
+    @Description("If a user trying to update existing event, it will response 403 Forbidden.")
+    @Test
+    public void updateEvent_forbidden() throws Exception {
+        // Given
+        String managerEmail = "manager@email.com";
+        String managerPassword = "manager";
+        User manager = userService.createUser(
+            User.builder().email(managerEmail).password(managerPassword).roles(Set.of(UserRole.USER)).build()
+        );
+
+        String userEmail = "anotherUser@email.com";
+        String userPassword = "user";
+        User user = userService.createUser(
+            User.builder().email(userEmail).password(userPassword).roles(Set.of(UserRole.USER)).build()
+        );
+
+        Event sampleEvent = this.createSampleEvent();
+        sampleEvent.setManager(manager);
+        Event existingEvent = this.eventRepository.save(sampleEvent);
+
+        String newName = RandomString.make(10);
+        EventDto.CreateOrUpdate eventDto = createEventDto();
+        eventDto.setName(newName);
+        eventDto.setBasePrice(0);
+        eventDto.setMaxPrice(0);
+        eventDto.setLocation(null);
+
+        this.mockMvc.perform(RestDocumentationRequestBuilders.put("/api/events/{id}", existingEvent.getId())
+                .header(HttpHeaders.AUTHORIZATION, bearer(getAccessToken(user, userPassword)))
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(objectMapper.writeValueAsString(eventDto)))
+                .andDo(print())
+                .andExpect(status().isForbidden())
+        ;
+    }
+
+
 
     private RequestFieldsSnippet getRequestFieldsSnippet() {
         return requestFields(

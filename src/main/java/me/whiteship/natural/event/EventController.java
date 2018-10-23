@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.Link;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -65,7 +66,7 @@ public class EventController {
 
         Event event = byId.get();
         EventResource eventResource = new EventResource(event);
-        if (currentUser.equals(event.getManager())) {
+        if (currentUser != null && currentUser.equals(event.getManager())) {
             eventResource.add(linkToUpdate(event));
         }
         eventResource.add(linkToProfile("resources-events-get"));
@@ -100,7 +101,8 @@ public class EventController {
     @PutMapping("/{id}")
     public ResponseEntity update(@PathVariable Integer id,
                                  @Valid @RequestBody EventDto.CreateOrUpdate eventDto,
-                                 BindingResult errors) {
+                                 BindingResult errors,
+                                 @CurrentUser User currentUser) {
         if (errors.hasErrors()) {
             return badRequestResponse(errors);
         }
@@ -111,6 +113,10 @@ public class EventController {
         }
 
         Event event = byId.get();
+        if (currentUser != null && !currentUser.equals(event.getManager())) {
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+        }
+
         modelMapper.map(eventDto, event);
         event.update();
 
@@ -151,6 +157,6 @@ public class EventController {
     }
 
     private Link linkToUpdate(Event newEvent) {
-        return linkTo(methodOn(EventController.class).update(newEvent.getId(), null, null)).withRel("update");
+        return linkTo(methodOn(EventController.class).update(newEvent.getId(), null, null, null)).withRel("update");
     }
 }
