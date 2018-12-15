@@ -4,8 +4,10 @@ import io.anymobi.common.Description;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -18,20 +20,23 @@ public class UserServiceTest {
     @Test
     public void loadUserByUsername() {
         // Given
-        var userRepository = Mockito.mock(UserRepository.class);
-        var userService = new UserService();
+        Set<UserRole> roleSet =new HashSet<>();
+        roleSet.add(UserRole.ADMIN);
+        roleSet.add(UserRole.USER);
+        UserRepository userRepository = Mockito.mock(UserRepository.class);
+        UserService userService = new UserService();
         userService.userRepository = userRepository;
         String email = "keesun@email.com";
         String password = "pass";
         User user = User.builder()
                 .email(email)
                 .password(password)
-                .roles(Set.of(UserRole.ADMIN, UserRole.USER))
+                .roles(roleSet)
                 .build();
         Mockito.when(userRepository.findByEmailIgnoreCase(email)).thenReturn(Optional.of(user));
 
         // When
-        var userDetails = userService.loadUserByUsername(email);
+        UserDetails userDetails = userService.loadUserByUsername(email);
 
         // Then
         assertThat(userDetails.getUsername()).isEqualTo(email);
@@ -43,8 +48,8 @@ public class UserServiceTest {
     @Test(expected = UsernameNotFoundException.class)
     public void usernameNotfoundException() {
         // Given
-        var userRepository = Mockito.mock(UserRepository.class);
-        var userService = new UserService();
+        UserRepository userRepository = Mockito.mock(UserRepository.class);
+        UserService userService = new UserService();
         userService.userRepository = userRepository;
         Mockito.when(userRepository.findByEmailIgnoreCase(anyString())).thenReturn(Optional.empty());
 

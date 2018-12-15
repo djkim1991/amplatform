@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -39,10 +40,12 @@ public class UserRepositoryTest {
     }
 
     private User user() {
+        Set<UserRole> roleSet =new HashSet<>();
+        roleSet.add(UserRole.USER);
         return User.builder()
                     .email("keesun@email.com")
                     .password("password")
-                    .roles(Set.of(UserRole.ADMIN, UserRole.USER))
+                    .roles(roleSet)
                     .build();
     }
 

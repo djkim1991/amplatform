@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
@@ -41,12 +42,16 @@ public class OAuth2ServerConfigTests {
     @Test
     public void getAccessToken() throws Exception {
         // Given
+
+        Set<UserRole> roleSet =new HashSet<>();
+        roleSet.add(UserRole.USER);
+
         String password = "pass";
         String email = "test@email.com";
-        var user = User.builder()
+        User user = User.builder()
                 .email(email)
                 .password(password)
-                .roles(Set.of(UserRole.USER))
+                .roles(roleSet)
                 .build();
         userService.createUser(user);
 

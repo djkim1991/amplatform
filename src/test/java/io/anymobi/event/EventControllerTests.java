@@ -18,10 +18,12 @@ import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.security.oauth2.common.util.Jackson2JsonParser;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
@@ -157,10 +159,12 @@ public class EventControllerTests extends BaseControllerTests {
     @Test
     public void getEventAsAManager() throws Exception {
         // Given
+        Set<UserRole> roleSet =new HashSet<>();
+        roleSet.add(UserRole.USER);
         String email = "manager@email.com";
         String originalPassword = "manager";
         User manager = userService.createUser(
-                User.builder().email(email).password(originalPassword).roles(Set.of(UserRole.USER)).build()
+                User.builder().email(email).password(originalPassword).roles(roleSet).build()
         );
         Event sampleEvent = this.createSampleEvent();
         sampleEvent.setManager(manager);
@@ -254,10 +258,12 @@ public class EventControllerTests extends BaseControllerTests {
     @Test
     public void updateEvent() throws Exception {
         // Given
+        Set<UserRole> roleSet =new HashSet<>();
+        roleSet.add(UserRole.USER);
         String email = "manager@email.com";
         String originalPassword = "manager";
         User manager = userService.createUser(
-                User.builder().email(email).password(originalPassword).roles(Set.of(UserRole.USER)).build()
+                User.builder().email(email).password(originalPassword).roles(roleSet).build()
         );
 
         Event sampleEvent = this.createSampleEvent();
@@ -317,16 +323,18 @@ public class EventControllerTests extends BaseControllerTests {
     @Test
     public void updateEvent_forbidden() throws Exception {
         // Given
+        Set<UserRole> roleSet =new HashSet<>();
+        roleSet.add(UserRole.USER);
         String managerEmail = "manager@email.com";
         String managerPassword = "manager";
         User manager = userService.createUser(
-            User.builder().email(managerEmail).password(managerPassword).roles(Set.of(UserRole.USER)).build()
+            User.builder().email(managerEmail).password(managerPassword).roles(roleSet).build()
         );
 
         String userEmail = "anotherUser@email.com";
         String userPassword = "user";
         User user = userService.createUser(
-            User.builder().email(userEmail).password(userPassword).roles(Set.of(UserRole.USER)).build()
+            User.builder().email(userEmail).password(userPassword).roles(roleSet).build()
         );
 
         Event sampleEvent = this.createSampleEvent();
@@ -393,13 +401,17 @@ public class EventControllerTests extends BaseControllerTests {
     }
 
     private String getAccessToken() throws Exception {
+
+        Set<UserRole> roleSet =new HashSet<>();
+        roleSet.add(UserRole.USER);
+
         String email = "User" + System.currentTimeMillis() + "@email.com";
         String password = "pass";
 
-        var user = User.builder()
+        User user = User.builder()
                 .email(email)
                 .password(password)
-                .roles(Set.of(UserRole.USER))
+                .roles(roleSet)
                 .build();
 
         User newUser = userService.createUser(user);
@@ -413,14 +425,14 @@ public class EventControllerTests extends BaseControllerTests {
         params.add("password", originalPassword);
 
         // When & Then
-        var result = mockMvc.perform(post("/oauth/token")
+        ResultActions resultActions = mockMvc.perform(post("/oauth/token")
                 .params(params)
                 .with(httpBasic(appSecurityProperties.getDefaultClientId(), appSecurityProperties.getDefaultClientSecret()))
                 .accept(MediaType.APPLICATION_JSON_UTF8))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        String resultString = result.andReturn().getResponse().getContentAsString();
+        String resultString = resultActions.andReturn().getResponse().getContentAsString();
         Jackson2JsonParser parser = new Jackson2JsonParser();
         return parser.parseMap(resultString).get("access_token").toString();
     }

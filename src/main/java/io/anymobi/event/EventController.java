@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.Link;
+import org.springframework.hateoas.PagedResources;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -47,7 +48,7 @@ public class EventController {
         }
 
         Page<Event> events = eventRepository.findAll(pageable);
-        var resources = assembler.toResource(events, entity -> new EventResource(entity));
+        PagedResources<EventResource> resources = assembler.toResource(events, entity -> new EventResource(entity));
         resources.add(linkTo(EventController.class).withRel("events"));
         resources.add(linkTo(methodOn(EventController.class).getEvent(null, null)).withRel("get-an-event"));
         if (currentUser != null) {
@@ -149,7 +150,7 @@ public class EventController {
     }
 
     private Link linkToProfile(String anchor) {
-        var linkValue = "</docs/index.html>; rel=\"profile\";";
+        String linkValue = "</docs/index.html>; rel=\"profile\";";
         if (anchor != null) {
             linkValue = "</docs/index.html#" + anchor + ">; rel=\"profile\";";
         }

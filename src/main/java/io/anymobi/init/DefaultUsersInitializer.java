@@ -9,6 +9,7 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Component
@@ -22,10 +23,13 @@ public class DefaultUsersInitializer implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
+        Set<UserRole> roleSet =new HashSet<>();
+        roleSet.add(UserRole.ADMIN);
+        roleSet.add(UserRole.USER);
         User admin = User.builder()
                 .email(appSecurityProperties.getAdminUsername())
                 .password(appSecurityProperties.getAdminPassword())
-                .roles(Set.of(UserRole.ADMIN, UserRole.USER))
+                .roles(roleSet)
                 .build();
 
         userService.createUser(admin);
@@ -33,7 +37,7 @@ public class DefaultUsersInitializer implements ApplicationRunner {
         User user = User.builder()
                 .email(appSecurityProperties.getUserUsername())
                 .password(appSecurityProperties.getUserPassword())
-                .roles(Set.of(UserRole.ADMIN, UserRole.USER))
+                .roles(roleSet)
                 .build();
 
         userService.createUser(user);
