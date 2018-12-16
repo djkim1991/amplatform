@@ -40,5 +40,5 @@ public class AMPApplication {
         characterEncodingFilter.setForceEncoding(true);
         return characterEncodingFilter;
     }
-
+}
 }
