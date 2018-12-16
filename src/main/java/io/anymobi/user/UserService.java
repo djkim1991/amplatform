@@ -1,5 +1,6 @@
 package io.anymobi.user;
 
+import io.anymobi.entity.UserConfirm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,5 +28,8 @@ public class UserService implements UserDetailsService {
     public User createUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
+    }
+
+    public void createUserConfirm(UserConfirm userConfirm) {
     }
 }

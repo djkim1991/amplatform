@@ -1,13 +1,41 @@
-version: '2'
-
-services:
-  app:
-    build: .
-    image: ${DOCKER_USER_ID}/amplatform
-  production:
-    image: ${DOCKER_USER_ID}/amplatform:${BUILD_NUMBER}
-    container_name: amplatform
+version: '2' # Docker-Compose 버전 2 사용.
+services: # 컨테이너별 서비스 정의.
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: springboot-rabbitmq
     ports:
-      - '8081:8081'
+    - 5672:5672
+    - 15672:15672
     environment:
-      - "SPRING_PROFILES_ACTIVE=prod"
+    - RABBITMQ_DEFAULT_VHOST=/springboot
+  redis:
+    image: redis
+    container_name: springboot-redis
+    ports:
+    - 6379:6379
+  db:
+    image: postgres
+    container_name: springboot-postgres
+    ports:
+    - 5432:5432
+    environment:
+    - POSTGRES_DB=springboot
+    - POSTGRES_USER=postgres
+    - POSTGRES_PASS=pass
+  web:
+    build: . # 현 위치의 DockerFile을 사용해 이미지 빌드.
+    container_name: amplatform
+    ports: # 웹서버 포트.
+    - '8081:8080'
+    volumes: # 웹서버 저장소.
+    - .:/code
+    links:
+    - db
+    - rabbitmq
+    - redis
+    depends_on:
+    - db
+    - rabbitmq
+    - redis
+    environment:
+    - "SPRING_PROFILES_ACTIVE=prod"
