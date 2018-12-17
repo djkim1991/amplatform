@@ -3,8 +3,9 @@ ADD pom.xml ./pom.xml
 ADD src ./src
 RUN mvn package -DskipTests=true
 
+
 FROM java:8
-COPY --from=build /target/amplatform-1.0.0.jar /app.jar
+COPY --from=build target/amplatform-1.0.0.jar /app.jar
 #ADD target/amplatform-1.0.0.jar app.jar
 #RUN bash -c 'touch /app.jar'
 #VOLUME /tmp
