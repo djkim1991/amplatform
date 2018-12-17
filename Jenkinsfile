@@ -29,7 +29,7 @@ node {
          }
 
          stage('Deploy') {
-             sh(script: '/usr/local/bin/docker-compose up -d production')
+             sh(script: '/usr/local/bin/docker-compose up -d web')
          }
      }
 
