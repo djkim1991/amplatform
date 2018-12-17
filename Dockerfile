@@ -1,7 +1,7 @@
 FROM maven:3.5-jdk-8-alpine as build
 ADD pom.xml ./pom.xml
 ADD src ./src
-RUN mvn package
+RUN mvn package -DskipTests=true
 
 
 FROM java:8
