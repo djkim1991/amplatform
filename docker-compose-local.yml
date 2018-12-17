@@ -38,5 +38,5 @@ services: # 컨테이너별 서비스 정의.
       - rabbitmq
       - redis
       environment:
-      - "SPRING_PROFILES_ACTIVE=prod"
+      - "SPRING_PROFILES_ACTIVE=docker"
 
