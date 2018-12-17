@@ -22,11 +22,8 @@ services: # 컨테이너별 서비스 정의.
     - POSTGRES_DB=springboot
     - POSTGRES_USER=postgres
     - POSTGRES_PASS=pass
-  app:
-    build: .
-    image: ${DOCKER_USER_ID}/amplatform
   web:
-    image: ${DOCKER_USER_ID}/amplatform:${BUILD_NUMBER}
+    build: .
     container_name: amplatform
     ports: # 웹서버 포트.
     - '8081:8080'
@@ -42,4 +39,3 @@ services: # 컨테이너별 서비스 정의.
     - redis
     environment:
     - "SPRING_PROFILES_ACTIVE=prod"
-

@@ -25,7 +25,7 @@ services: # 컨테이너별 서비스 정의.
   app:
     build: .
     image: ${DOCKER_USER_ID}/amplatform
-  production:
+  web:
     image: ${DOCKER_USER_ID}/amplatform:${BUILD_NUMBER}
     container_name: amplatform
     ports: # 웹서버 포트.
