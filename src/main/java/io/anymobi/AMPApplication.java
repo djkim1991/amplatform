@@ -22,7 +22,7 @@ public class AMPApplication {
     }
 
     @Bean
-    @Profile("prod")
+    @Profile("docker")
     Queue queueWithdrawal() {
 
         return new Queue("user_confirm", false);
