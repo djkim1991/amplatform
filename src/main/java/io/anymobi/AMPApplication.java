@@ -13,7 +13,7 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 import java.nio.charset.Charset;
 
 @SpringBootApplication
-@EnableScheduling
+//@EnableScheduling
 public class AMPApplication {
 
     public static void main(String[] args) {

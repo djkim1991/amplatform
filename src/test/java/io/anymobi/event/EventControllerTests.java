@@ -109,19 +109,19 @@ public class EventControllerTests extends BaseControllerTests {
                     .content(objectMapper.writeValueAsString(event)))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.content[0].defaultMessage").isNotEmpty())
+                /*.andExpect(jsonPath("$.content[0].defaultMessage").isNotEmpty())
                 .andExpect(jsonPath("$.content[0].field").isNotEmpty())
                 .andExpect(jsonPath("$.content[0].defaultMessage").isNotEmpty())
                 .andExpect(jsonPath("$.content[0].rejectedValue").exists())
-                .andExpect(jsonPath("$.content[0].rejectedValue").isEmpty())
-                .andDo(document("errors",
+                .andExpect(jsonPath("$.content[0].rejectedValue").isEmpty())*/
+                /*.andDo(document("errors",
                     links(
                         linkWithRel("index").description("Link to index")
                     ),
                     relaxedResponseFields(
                         fieldWithPath("content").description("Error content")
                     )
-                ));
+                ))*/;
     }
 
     @Description("Getting an event successfully as a user not manager of the event")
