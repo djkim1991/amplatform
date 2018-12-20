@@ -20,7 +20,7 @@ public class AMPApplication {
     }
 
     @Bean
-    @Profile("docker")git
+    @Profile("docker")
     Queue queueWithdrawal() {
 
         return new Queue("user_confirm", false);
