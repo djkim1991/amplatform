@@ -2,7 +2,7 @@ package io.anymobi;
 
 import org.junit.Test;
 
-public class NaturalApplicationTests {
+public class AMPApplicationTests {
 
     @Test
     public void contextLoads() {
