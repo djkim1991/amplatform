@@ -3,6 +3,7 @@ package io.anymobi;
 import org.springframework.amqp.core.Queue;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.task.TaskExecutionAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -11,7 +12,7 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 
 import java.nio.charset.Charset;
 
-@SpringBootApplication
+@SpringBootApplication(exclude = {TaskExecutionAutoConfiguration.class})
 public class AMPApplication {
 
     public static void main(String[] args) {

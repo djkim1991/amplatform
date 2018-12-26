@@ -34,7 +34,10 @@ public class BatchExecutor {
         if (!lock.isLocked()) {
             lock.lock(10, TimeUnit.MINUTES);
             log.info("### userConfirmPublish begin ###");
-            UserConfirm userConfirm = UserConfirm.builder().email("onjsdnjs@gmail.com").build();
+            UserConfirm userConfirm = UserConfirm.builder()
+                    .hashEmail("onjsdnjs@gmail.com")
+                    .code("123456789")
+                    .email("onjsdnjs@gmail.com").build();
             try {
                     mqPublisher.userConfirmPublish(userConfirm);
                 } catch (Exception ex) {
