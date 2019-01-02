@@ -17,7 +17,6 @@ public class AMPApplication {
 
     public static void main(String[] args) {
 
-
         SpringApplication.run(AMPApplication.class, args);
     }
 
