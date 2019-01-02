@@ -14,7 +14,7 @@ node {
          stage('Unit Test') {
          }
          stage('Build') {
-             sh(script: '/usr/local/bin/docker-compose build web')
+             sh(script: '/usr/local/bin/docker-compose build app')
          }
 
          stage('Tag') {
