@@ -1,22 +1,21 @@
 package io.anymobi.init;
 
 import io.anymobi.common.AppSecurityProperties;
-import io.anymobi.user.User;
-import io.anymobi.user.UserRole;
-import io.anymobi.user.UserService;
+import io.anymobi.common.enums.UserRole;
+import io.anymobi.domain.entity.User;
+import io.anymobi.user.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
 import java.util.Set;
 
-@Component
+//@Component
 public class DefaultUsersInitializer implements ApplicationRunner {
 
     @Autowired
-    UserService userService;
+    UsersService userService;
 
     @Autowired
     AppSecurityProperties appSecurityProperties;

@@ -1,6 +1,9 @@
 package io.anymobi.user;
 
 import io.anymobi.common.Description;
+import io.anymobi.common.enums.UserRole;
+import io.anymobi.domain.entity.User;
+import io.anymobi.repositories.jpa.UserRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;

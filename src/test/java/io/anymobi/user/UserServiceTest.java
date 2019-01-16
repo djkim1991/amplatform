@@ -1,6 +1,9 @@
 package io.anymobi.user;
 
 import io.anymobi.common.Description;
+import io.anymobi.common.enums.UserRole;
+import io.anymobi.domain.entity.User;
+import io.anymobi.repositories.jpa.UserRepository;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.springframework.security.core.GrantedAuthority;
@@ -24,7 +27,7 @@ public class UserServiceTest {
         roleSet.add(UserRole.ADMIN);
         roleSet.add(UserRole.USER);
         UserRepository userRepository = Mockito.mock(UserRepository.class);
-        UserService userService = new UserService();
+        UsersService userService = new UsersService();
         userService.userRepository = userRepository;
         String email = "keesun@email.com";
         String password = "pass";
@@ -49,7 +52,7 @@ public class UserServiceTest {
     public void usernameNotfoundException() {
         // Given
         UserRepository userRepository = Mockito.mock(UserRepository.class);
-        UserService userService = new UserService();
+        UsersService userService = new UsersService();
         userService.userRepository = userRepository;
         Mockito.when(userRepository.findByEmailIgnoreCase(anyString())).thenReturn(Optional.empty());
 

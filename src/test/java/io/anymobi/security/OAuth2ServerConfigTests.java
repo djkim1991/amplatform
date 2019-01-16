@@ -1,9 +1,9 @@
 package io.anymobi.security;
 
 import io.anymobi.common.AppSecurityProperties;
-import io.anymobi.user.User;
-import io.anymobi.user.UserRole;
-import io.anymobi.user.UserService;
+import io.anymobi.common.enums.UserRole;
+import io.anymobi.domain.entity.User;
+import io.anymobi.user.UsersService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +34,7 @@ public class OAuth2ServerConfigTests {
     MockMvc mockMvc;
 
     @Autowired
-    UserService userService;
+    UsersService userService;
 
     @Autowired
     AppSecurityProperties appSecurityProperties;

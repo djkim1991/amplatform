@@ -1,6 +1,6 @@
 package io.anymobi.common;
 
-import io.anymobi.index.IndexController;
+import io.anymobi.controller.rest.IndexController;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resource;
 import org.springframework.validation.Errors;
