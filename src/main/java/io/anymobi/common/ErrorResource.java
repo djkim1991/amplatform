@@ -1,6 +1,6 @@
 package io.anymobi.common;
 
-import io.anymobi.index.IndexController;
+import io.anymobi.controller.rest.RestIndexController;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resource;
 import org.springframework.validation.Errors;
@@ -11,6 +11,6 @@ public class ErrorResource extends Resource<Errors> {
 
     public ErrorResource(Errors content, Link... links) {
         super(content, links);
-        add(linkTo(IndexController.class).withRel("index"));
+        add(linkTo(RestIndexController.class).withRel("index"));
     }
 }
