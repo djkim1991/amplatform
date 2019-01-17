@@ -17,8 +17,8 @@ public abstract class AbstractBaseService<Mapper> {
 	@Autowired
 	protected CommonSqlRepository commonSqlRepository;
 	
-	protected Mapper getMapper(Class<Mapper> clz) {
-		Mapper mapper = (Mapper) commonSqlRepository.getSqlSession().getMapper(clz);
-		return mapper;
-	}
+//	protected Mapper getMapper(Class<Mapper> clz) {
+//		Mapper mapper = (Mapper) commonSqlRepository.getSqlSession().getMapper(clz);
+//		return mapper;
+//	}
 }

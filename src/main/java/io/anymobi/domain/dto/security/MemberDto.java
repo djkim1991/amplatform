@@ -1,6 +1,7 @@
 package io.anymobi.domain.dto.security;
 
 import lombok.*;
+import org.apache.ibatis.type.Alias;
 
 @Getter
 @Setter
@@ -8,6 +9,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Alias("member")
 public class MemberDto {
 
     private int id;

@@ -29,7 +29,7 @@ public class SecurityTestController {
     @GetMapping("/errortest")
     public String home(Model model, Principal principal) {
 
-        return "errorTest";
+        return "test/errorTest";
     }
 
     @GetMapping("/users")

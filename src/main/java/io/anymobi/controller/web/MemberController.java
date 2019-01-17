@@ -23,19 +23,25 @@ import java.util.List;
 public class MemberController {
 
 	@Autowired
-    MemberService memberService;
+	MemberService memberService;
+
+	@GetMapping(value="/members/home")
+	public String members() throws Exception {
+
+		return "test/index";
+	}
 
 	@GetMapping(value="/members/join")
 	public String memberJoin() throws Exception {
 
-		return "member";
+		return "test/member";
 	}
 	
 	@PostMapping(value="/members")
 	public String registerMember(MemberDto member) throws Exception {
 
 		memberService.insertMember(member);
-		return "index";
+		return "test/index";
 		
 	}
 	
@@ -55,13 +61,13 @@ public class MemberController {
 	@GetMapping(value="/members/edit")
 	public String memberEdit() throws Exception {
 
-		return "member_edit";
+		return "test/member_edit";
 	}
 
 	@PostMapping(value="/members/{id}")
 	public String editMember(@PathVariable int id, MemberDto memberDto) throws Exception {
 		memberDto.setId(id);
 		memberService.updateMember(memberDto);
-		return "index";
+		return "test/index";
 	}
 }

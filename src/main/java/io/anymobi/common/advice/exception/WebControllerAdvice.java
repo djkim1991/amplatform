@@ -25,7 +25,7 @@ public class WebControllerAdvice{
         return "forward:/handling";
     }
 
-    @ExceptionHandler(Exception.class)
+    @ExceptionHandler(Throwable.class)
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     public String handleException(HttpServletRequest request, HttpServletResponse response, Exception e) {
         ExceptionDto exception = new ExceptionDto("Exception on server occurred", e.toString(), ExceptionType.SERVER);

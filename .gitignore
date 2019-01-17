@@ -1,5 +1,8 @@
 /target/
 target
+/logs
+/logs/
+logs
 build
 !.mvn/wrapper/maven-wrapper.jar
 

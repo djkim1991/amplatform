@@ -1,4 +1,4 @@
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 
 <head>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"/>
@@ -29,6 +29,7 @@ label{padding-left:0 !important}
 </style>
 </head>
 <body>
+<h1>JPA</h1>
 <div th:if="${param.message != null}" class="alert alert-info" th:text="${param.message[0]}">message</div>
 
 
