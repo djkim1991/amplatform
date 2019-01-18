@@ -60,19 +60,23 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addViewController("/users/qrcode.html");
     }
 
-    @Override
+    @Bean
+    public LocaleChangeInterceptor localeChangeInterceptor() {
+        LocaleChangeInterceptor lci = new LocaleChangeInterceptor();
+        lci.setParamName("lang");
+        return lci;
+    }
+
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(profileHeaderInterceptor).addPathPatterns("/api/**");
-        LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
-        localeChangeInterceptor.setParamName("lang");
-        registry.addInterceptor(localeChangeInterceptor);
+        registry.addInterceptor(localeChangeInterceptor());
     }
 
     @Bean
     public LocaleResolver localeResolver() {
 
         CookieLocaleResolver cookieLocaleResolver = new CookieLocaleResolver();
-        cookieLocaleResolver.setDefaultLocale(Locale.KOREAN);
+        cookieLocaleResolver.setDefaultLocale(Locale.KOREA);
         return cookieLocaleResolver;
     }
 
