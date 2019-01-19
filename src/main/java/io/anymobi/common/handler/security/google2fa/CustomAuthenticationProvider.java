@@ -9,12 +9,16 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 //@Component
 public class CustomAuthenticationProvider extends DaoAuthenticationProvider {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Override
     public Authentication authenticate(Authentication auth) throws AuthenticationException {
@@ -23,8 +27,12 @@ public class CustomAuthenticationProvider extends DaoAuthenticationProvider {
             throw new BadCredentialsException("Invalid username or password");
         }
 
-        if (!matchPassword(user.getPassword(), auth.getCredentials())) {
-            throw new BadCredentialsException("Invalid username or password");
+        //if (!matchPassword(user.getPassword(), auth.getCredentials())) {
+            //throw new BadCredentialsException("Invalid username or password");
+        //}
+
+        if (!user.isEnabled()) {
+            throw new BadCredentialsException("not user confirm");
         }
 
         // to verify verification code

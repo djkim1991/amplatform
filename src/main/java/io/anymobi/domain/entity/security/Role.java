@@ -1,6 +1,7 @@
 package io.anymobi.domain.entity.security;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Collection;
 
 @Entity
