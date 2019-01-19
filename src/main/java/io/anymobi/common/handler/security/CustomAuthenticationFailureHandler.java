@@ -35,8 +35,10 @@ public class CustomAuthenticationFailureHandler extends SimpleUrlAuthenticationF
 
         if (exception.getMessage().equalsIgnoreCase("User is disabled")) {
             errorMessage = messages.getMessage("auth.message.disabled", null, locale);
+
         } else if (exception.getMessage().equalsIgnoreCase("User account has expired")) {
             errorMessage = messages.getMessage("auth.message.expired", null, locale);
+            
         } else if (exception.getMessage().equalsIgnoreCase("blocked")) {
             errorMessage = messages.getMessage("auth.message.blocked", null, locale);
         }
