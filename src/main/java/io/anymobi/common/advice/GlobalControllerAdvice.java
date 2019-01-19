@@ -25,7 +25,7 @@ public class GlobalControllerAdvice {
         this.environment = environment;
     }
     
-    @ModelAttribute("user")
+    @ModelAttribute("principal")
     public User getCurrentUser(Authentication authentication) {
         return (authentication == null) ? null : ((User) authentication.getPrincipal());
     }

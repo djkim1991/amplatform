@@ -18,7 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping(value = "/api")
 public class RegistrationCaptchaController {
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 

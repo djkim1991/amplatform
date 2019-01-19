@@ -14,6 +14,7 @@ import org.springframework.web.context.request.RequestContextListener;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.LocaleResolver;
+import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -72,31 +73,8 @@ public class WebConfig implements WebMvcConfigurer {
     public LocaleResolver localeResolver() {
 
         CookieLocaleResolver cookieLocaleResolver = new CookieLocaleResolver();
-        cookieLocaleResolver.setDefaultLocale(Locale.KOREAN);
+        cookieLocaleResolver.setDefaultLocale(Locale.KOREA);
         return cookieLocaleResolver;
-    }
-
-    @Bean
-    public MultipartResolver multipartResolver() {
-        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
-        multipartResolver.setMaxUploadSize(10*1024*1024);
-        return multipartResolver;
-    }
-
-    @Bean
-    public EmailValidator usernameValidator() {
-        return new EmailValidator();
-    }
-
-    @Bean
-    public PasswordMatchesValidator passwordMatchesValidator() {
-        return new PasswordMatchesValidator();
-    }
-
-    @Bean
-    @ConditionalOnMissingBean(RequestContextListener.class)
-    public RequestContextListener requestContextListener() {
-        return new RequestContextListener();
     }
 
     @Override
