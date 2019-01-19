@@ -1,9 +1,10 @@
 package io.anymobi.common.handler.security;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ActiveUserStore {
+public class ActiveUserStore implements Serializable {
 
     public List<String> users;
 

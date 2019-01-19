@@ -25,7 +25,7 @@ public class MailMqListener {
     public void onEmailConfirmMessage(final EmailConfirm emailConfirm) throws UnsupportedEncodingException {
         try {
             log.error("* email_confirm::onMessage : {}", emailConfirm);
-            mailService.emailConfirmEmailSend(emailConfirm);
+            mailService.confirmRegistration(emailConfirm);
         } catch (Exception ex) {
             log.error("onUserConfirmMessage error : {}", ex.getMessage());
         }

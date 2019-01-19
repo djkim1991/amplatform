@@ -4,10 +4,11 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionBindingListener;
+import java.io.Serializable;
 import java.util.List;
 
 @Component
-public class LoggedUser implements HttpSessionBindingListener {
+public class LoggedUser implements HttpSessionBindingListener, Serializable {
 
     private String username;
     private ActiveUserStore activeUserStore;

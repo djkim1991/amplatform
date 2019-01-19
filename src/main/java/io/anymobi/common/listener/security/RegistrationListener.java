@@ -1,6 +1,7 @@
 package io.anymobi.common.listener.security;
 
 import io.anymobi.domain.entity.security.User;
+import io.anymobi.services.jpa.security.AbstractMailService;
 import io.anymobi.services.jpa.security.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
@@ -11,24 +12,15 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 
+import java.util.Locale;
 import java.util.UUID;
 
 @Component
 @Profile("syncMail")
-public class RegistrationListener implements ApplicationListener<OnRegistrationCompleteEvent> {
+public class RegistrationListener extends AbstractMailService implements ApplicationListener<OnRegistrationCompleteEvent> {
+
     @Autowired
     private IUserService service;
-
-    @Autowired
-    private MessageSource messages;
-
-    @Autowired
-    private JavaMailSender mailSender;
-
-    @Autowired
-    private Environment env;
-
-    // API
 
     @Override
     public void onApplicationEvent(final OnRegistrationCompleteEvent event) {
@@ -36,28 +28,15 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
         this.confirmRegistration(event);
     }
 
-    private void confirmRegistration(final OnRegistrationCompleteEvent event) {
+    public void confirmRegistration(Object confirm) {
+
+        OnRegistrationCompleteEvent event = (OnRegistrationCompleteEvent)confirm;
         final User user = event.getUser();
         final String token = UUID.randomUUID().toString();
         service.createVerificationTokenForUser(user, token);
 
-        final SimpleMailMessage email = constructEmailMessage(event, user, token);
+        SimpleMailMessage email = constructEmailMessage(event.getAppUrl(), event.getLocale(), token, user.getEmail());
         mailSender.send(email);
-    }
-
-    //
-
-    private final SimpleMailMessage constructEmailMessage(final OnRegistrationCompleteEvent event, final User user, final String token) {
-        final String recipientAddress = user.getEmail();
-        final String subject = "Registration Confirmation";
-        final String confirmationUrl = event.getAppUrl() + "/users/registrationConfirm.html?token=" + token;
-        final String message = messages.getMessage("message.regSucc", null, event.getLocale());
-        final SimpleMailMessage email = new SimpleMailMessage();
-        email.setTo(recipientAddress);
-        email.setSubject(subject);
-        email.setText(message + " \r\n" + confirmationUrl);
-        email.setFrom(env.getProperty("support.email"));
-        return email;
     }
 
 }
