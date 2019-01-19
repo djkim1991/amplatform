@@ -9,7 +9,6 @@ import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
 
 @Configuration
-@ComponentScan(basePackages = { "org.baeldung.captcha" })
 public class CaptchaConfig {
     @Bean
     public ClientHttpRequestFactory clientHttpRequestFactory() {
