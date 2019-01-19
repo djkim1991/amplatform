@@ -86,7 +86,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
             .csrf().disable()
             .authorizeRequests()
-                .antMatchers("/error*","/members/home", "/members/join", "/login*", "/logout*", "/signin/**", "/signup/**", "/users/customLogin",
+                .antMatchers("/members/home", "/members/join", "/login*", "/logout*", "/signin/**", "/signup/**", "/users/customLogin",
                         "/users/registration*", "/users/registrationConfirm*", "/users/expiredAccount*",
                         "/users/badUser*", "/users/resendRegistrationToken*" ,"/users/forgetPassword*", "/users/resetPassword*",
                         "/users/changePassword*", "/users/emailError*", "/users/successRegister*","/users/qrcode*","/docs/**").permitAll()
@@ -112,7 +112,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessHandler(myLogoutSuccessHandler)
                 .invalidateHttpSession(false)
                 .logoutSuccessUrl("/logout.html?logSucc=true")
-                .deleteCookies("JSESSIONID")
+                .deleteCookies("SESSION")
                 .permitAll()
              .and()
                 .rememberMe().rememberMeServices(rememberMeServices()).key("theKey");
