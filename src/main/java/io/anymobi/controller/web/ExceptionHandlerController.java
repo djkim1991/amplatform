@@ -16,7 +16,7 @@ public class ExceptionHandlerController {
     public String sampleTest(HttpServletRequest request, Model model) {
         String msg = (String) request.getAttribute("msg");
         model.addAttribute("msg", msg);
-        return "/error";
+        return "error/5xx";
     }
 
     @GetMapping("/exceptionOnHtmlRequst")

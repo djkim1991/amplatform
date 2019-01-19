@@ -8,6 +8,7 @@ import io.anymobi.domain.entity.security.User;
 import io.anymobi.domain.entity.security.VerificationToken;
 import io.anymobi.services.jpa.security.IUserService;
 import io.anymobi.utils.GenericResponse;
+import org.apache.ibatis.jdbc.Null;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +56,7 @@ public class RegistrationController {
     @PostMapping(value = "/users/registration")
     public GenericResponse registerUserAccount(@Valid final UserDto accountDto, final HttpServletRequest request) {
         LOGGER.debug("Registering user account with information: {}", accountDto);
-
+        int a = 1/0;
         final User registered = userService.registerNewUserAccount(accountDto);
         eventPublisher.publishEvent(new OnRegistrationCompleteEvent(registered, request.getLocale(), getAppUrl(request)));
         return new GenericResponse("success");
