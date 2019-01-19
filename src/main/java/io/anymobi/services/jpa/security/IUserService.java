@@ -7,6 +7,7 @@ import io.anymobi.domain.entity.security.User;
 import io.anymobi.domain.entity.security.VerificationToken;
 
 import java.io.UnsupportedEncodingException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,5 +59,5 @@ public interface IUserService {
 
     public void deleteById(Long id);
 
-    public void socketService();
+    public void socketService(String localDateTime);
 }

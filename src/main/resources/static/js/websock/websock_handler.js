@@ -1,5 +1,5 @@
 
-var sock = new SockJS('http://localhost:8080/websock');
+var sock = new SockJS('http://localhost:9090/websock');
 var client = Stomp.over(sock);
 
 client.connect({}, function(frame) {
@@ -13,9 +13,8 @@ client.connect({}, function(frame) {
 
         var userId = payload.userId;
         var data = payload.data;
-        console.log("cmd ================== " + userId);
-        console.log("cmd ================== " + data);
-        alert(userId);
-        alert(data);
+        var localDateTime = payload.localDateTime;
+        console.log("cmd ================== " + userId + " " + data + " " + localDateTime);
+        alert(userId + ' ' + data + localDateTime);
     });
 });
