@@ -1,1 +1,41 @@
-
+version: '2' # Docker-Compose 버전 2 사용.
+services: # 컨테이너별 서비스 정의.
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: springboot-rabbitmq
+    ports:
+    - 5672:5672
+    - 15672:15672
+    environment:
+    - RABBITMQ_DEFAULT_VHOST=/springboot
+  redis:
+    image: redis
+    container_name: springboot-redis
+    ports:
+    - 6379:6379
+  db:
+    image: postgres
+    container_name: springboot-postgres
+    ports:
+    - 5432:5432
+    environment:
+    - POSTGRES_DB=springboot
+    - POSTGRES_USER=postgres
+    - POSTGRES_PASS=pass
+  web:
+    image: onjsdnjs/amplatform:latest
+    container_name: amplatform
+    ports: # 웹서버 포트.
+    - '8081:8080'
+    volumes: # 웹서버 저장소.
+    - .:/code
+    links:
+    - db
+    - rabbitmq
+    - redis
+    depends_on:
+    - db
+    - rabbitmq
+    - redis
+    environment:
+    - "SPRING_PROFILES_ACTIVE=docker"
