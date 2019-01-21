@@ -10,5 +10,6 @@ import lombok.*;
 public class MessagePacketDto {
     private String userId;
     private Object data;
+    private String localDateTime;
 }
 

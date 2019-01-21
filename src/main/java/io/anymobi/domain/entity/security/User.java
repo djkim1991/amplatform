@@ -3,11 +3,12 @@ package io.anymobi.domain.entity.security;
 import org.jboss.aerogear.security.otp.api.Base32;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Collection;
 
 @Entity
 @Table(name = "user_account")
-public class User {
+public class User implements Serializable {
 
     @Id
     @Column(unique = true, nullable = false)

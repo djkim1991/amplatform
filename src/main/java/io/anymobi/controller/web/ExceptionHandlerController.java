@@ -16,7 +16,7 @@ public class ExceptionHandlerController {
     public String sampleTest(HttpServletRequest request, Model model) {
         String msg = (String) request.getAttribute("msg");
         model.addAttribute("msg", msg);
-        return "/error";
+        return "/error/5xx";
     }
 
     @GetMapping("/exceptionOnHtmlRequst")
@@ -26,7 +26,7 @@ public class ExceptionHandlerController {
 
     @GetMapping("/sqlExceptionOnHtmlRequest")
     public String sqlExceptionOnHtmlRequest() throws SQLException {
-        throw new SQLException("SQLExceptin", new SQLException("SQL_101"));
+        throw new SQLException("SQLException", new SQLException("SQL_101"));
     }
 
 }

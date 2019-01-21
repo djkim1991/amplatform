@@ -1,6 +1,8 @@
 package io.anymobi.configs;
 
 import io.anymobi.common.handler.security.ActiveUserStore;
+import io.anymobi.common.validator.EmailValidator;
+import io.anymobi.common.validator.PasswordMatchesValidator;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +20,16 @@ public class AppConfig {
     public ActiveUserStore activeUserStore() {
 
         return new ActiveUserStore();
+    }
+
+    @Bean
+    public EmailValidator usernameValidator() {
+        return new EmailValidator();
+    }
+
+    @Bean
+    public PasswordMatchesValidator passwordMatchesValidator() {
+        return new PasswordMatchesValidator();
     }
 
 }

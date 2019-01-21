@@ -46,13 +46,13 @@ public class RegistrationController {
     @RequestMapping(value = "/users/loggedUsers", method = RequestMethod.GET)
     public String getLoggedUsers(final Locale locale, final Model model) {
         model.addAttribute("users", activeUserStore.getUsers());
-        return "users";
+        return "/users/users";
     }
 
     @RequestMapping(value = "/users/loggedUsersFromSessionRegistry", method = RequestMethod.GET)
     public String getLoggedUsersFromSessionRegistry(final Locale locale, final Model model) {
         model.addAttribute("users", userService.getUsersFromSessionRegistry());
-        return "users";
+        return "/users/users";
     }
 
 
@@ -68,13 +68,14 @@ public class RegistrationController {
             // }
             authWithoutPassword(user);
             model.addAttribute("message", messages.getMessage("message.accountVerified", null, locale));
-            return "redirect:/user/console.html?lang=" + locale.getLanguage();
+            model.addAttribute("authentication", SecurityContextHolder.getContext().getAuthentication());
+            return "/users/console";
         }
 
         model.addAttribute("message", messages.getMessage("auth.message." + result, null, locale));
         model.addAttribute("expired", "expired".equals(result));
         model.addAttribute("token", token);
-        return "redirect:/user/badUser.html?lang=" + locale.getLanguage();
+        return "redirect:/users/badUser.html?lang=" + locale.getLanguage();
     }
 
     @RequestMapping(value = "/users/changePassword", method = RequestMethod.GET)

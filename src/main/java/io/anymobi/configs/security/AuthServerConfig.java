@@ -3,6 +3,7 @@ package io.anymobi.configs.security;
 import io.anymobi.common.AppSecurityProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,6 +16,7 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 
 @Configuration
 @EnableAuthorizationServer
+@Profile("OAuth")
 public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
 
     @Autowired

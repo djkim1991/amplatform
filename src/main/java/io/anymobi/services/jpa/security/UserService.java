@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -259,13 +260,14 @@ public class UserService implements IUserService {
         userRepository.deleteById(id);
     }
 
-    public void socketService() {
+    public void socketService(String localDateTime) {
 
         List<User> users = userRepository.findAll();
         users.forEach(user -> {
             MessagePacketDto messagePacketDto = MessagePacketDto.builder()
-                    .userId("anymobi")
-                    .data("Hello RabbitMQ")
+                    .userId("Anymobi")
+                    .data("현재 시간 : ")
+                    .localDateTime(localDateTime)
                     .build();
             mqPublisher.websockMessagePublish(messagePacketDto);
         });

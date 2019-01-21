@@ -27,10 +27,11 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.authentication.rememberme.InMemoryTokenRepositoryImpl;
+import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
 @Configuration
 @EnableWebSecurity
-//@EnableRedisHttpSession
+@EnableRedisHttpSession
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -85,7 +86,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
             .csrf().disable()
             .authorizeRequests()
-                .antMatchers("/members/home", "/members/join", "/login*", "/logout*", "/signin/**", "/signup/**", "/users/customLogin",
+                .antMatchers("/websock/**","/members/home", "/members/join", "/login*", "/logout*", "/signin/**", "/signup/**", "/users/customLogin",
                         "/users/registration*", "/users/registrationConfirm*", "/users/expiredAccount*",
                         "/users/badUser*", "/users/resendRegistrationToken*" ,"/users/forgetPassword*", "/users/resetPassword*",
                         "/users/changePassword*", "/users/emailError*", "/users/successRegister*","/users/qrcode*","/docs/**").permitAll()
@@ -111,7 +112,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessHandler(myLogoutSuccessHandler)
                 .invalidateHttpSession(false)
                 .logoutSuccessUrl("/logout.html?logSucc=true")
-                .deleteCookies("JSESSIONID")
+                .deleteCookies("SESSION")
                 .permitAll()
              .and()
                 .rememberMe().rememberMeServices(rememberMeServices()).key("theKey");
