@@ -3,15 +3,14 @@ package io.anymobi.controller.rest.security;
 import io.anymobi.common.handler.security.captcha.ICaptchaService;
 import io.anymobi.common.listener.security.OnRegistrationCompleteEvent;
 import io.anymobi.domain.dto.security.UserDto;
-import io.anymobi.domain.entity.security.User;
-import io.anymobi.services.jpa.security.IUserService;
+import io.anymobi.domain.entity.sec.User;
+import io.anymobi.services.jpa.IUserService;
 import io.anymobi.utils.GenericResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;

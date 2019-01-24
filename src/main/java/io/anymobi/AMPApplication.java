@@ -1,7 +1,10 @@
 package io.anymobi;
 
+import io.anymobi.common.filter.FilterMetadataSource;
+import io.anymobi.common.listener.security.CacheManager;
+import io.anymobi.services.jpa.security.ResourceMetaService;
+import io.anymobi.services.jpa.security.ResourceMetaServiceImpl;
 import org.springframework.amqp.core.Queue;
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.task.TaskExecutionAutoConfiguration;
@@ -50,6 +53,21 @@ public class AMPApplication {
         characterEncodingFilter.setEncoding("UTF-8");
         characterEncodingFilter.setForceEncoding(true);
         return characterEncodingFilter;
+    }
+
+    @Bean
+    public ResourceMetaService resourceMetaService(){
+        return new ResourceMetaServiceImpl();
+    }
+
+    @Bean
+    public FilterMetadataSource filterMetadataSource(){
+        return new FilterMetadataSource();
+    }
+
+    @Bean
+    public CacheManager cacheManager(){
+        return new CacheManager();
     }
 }
 

@@ -1,6 +1,6 @@
 package io.anymobi.common.handler.security;
 
-import io.anymobi.domain.entity.security.User;
+import io.anymobi.domain.entity.sec.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,7 @@
 package io.anymobi.security;
 
 import io.anymobi.AMPApplication;
-import io.anymobi.domain.entity.security.User;
+import io.anymobi.domain.entity.sec.User;
 import io.anymobi.repositories.jpa.security.UserRepository;
 import io.restassured.RestAssured;
 import io.restassured.authentication.FormAuthConfig;

@@ -1,7 +1,7 @@
 package io.anymobi.common.handler.security;
 
-import io.anymobi.domain.entity.security.PasswordResetToken;
-import io.anymobi.domain.entity.security.User;
+import io.anymobi.domain.entity.sec.PasswordResetToken;
+import io.anymobi.domain.entity.sec.User;
 import io.anymobi.repositories.jpa.security.PasswordResetTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

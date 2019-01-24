@@ -1,13 +1,12 @@
-package io.anymobi.services.jpa.security;
+package io.anymobi.services.jpa;
 
 import io.anymobi.common.exception.UserAlreadyExistException;
 import io.anymobi.domain.dto.security.UserDto;
-import io.anymobi.domain.entity.security.PasswordResetToken;
-import io.anymobi.domain.entity.security.User;
-import io.anymobi.domain.entity.security.VerificationToken;
+import io.anymobi.domain.entity.sec.PasswordResetToken;
+import io.anymobi.domain.entity.sec.User;
+import io.anymobi.domain.entity.sec.VerificationToken;
 
 import java.io.UnsupportedEncodingException;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 

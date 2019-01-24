@@ -1,15 +1,13 @@
 package io.anymobi.common.batch;
 
 import io.anymobi.common.provider.MqPublisher;
-import io.anymobi.services.jpa.security.IUserService;
+import io.anymobi.services.jpa.IUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 @Component
@@ -26,7 +24,7 @@ public class BatchExecutor {
         this.userService = userService;
     }
 
-    @Scheduled(fixedDelay=5000, initialDelay=5000)
+    @Scheduled(fixedDelay=5000000, initialDelay=5000000)
     private synchronized void execSocketService() {
 
         String key = environment.getActiveProfiles()[0] + "_userConfirmPublish";

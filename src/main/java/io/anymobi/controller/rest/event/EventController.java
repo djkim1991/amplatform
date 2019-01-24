@@ -5,7 +5,7 @@ import io.anymobi.common.ErrorResource;
 import io.anymobi.common.validator.EventValidator;
 import io.anymobi.domain.dto.event.EventDto;
 import io.anymobi.domain.entity.Event;
-import io.anymobi.domain.entity.security.User;
+import io.anymobi.domain.entity.sec.User;
 import io.anymobi.repositories.jpa.EventRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;

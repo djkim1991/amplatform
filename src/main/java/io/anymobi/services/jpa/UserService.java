@@ -1,17 +1,18 @@
-package io.anymobi.services.jpa.security;
+package io.anymobi.services.jpa;
 
 import io.anymobi.common.exception.UserAlreadyExistException;
 import io.anymobi.common.provider.MqPublisher;
 import io.anymobi.domain.dto.security.MessagePacketDto;
 import io.anymobi.domain.dto.security.UserDto;
-import io.anymobi.domain.entity.security.PasswordResetToken;
-import io.anymobi.domain.entity.security.User;
-import io.anymobi.domain.entity.security.VerificationToken;
+import io.anymobi.domain.entity.sec.PasswordResetToken;
+import io.anymobi.domain.entity.sec.User;
+import io.anymobi.domain.entity.sec.VerificationToken;
 import io.anymobi.repositories.jpa.security.PasswordResetTokenRepository;
 import io.anymobi.repositories.jpa.security.RoleRepository;
 import io.anymobi.repositories.jpa.security.UserRepository;
 import io.anymobi.repositories.jpa.security.VerificationTokenRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,8 +25,10 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -54,6 +57,9 @@ public class UserService implements IUserService {
     @Autowired
     private MqPublisher mqPublisher;
 
+    @Autowired
+    private ModelMapper modelMapper;
+
     public static final String TOKEN_INVALID = "invalidToken";
     public static final String TOKEN_EXPIRED = "expired";
     public static final String TOKEN_VALID = "valid";
@@ -65,17 +71,22 @@ public class UserService implements IUserService {
 
     @Override
     public User registerNewUserAccount(final UserDto accountDto) {
+
         if (emailExist(accountDto.getEmail())) {
             throw new UserAlreadyExistException("There is an account with that email adress: " + accountDto.getEmail());
         }
-        final User user = new User();
 
-        user.setFirstName(accountDto.getFirstName());
+        User user = modelMapper.map(accountDto, User.class);
+        user.setPassword(passwordEncoder.encode(accountDto.getPassword()));
+
+       // final User user = new User();
+
+        /*user.setFirstName(accountDto.getFirstName());
         user.setLastName(accountDto.getLastName());
         user.setPassword(passwordEncoder.encode(accountDto.getPassword()));
         user.setEmail(accountDto.getEmail());
         user.setUsing2FA(accountDto.isUsing2FA());
-        user.setRoles(Arrays.asList(roleRepository.findByName("ROLE_USER")));
+        user.setRoles(Arrays.asList(roleRepository.findByName("ROLE_USER")));*/
         return userRepository.save(user);
     }
 
@@ -150,8 +161,7 @@ public class UserService implements IUserService {
 
     @Override
     public User getUserByPasswordResetToken(final String token) {
-        return passwordTokenRepository.findByToken(token)
-            .getUser();
+        return passwordTokenRepository.findByToken(token).getUser();
     }
 
     @Override

@@ -1,11 +1,11 @@
+/*
 package io.anymobi.security;
 
-import io.anymobi.domain.entity.security.Privilege;
-import io.anymobi.domain.entity.security.Role;
-import io.anymobi.domain.entity.security.User;
-import io.anymobi.repositories.jpa.security.PrivilegeRepository;
+import io.anymobi.domain.entity.sec.Role;
+import io.anymobi.domain.entity.sec.User;
 import io.anymobi.repositories.jpa.security.RoleRepository;
 import io.anymobi.repositories.jpa.security.UserRepository;
+import netscape.security.Privilege;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +31,6 @@ public class SpringSecurityRolesIntegrationTest {
     @Autowired
     private RoleRepository roleRepository;
 
-    @Autowired
-    private PrivilegeRepository privilegeRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -116,3 +114,4 @@ public class SpringSecurityRolesIntegrationTest {
         assertNotNull(roleRepository.findByName(role.getName()));
     }
 }
+*/

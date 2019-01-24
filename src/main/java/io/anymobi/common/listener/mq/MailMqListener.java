@@ -1,7 +1,7 @@
 package io.anymobi.common.listener.mq;
 
 import io.anymobi.domain.dto.security.EmailConfirm;
-import io.anymobi.services.jpa.security.MailService;
+import io.anymobi.services.jpa.MailService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;

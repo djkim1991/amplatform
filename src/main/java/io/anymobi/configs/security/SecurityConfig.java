@@ -4,9 +4,15 @@ import io.anymobi.common.handler.security.CustomRememberMeServices;
 import io.anymobi.common.handler.security.google2fa.CustomAuthenticationProvider;
 import io.anymobi.common.handler.security.google2fa.CustomWebAuthenticationDetailsSource;
 import io.anymobi.repositories.jpa.security.UserRepository;
+import io.anymobi.services.jpa.security.RoleHierarchyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.AccessDecisionVoter;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
+import org.springframework.security.access.vote.AffirmativeBased;
+import org.springframework.security.access.vote.RoleHierarchyVoter;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -22,12 +28,17 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
+import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
+import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.authentication.rememberme.InMemoryTokenRepositoryImpl;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -37,6 +48,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private UserDetailsService userDetailsService;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     @Autowired
     private AuthenticationSuccessHandler myAuthenticationSuccessHandler;
@@ -52,6 +66,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private RoleHierarchyService roleHierarchyService;
+
+    @Autowired
+    private FilterInvocationSecurityMetadataSource filterInvocationSecurityMetadataSource;
 
     public SecurityConfig() {
         super();
@@ -91,8 +111,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/users/badUser*", "/users/resendRegistrationToken*" ,"/users/forgetPassword*", "/users/resetPassword*",
                         "/users/changePassword*", "/users/emailError*", "/users/successRegister*","/users/qrcode*","/docs/**").permitAll()
                 .antMatchers("/invalidSession*").anonymous()
-                .antMatchers("/user/updatePassword*","/user/savePassword*","/updatePassword*").hasAuthority("CHANGE_PASSWORD_PRIVILEGE")
-                .anyRequest().hasAuthority("READ_PRIVILEGE")
+                //.antMatchers("/user/updatePassword*","/user/savePassword*","/updatePassword*").hasAuthority("CHANGE_PASSWORD_PRIVILEGE")
+                //.anyRequest().hasAuthority("READ_PRIVILEGE")
                 .and()
             .formLogin()
                 .loginPage("/login")
@@ -119,8 +139,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     // @formatter:on
     }
 
-    // beans
-
     @Bean
     public DaoAuthenticationProvider authProvider() {
         final CustomAuthenticationProvider authProvider = new CustomAuthenticationProvider();
@@ -143,5 +161,37 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public RememberMeServices rememberMeServices() {
         CustomRememberMeServices rememberMeServices = new CustomRememberMeServices("theKey", userDetailsService, new InMemoryTokenRepositoryImpl());
         return rememberMeServices;
+    }
+
+    @Bean
+    public FilterSecurityInterceptor filterSecurityInterceptor() {
+        FilterSecurityInterceptor filterSecurityInterceptor = new FilterSecurityInterceptor();
+        filterSecurityInterceptor.setAuthenticationManager(authenticationManager);
+        filterSecurityInterceptor.setSecurityMetadataSource(filterInvocationSecurityMetadataSource);
+        filterSecurityInterceptor.setAccessDecisionManager(affirmativeBased());
+        return filterSecurityInterceptor;
+    }
+
+    @Bean
+    public AffirmativeBased affirmativeBased() {
+        List<AccessDecisionVoter<? extends Object>> accessDecisionVoters = new ArrayList<>();
+        accessDecisionVoters.add(roleVoter());
+        AffirmativeBased affirmativeBased = new AffirmativeBased(accessDecisionVoters);
+        return affirmativeBased;
+    }
+
+    @Bean
+    public RoleHierarchyVoter roleVoter() {
+        RoleHierarchyVoter roleHierarchyVoter = new RoleHierarchyVoter(roleHierarchy());
+        roleHierarchyVoter.setRolePrefix("ROLE_");
+        return roleHierarchyVoter;
+    }
+
+    @Bean
+    public RoleHierarchy roleHierarchy() {
+        String allHierarchy = roleHierarchyService.findAllHierarchy();
+        RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
+        roleHierarchy.setHierarchy(allHierarchy);
+        return roleHierarchy;
     }
 }

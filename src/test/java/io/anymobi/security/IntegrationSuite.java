@@ -10,8 +10,8 @@ import org.junit.runners.Suite;
     RegistrationControllerIntegrationTest.class,
     GetLoggedUsersIntegrationTest.class,
     UserServiceIntegrationTest.class,
-    UserIntegrationTest.class,
-    SpringSecurityRolesIntegrationTest.class,
+    UserIntegrationTest.class/*,
+    SpringSecurityRolesIntegrationTest.class,*/
 })// @formatter:on
 public class IntegrationSuite {
     //

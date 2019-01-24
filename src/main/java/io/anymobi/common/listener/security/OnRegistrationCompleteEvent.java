@@ -1,11 +1,10 @@
 package io.anymobi.common.listener.security;
 
-import io.anymobi.domain.entity.security.User;
+import io.anymobi.domain.entity.sec.User;
 import org.springframework.context.ApplicationEvent;
 
 import java.util.Locale;
 
-@SuppressWarnings("serial")
 public class OnRegistrationCompleteEvent extends ApplicationEvent {
 
     private final String appUrl;
