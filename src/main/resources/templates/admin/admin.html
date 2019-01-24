@@ -17,9 +17,9 @@
 </nav>
 
 <div class="container">         
-     <p sec:authorize="!hasAuthority('WRITE_PRIVILEGE')" th:text="#{message.unauth}">unauth</p>   
+     <p sec:authorize="!hasAuthority('ROLE_ADMIN')" th:text="#{message.unauth}">unauth</p>
         
-     <h1 sec:authorize="hasAuthority('WRITE_PRIVILEGE')" th:text="#{label.pages.admin.message}">admin</h1>
+     <h1 sec:authorize="hasAuthority('ROLE_ADMIN')" th:text="#{label.pages.admin.message}">admin</h1>
 </div>
 </body>
 </html>

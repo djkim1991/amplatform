@@ -1,8 +1,9 @@
-package io.anymobi.common.handler.security;
+package io.anymobi.services.jpa.security;
 
 import io.anymobi.domain.entity.sec.PasswordResetToken;
 import io.anymobi.domain.entity.sec.User;
 import io.anymobi.repositories.jpa.security.PasswordResetTokenRepository;
+import io.anymobi.services.jpa.security.ISecurityUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,8 +21,6 @@ public class UserSecurityService implements ISecurityUserService {
 
     @Autowired
     private PasswordResetTokenRepository passwordTokenRepository;
-
-    // API
 
     @Override
     public String validatePasswordResetToken(long id, String token) {

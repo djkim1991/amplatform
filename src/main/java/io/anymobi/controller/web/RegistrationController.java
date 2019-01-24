@@ -1,12 +1,18 @@
 package io.anymobi.controller.web;
 
-import io.anymobi.common.handler.security.ActiveUserStore;
-import io.anymobi.common.handler.security.ISecurityUserService;
+import io.anymobi.domain.entity.sec.ActiveUserStore;
+import io.anymobi.domain.entity.sec.Role;
+import io.anymobi.services.jpa.security.ISecurityUserService;
 import io.anymobi.domain.entity.sec.User;
 import io.anymobi.services.jpa.IUserService;
+import io.anymobi.services.jpa.security.UserDetailsServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,7 +22,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
-import java.util.Locale;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller("webRegistrationController")
 @Slf4j
@@ -81,11 +88,12 @@ public class RegistrationController {
 
 
     public void authWithoutPassword(User user) {
-        //List<Privilege> privileges = user.getRoles().stream().map(role -> role.getPrivileges()).flatMap(list -> list.stream()).distinct().collect(Collectors.toList());
-        //List<GrantedAuthority> authorities = privileges.stream().map(p -> new SimpleGrantedAuthority(p.getName())).collect(Collectors.toList());
 
-       // Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, authorities);
+        Set<String> roles = UserDetailsServiceImpl.getRoles(user);
 
-        //SecurityContextHolder.getContext().setAuthentication(authentication);
+        List<SimpleGrantedAuthority> authorities = roles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+        Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, authorities);
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 }

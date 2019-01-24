@@ -1,4 +1,4 @@
-package io.anymobi.common.handler.security;
+package io.anymobi.domain.entity.sec;
 
 import java.io.Serializable;
 import java.util.ArrayList;

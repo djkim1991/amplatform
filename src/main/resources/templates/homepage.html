@@ -16,9 +16,9 @@
 </nav>
 
     <div class="container">
-	    <div sec:authorize="hasAuthority('WRITE_PRIVILEGE')" th:text="#{label.pages.user.message}">user</div>
+	    <div sec:authorize="hasAuthority('ROLE_ADMIN')" th:text="#{label.pages.user.message}">user</div>
 	
-	    <div sec:authorize="hasAuthority('WRITE_PRIVILEGE')" th:text="#{label.pages.admin.message}"></div>
+	    <div sec:authorize="hasAuthority('ROLE_ADMIN')" th:text="#{label.pages.admin.message}"></div>
 	     
 	    <p th:if="${param.user} != null" th:text="${param.user[0]}">user</p>
 	     

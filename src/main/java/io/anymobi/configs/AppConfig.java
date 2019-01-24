@@ -1,6 +1,6 @@
 package io.anymobi.configs;
 
-import io.anymobi.common.handler.security.ActiveUserStore;
+import io.anymobi.domain.entity.sec.ActiveUserStore;
 import io.anymobi.common.validator.EmailValidator;
 import io.anymobi.common.validator.PasswordMatchesValidator;
 import org.modelmapper.ModelMapper;

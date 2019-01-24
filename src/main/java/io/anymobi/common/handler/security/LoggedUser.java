@@ -1,5 +1,6 @@
 package io.anymobi.common.handler.security;
 
+import io.anymobi.domain.entity.sec.ActiveUserStore;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpSessionBindingEvent;

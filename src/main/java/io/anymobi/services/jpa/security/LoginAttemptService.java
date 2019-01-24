@@ -1,4 +1,4 @@
-package io.anymobi.common.handler.security;
+package io.anymobi.services.jpa.security;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;

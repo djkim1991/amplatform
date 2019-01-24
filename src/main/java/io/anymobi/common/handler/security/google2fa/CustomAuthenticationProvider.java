@@ -11,7 +11,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-//@Component
+import javax.transaction.Transactional;
+
 public class CustomAuthenticationProvider extends DaoAuthenticationProvider {
 
     @Autowired
@@ -21,6 +22,7 @@ public class CustomAuthenticationProvider extends DaoAuthenticationProvider {
     PasswordEncoder passwordEncoder;
 
     @Override
+    @Transactional
     public Authentication authenticate(Authentication auth) throws AuthenticationException {
         final User user = userRepository.findByUsername(auth.getName());
         if ((user == null)) {

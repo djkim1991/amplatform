@@ -18,57 +18,63 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 public class HelloController {
 
-  @Autowired
-  private RoleResourceService roleResourceService;
+    @Autowired
+    private RoleResourceService roleResourceService;
 
-  @RequestMapping(value = {"/"})
-  public String home() {
-    return "index";
-  }
-
-  @RequestMapping(value = "/login")
-  public String login() {
-    return "login";
-  }
-
-  @RequestMapping(value = "/denied")
-  public String denied(Model model) {
-    model.addAttribute("roles", SecurityContextHolder.getContext().getAuthentication().getAuthorities());
-    return "denied";
-  }
-
-  @RequestMapping(value = "/user")
-  public String user(Model model) {
-    model.addAttribute("roles", SecurityContextHolder.getContext().getAuthentication().getAuthorities());
-    return "user";
-  }
-
-  @RequestMapping(value = "/admin")
-  public String admin(Model model) {
-    model.addAttribute("roles", SecurityContextHolder.getContext().getAuthentication().getAuthorities());
-    return "admin";
-  }
-
-  @RequestMapping(value = "/home")
-  public String home(Model model) {
-    model.addAttribute("roles", SecurityContextHolder.getContext().getAuthentication().getAuthorities());
-    return "home";
-  }
-
-  @RequestMapping(value = "/logout", method = RequestMethod.GET)
-  public String logout(HttpServletRequest request, HttpServletResponse response) {
-    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    if (auth != null) {
-      new SecurityContextLogoutHandler().logout(request, response, auth);
+    @RequestMapping(value = {"/"})
+    public String home() {
+        return "index";
     }
-    return "redirect:/login";
-  }
+
+    @RequestMapping(value = {"/homepage"})
+    public String homepage() {
+
+        return "homepage";
+    }
+
+    @RequestMapping(value = "/login")
+    public String login() {
+        return "login";
+    }
+
+    @RequestMapping(value = "/denied")
+    public String denied(Model model) {
+        model.addAttribute("roles", SecurityContextHolder.getContext().getAuthentication().getAuthorities());
+        return "denied";
+    }
+
+    @RequestMapping(value = "/user")
+    public String user(Model model) {
+        model.addAttribute("roles", SecurityContextHolder.getContext().getAuthentication().getAuthorities());
+        return "user";
+    }
+
+    @RequestMapping(value = "/admin")
+    public String admin(Model model) {
+        model.addAttribute("roles", SecurityContextHolder.getContext().getAuthentication().getAuthorities());
+        return "admin/admin";
+    }
+
+    @RequestMapping(value = "/home")
+    public String home(Model model) {
+        model.addAttribute("roles", SecurityContextHolder.getContext().getAuthentication().getAuthorities());
+        return "home";
+    }
+
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    public String logout(HttpServletRequest request, HttpServletResponse response) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null) {
+            new SecurityContextLogoutHandler().logout(request, response, auth);
+        }
+        return "redirect:/login";
+    }
 
 
-  @RequestMapping("/delete/{id}")
-  @ResponseBody
-  public String delete(@PathVariable Integer id) {
-    roleResourceService.delete(id);
-    return "ok";
-  }
+    @RequestMapping("/delete/{id}")
+    @ResponseBody
+    public String delete(@PathVariable Integer id) {
+        roleResourceService.delete(id);
+        return "ok";
+    }
 }

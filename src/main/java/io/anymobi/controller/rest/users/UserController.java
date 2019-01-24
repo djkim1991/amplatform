@@ -2,7 +2,7 @@ package io.anymobi.controller.rest.users;
 
 import io.anymobi.common.ErrorResource;
 import io.anymobi.common.annotation.CurrentUser;
-import io.anymobi.common.handler.security.ActiveUserStore;
+import io.anymobi.domain.entity.sec.ActiveUserStore;
 import io.anymobi.domain.entity.sec.User;
 import io.anymobi.services.jpa.IUserService;
 import lombok.extern.slf4j.Slf4j;

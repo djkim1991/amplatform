@@ -25,10 +25,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -78,6 +75,7 @@ public class UserService implements IUserService {
 
         User user = modelMapper.map(accountDto, User.class);
         user.setPassword(passwordEncoder.encode(accountDto.getPassword()));
+        //user.setUserRoles(Arrays.asList(roleRepository.findByRoleName("ROLE_USER")));
 
        // final User user = new User();
 

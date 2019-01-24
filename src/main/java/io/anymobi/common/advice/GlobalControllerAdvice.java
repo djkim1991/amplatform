@@ -30,6 +30,11 @@ public class GlobalControllerAdvice {
         return (authentication == null) ? null : ((User) authentication.getPrincipal());
     }
 
+    @ModelAttribute("authentication")
+    public Authentication getAuthentication(Authentication authentication) {
+        return (authentication == null) ? null : authentication;
+    }
+
     @ModelAttribute("version")
     public long getVersion() {
         Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now());

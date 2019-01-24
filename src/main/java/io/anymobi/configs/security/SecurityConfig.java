@@ -1,6 +1,7 @@
 package io.anymobi.configs.security;
 
-import io.anymobi.common.handler.security.CustomRememberMeServices;
+import io.anymobi.common.handler.security.CustomAccessDeniedHandler;
+import io.anymobi.services.jpa.security.CustomRememberMeServices;
 import io.anymobi.common.handler.security.google2fa.CustomAuthenticationProvider;
 import io.anymobi.common.handler.security.google2fa.CustomWebAuthenticationDetailsSource;
 import io.anymobi.repositories.jpa.security.UserRepository;
@@ -28,6 +29,7 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -53,13 +55,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private AuthenticationSuccessHandler myAuthenticationSuccessHandler;
+    private AuthenticationSuccessHandler authenticationSuccessHandler;
 
     @Autowired
-    private LogoutSuccessHandler myLogoutSuccessHandler;
+    private LogoutSuccessHandler logoutSuccessHandler;
 
     @Autowired
     private AuthenticationFailureHandler authenticationFailureHandler;
+
+    @Autowired
+    private AccessDeniedHandler accessDeniedHandler;
 
     @Autowired
     private CustomWebAuthenticationDetailsSource authenticationDetailsSource;
@@ -77,7 +82,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         super();
     }
 
-    
+
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
@@ -88,7 +93,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public TokenStore tokenStore() {
         return new InMemoryTokenStore();
     }
-    
+
     @Override
     protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(authProvider());
@@ -104,39 +109,40 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(final HttpSecurity http) throws Exception {
         // @formatter:off
         http
-            .csrf().disable()
-            .authorizeRequests()
-                .antMatchers("/websock/**","/members/home", "/members/join", "/login*", "/logout*", "/signin/**", "/signup/**", "/users/customLogin",
-                        "/users/registration*", "/users/registrationConfirm*", "/users/expiredAccount*",
-                        "/users/badUser*", "/users/resendRegistrationToken*" ,"/users/forgetPassword*", "/users/resetPassword*",
-                        "/users/changePassword*", "/users/emailError*", "/users/successRegister*","/users/qrcode*","/docs/**").permitAll()
+                .csrf().disable()
+                .authorizeRequests()
+                .antMatchers("/","/login").permitAll()
                 .antMatchers("/invalidSession*").anonymous()
                 //.antMatchers("/user/updatePassword*","/user/savePassword*","/updatePassword*").hasAuthority("CHANGE_PASSWORD_PRIVILEGE")
-                //.anyRequest().hasAuthority("READ_PRIVILEGE")
+                //.anyRequest().hasAuthority("ROLE_USER")
                 .and()
-            .formLogin()
+                .exceptionHandling().accessDeniedPage("/denied")
+                .accessDeniedHandler(accessDeniedHandler)
+                .and()
+                .formLogin()
                 .loginPage("/login")
                 .defaultSuccessUrl("/homepage.html")
                 .failureUrl("/login?error=true")
-                .successHandler(myAuthenticationSuccessHandler)
+                .successHandler(authenticationSuccessHandler)
                 .failureHandler(authenticationFailureHandler)
                 .authenticationDetailsSource(authenticationDetailsSource)
-            .permitAll()
+                .permitAll()
                 .and()
-            .sessionManagement()
+                .sessionManagement()
                 .invalidSessionUrl("/users/invalidSession.html")
                 .maximumSessions(1).sessionRegistry(sessionRegistry()).and()
                 .sessionFixation().none()
-            .and()
-            .logout()
-                .logoutSuccessHandler(myLogoutSuccessHandler)
+                .and()
+                .logout()
+                .logoutSuccessHandler(logoutSuccessHandler)
                 .invalidateHttpSession(false)
                 .logoutSuccessUrl("/logout.html?logSucc=true")
                 .deleteCookies("SESSION")
                 .permitAll()
-             .and()
-                .rememberMe().rememberMeServices(rememberMeServices()).key("theKey");
-    // @formatter:on
+                .and()
+                .rememberMe().rememberMeServices(rememberMeServices()).key("theKey")
+                .and()
+                .addFilter(filterSecurityInterceptor());
     }
 
     @Bean
@@ -155,6 +161,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public SessionRegistry sessionRegistry() {
         return new SessionRegistryImpl();
+    }
+
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler() {
+        CustomAccessDeniedHandler customAccessDeniedHandler = new CustomAccessDeniedHandler();
+        customAccessDeniedHandler.setErrorPage("/denied");
+        return customAccessDeniedHandler;
     }
 
     @Bean

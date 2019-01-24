@@ -1,4 +1,4 @@
-package io.anymobi.common.handler.security;
+package io.anymobi.services.jpa.security;
 
 import io.anymobi.domain.entity.sec.User;
 import io.anymobi.repositories.jpa.security.UserRepository;
@@ -42,13 +42,17 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException("No user found with username: " + username);
         }
+        Set<String> distinctRoles = getRoles( user);
 
+        return new UserDetail(user, distinctRoles.stream().collect(Collectors.toList()));
+    }
+
+    public static Set<String> getRoles(User user) {
         // 개인 권한 할당
         List<String> userRoles = user.getUserRoles()
                 .stream()
                 .map(userRole -> userRole.getRole().getRoleName())
                 .collect(Collectors.toList());
-        log.info("username : {} , role : {} : ", username, userRoles);
 
         // 그룹 권한 할당
         userRoles.addAll(user.getGroupUsers()
@@ -59,8 +63,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         Set<String> distinctRoles = new HashSet<>();
         distinctRoles.addAll(userRoles);
-
-        return new UserDetail(user, distinctRoles.stream().collect(Collectors.toList()));
+        return distinctRoles;
     }
 
     private final String getClientIP() {

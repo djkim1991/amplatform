@@ -1,4 +1,4 @@
-package io.anymobi.common.handler.security;
+package io.anymobi.services.jpa.security;
 
 public interface ISecurityUserService {
 
