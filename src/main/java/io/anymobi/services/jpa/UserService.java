@@ -72,7 +72,7 @@ public class UserService implements IUserService {
     @Override
     public User registerNewUserAccount(final UserDto accountDto) {
 
-        if (emailExist(accountDto.getEmail())) {
+        if (userNameExist(accountDto.getEmail())) {
             throw new UserAlreadyExistException("There is an account with that email adress: " + accountDto.getEmail());
         }
 
@@ -149,9 +149,9 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User findUserByEmail(final String email) {
+    public User findUserByEmail(final String userName) {
 
-        return userRepository.findByEmail(email);
+        return userRepository.findByUsername(userName);
     }
 
     @Override
@@ -222,9 +222,9 @@ public class UserService implements IUserService {
         return currentUser;
     }
 
-    private boolean emailExist(final String email) {
+    private boolean userNameExist(final String email) {
 
-        return userRepository.findByEmail(email) != null;
+        return userRepository.findByUsername(email) != null;
     }
 
     @Override

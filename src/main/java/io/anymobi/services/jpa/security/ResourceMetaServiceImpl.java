@@ -13,9 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by wonwoo on 2016. 4. 9..
- */
 @Slf4j
 public class ResourceMetaServiceImpl implements ResourceMetaService {
 
@@ -31,8 +28,10 @@ public class ResourceMetaServiceImpl implements ResourceMetaService {
   @Override
   @Transactional
   public void findAllResources() {
+
     List<RoleResource> roleResources = roleResourceRepository.findAll();
     List<AuthoritiesDto> authorities = new ArrayList<>();
+
     roleResources.stream().forEach(roleResource -> {
       authorities.add(AuthoritiesDto.builder()
               .roleName(roleResource.getRole().getRoleName())

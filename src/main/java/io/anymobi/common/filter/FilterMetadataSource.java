@@ -18,42 +18,43 @@ import java.util.stream.Collectors;
 @Slf4j
 public class FilterMetadataSource implements FilterInvocationSecurityMetadataSource, InitializingBean {
 
-  @Autowired
-  private ResourceMetaService resourceMetaService;
+    @Autowired
+    private ResourceMetaService resourceMetaService;
 
-  @Autowired
-  private CacheManager cacheManager;
+    @Autowired
+    private CacheManager cacheManager;
 
 
-  @Override
-  public Collection<ConfigAttribute> getAttributes(Object object) throws IllegalArgumentException {
-    FilterInvocation fi = (FilterInvocation) object;
-    String url = fi.getRequestUrl();
+    @Override
+    public Collection<ConfigAttribute> getAttributes(Object object) throws IllegalArgumentException {
 
-    List<AuthoritiesDto> userRoleDto = cacheManager.getAuthorities().get(url);
-    if (userRoleDto == null) {
-      return null;
+        FilterInvocation fi = (FilterInvocation) object;
+        String url = fi.getRequestUrl();
+
+        List<AuthoritiesDto> userRoleDto = cacheManager.getAuthorities().get(url);
+        if (userRoleDto == null) {
+            return null;
+        }
+        List<String> roles = userRoleDto.stream().map(AuthoritiesDto::getRoleName).collect(Collectors.toList());
+
+        String[] stockArr = new String[roles.size()];
+        stockArr = roles.toArray(stockArr);
+
+        return SecurityConfig.createList(stockArr);
     }
-    List<String> roles = userRoleDto.stream().map(AuthoritiesDto::getRoleName).collect(Collectors.toList());
 
-    String[] stockArr = new String[roles.size()];
-    stockArr = roles.toArray(stockArr);
+    @Override
+    public Collection<ConfigAttribute> getAllConfigAttributes() {
+        return null;
+    }
 
-    return SecurityConfig.createList(stockArr);
-  }
+    @Override
+    public boolean supports(Class<?> clazz) {
+        return FilterInvocation.class.isAssignableFrom(clazz);
+    }
 
-  @Override
-  public Collection<ConfigAttribute> getAllConfigAttributes() {
-    return null;
-  }
-
-  @Override
-  public boolean supports(Class<?> clazz) {
-    return FilterInvocation.class.isAssignableFrom(clazz);
-  }
-
-  @Override
-  public void afterPropertiesSet() throws Exception {
-    resourceMetaService.findAllResources();
-  }
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        resourceMetaService.findAllResources();
+    }
 }

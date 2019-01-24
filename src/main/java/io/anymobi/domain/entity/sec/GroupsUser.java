@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +12,7 @@ import java.util.List;
 @Table(name = "groups_user")
 @Data
 @ToString(exclude = {"groups", "user"})
-public class GroupsUser {
+public class GroupsUser implements Serializable {
 
   @Id
   @GeneratedValue

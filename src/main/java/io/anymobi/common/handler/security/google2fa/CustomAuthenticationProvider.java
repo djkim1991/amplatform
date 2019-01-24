@@ -22,7 +22,7 @@ public class CustomAuthenticationProvider extends DaoAuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication auth) throws AuthenticationException {
-        final User user = userRepository.findByEmail(auth.getName());
+        final User user = userRepository.findByUsername(auth.getName());
         if ((user == null)) {
             throw new BadCredentialsException("Invalid username or password");
         }

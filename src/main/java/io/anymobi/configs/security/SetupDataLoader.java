@@ -33,8 +33,10 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
             return;
         }
 
-        createRoleIfNotFound("ROLE_USER", "일반사용자");
-        createUserIfNotFound("test","test@test.com", "Test", "Test", "1234");
+        //createRoleIfNotFound("ROLE_USER", "일반사용자");
+        for (int i = 1; i <= 3; i++) {
+            createUserIfNotFound("user" + i, "user" + i + "@test.com", "userFirst" + i, "userLast" + i, "pass");
+        }
 
         alreadySetup = true;
     }
@@ -62,14 +64,15 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         User user = userRepository.findByUsername(userName);
 
         if (user == null) {
-            User.builder()
-                .username(userName)
-                .firstName(firstName)
-                .lastName(lastName)
-                .email(email)
-                .password(passwordEncoder.encode(password))
-                .enabled(true)
-                .build();
+            user = User.builder()
+                    .username(userName)
+                    .firstName(firstName)
+                    .lastName(lastName)
+                    .email(email)
+                    .isUsing2FA(false)
+                    .password(passwordEncoder.encode(password))
+                    .enabled(true)
+                    .build();
         }
 
         user = userRepository.save(user);

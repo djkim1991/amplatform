@@ -4,13 +4,14 @@ import lombok.Data;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 
 @Entity
 @Table(name = "authorities")
 @Data
 @ToString(exclude = {"user", "role"})
-public class Authorities {
+public class Authorities implements Serializable {
 
   @Id
   @GeneratedValue

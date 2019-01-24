@@ -1,20 +1,23 @@
 
 package io.anymobi.domain.entity.sec;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "role")
-@Data
+@Getter
+@Setter
 @ToString(exclude = {"authorities", "roleResources", "groups"})
 @Builder
-public class Role {
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(of = "id")
+public class Role implements Serializable {
 
   @Id
   @GeneratedValue
@@ -34,3 +37,5 @@ public class Role {
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "role")
   private Set<GroupsRole> groups = new HashSet<>();
 }
+
+

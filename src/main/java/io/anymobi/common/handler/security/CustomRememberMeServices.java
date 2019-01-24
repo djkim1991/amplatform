@@ -51,7 +51,7 @@ public class CustomRememberMeServices extends PersistentTokenBasedRememberMeServ
 
     @Override
     protected Authentication createSuccessfulAuthentication(HttpServletRequest request, UserDetails user) {
-        User auser = userRepository.findByEmail(user.getUsername());
+        User auser = userRepository.findByUsername(user.getUsername());
         RememberMeAuthenticationToken auth = new RememberMeAuthenticationToken(key, auser, authoritiesMapper.mapAuthorities(user.getAuthorities()));
         auth.setDetails(authenticationDetailsSource.buildDetails(request));
         return auth;
