@@ -2,9 +2,9 @@ package io.anymobi.services.jpa.security;
 
 import io.anymobi.common.listener.security.CacheEventMessage;
 import io.anymobi.domain.dto.security.AuthoritiesDto;
-import io.anymobi.domain.entity.sec.RoleResource;
-import io.anymobi.repositories.jpa.security.ResourceRepository;
-import io.anymobi.repositories.jpa.security.RoleResourceRepository;
+import io.anymobi.domain.entity.sec.RoleResources;
+import io.anymobi.repositories.jpa.security.ResourcesRepository;
+import io.anymobi.repositories.jpa.security.RoleResourcesRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -17,10 +17,10 @@ import java.util.List;
 public class ResourceMetaServiceImpl implements ResourceMetaService {
 
   @Autowired
-  private ResourceRepository resourceRepository;
+  private ResourcesRepository ResourcesRepository;
 
   @Autowired
-  private RoleResourceRepository roleResourceRepository;
+  private RoleResourcesRepository roleResourcesRepository;
 
   @Autowired
   private ApplicationContext applicationContext;
@@ -29,13 +29,13 @@ public class ResourceMetaServiceImpl implements ResourceMetaService {
   @Transactional
   public void findAllResources() {
 
-    List<RoleResource> roleResources = roleResourceRepository.findAll();
+    List<RoleResources> roleResources = roleResourcesRepository.findAll();
     List<AuthoritiesDto> authorities = new ArrayList<>();
 
     roleResources.stream().forEach(roleResource -> {
       authorities.add(AuthoritiesDto.builder()
               .roleName(roleResource.getRole().getRoleName())
-              .url(roleResource.getResources().getName()).build());
+              .url(roleResource.getResources().getResourceName()).build());
     });
 
     authorities.stream().forEach(userRoleDto -> {

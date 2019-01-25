@@ -73,7 +73,7 @@ public class HelloController {
 
     @RequestMapping("/delete/{id}")
     @ResponseBody
-    public String delete(@PathVariable Integer id) {
+    public String delete(@PathVariable Long id) {
         roleResourceService.delete(id);
         return "ok";
     }

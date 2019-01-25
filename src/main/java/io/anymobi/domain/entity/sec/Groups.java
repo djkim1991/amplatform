@@ -1,6 +1,8 @@
 package io.anymobi.domain.entity.sec;
 
+import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.*;
@@ -12,13 +14,16 @@ import java.util.Set;
 @Table(name = "groups")
 @Data
 @ToString(exclude = {"users", "roles"})
+@EqualsAndHashCode(of = "id")
+@Builder
 public class Groups implements Serializable {
 
     @Id
     @GeneratedValue
     @Column(name = "GROUP_ID", unique = true, nullable = false)
-    private Integer id;
+    private Long id;
 
+    @Column(name = "GROUP_NAME", unique = true, nullable = false)
     private String groupName;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "groups")

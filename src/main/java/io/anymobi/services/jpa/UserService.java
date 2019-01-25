@@ -4,13 +4,8 @@ import io.anymobi.common.exception.UserAlreadyExistException;
 import io.anymobi.common.provider.MqPublisher;
 import io.anymobi.domain.dto.security.MessagePacketDto;
 import io.anymobi.domain.dto.security.UserDto;
-import io.anymobi.domain.entity.sec.PasswordResetToken;
-import io.anymobi.domain.entity.sec.User;
-import io.anymobi.domain.entity.sec.VerificationToken;
-import io.anymobi.repositories.jpa.security.PasswordResetTokenRepository;
-import io.anymobi.repositories.jpa.security.RoleRepository;
-import io.anymobi.repositories.jpa.security.UserRepository;
-import io.anymobi.repositories.jpa.security.VerificationTokenRepository;
+import io.anymobi.domain.entity.sec.*;
+import io.anymobi.repositories.jpa.security.*;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +38,9 @@ public class UserService implements IUserService {
     private PasswordResetTokenRepository passwordTokenRepository;
 
     @Autowired
+    private AuthoritiesRepository authoritiesRepository;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
@@ -73,19 +71,16 @@ public class UserService implements IUserService {
             throw new UserAlreadyExistException("There is an account with that email adress: " + accountDto.getEmail());
         }
 
+        Role role = roleRepository.findByRoleName("ROLE_USER");
+
         User user = modelMapper.map(accountDto, User.class);
         user.setPassword(passwordEncoder.encode(accountDto.getPassword()));
-        //user.setUserRoles(Arrays.asList(roleRepository.findByRoleName("ROLE_USER")));
+        userRepository.save(user);
 
-       // final User user = new User();
+        Authorities authorities = Authorities.builder().role(role).user(user).build();
+        user.setUserRoles(Arrays.asList(authoritiesRepository.save(authorities)));
 
-        /*user.setFirstName(accountDto.getFirstName());
-        user.setLastName(accountDto.getLastName());
-        user.setPassword(passwordEncoder.encode(accountDto.getPassword()));
-        user.setEmail(accountDto.getEmail());
-        user.setUsing2FA(accountDto.isUsing2FA());
-        user.setRoles(Arrays.asList(roleRepository.findByName("ROLE_USER")));*/
-        return userRepository.save(user);
+        return user;
     }
 
     @Override
@@ -135,7 +130,7 @@ public class UserService implements IUserService {
     public VerificationToken generateNewVerificationToken(final String existingVerificationToken) {
         VerificationToken vToken = tokenRepository.findByToken(existingVerificationToken);
         vToken.updateToken(UUID.randomUUID()
-            .toString());
+                .toString());
         vToken = tokenRepository.save(vToken);
         return vToken;
     }
@@ -189,8 +184,8 @@ public class UserService implements IUserService {
         final User user = verificationToken.getUser();
         final Calendar cal = Calendar.getInstance();
         if ((verificationToken.getExpiryDate()
-            .getTime()
-            - cal.getTime()
+                .getTime()
+                - cal.getTime()
                 .getTime()) <= 0) {
             tokenRepository.delete(verificationToken);
             return TOKEN_EXPIRED;
@@ -210,13 +205,13 @@ public class UserService implements IUserService {
     @Override
     public User updateUser2FA(boolean use2FA) {
         final Authentication curAuth = SecurityContextHolder.getContext()
-            .getAuthentication();
+                .getAuthentication();
         User currentUser = (User) curAuth.getPrincipal();
         currentUser.setUsing2FA(use2FA);
         currentUser = userRepository.save(currentUser);
         final Authentication auth = new UsernamePasswordAuthenticationToken(currentUser, currentUser.getPassword(), curAuth.getAuthorities());
         SecurityContextHolder.getContext()
-            .setAuthentication(auth);
+                .setAuthentication(auth);
         return currentUser;
     }
 
@@ -228,17 +223,17 @@ public class UserService implements IUserService {
     @Override
     public List<String> getUsersFromSessionRegistry() {
         return sessionRegistry.getAllPrincipals()
-            .stream()
-            .filter((u) -> !sessionRegistry.getAllSessions(u, false)
-                .isEmpty())
-            .map(o -> {
-                if (o instanceof User) {
-                    return ((User) o).getEmail();
-                } else {
-                    return o.toString();
-                }
-            })
-            .collect(Collectors.toList());
+                .stream()
+                .filter((u) -> !sessionRegistry.getAllSessions(u, false)
+                        .isEmpty())
+                .map(o -> {
+                    if (o instanceof User) {
+                        return ((User) o).getEmail();
+                    } else {
+                        return o.toString();
+                    }
+                })
+                .collect(Collectors.toList());
 
     }
 

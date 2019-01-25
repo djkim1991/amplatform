@@ -18,16 +18,16 @@ import java.util.Set;
 public class RoleHierarchy {
 
     @Id
-    @Column(name = "ROLE_ID")
-    private Integer roleId;
+    @Column(name = "ROLE_HIERARCHY_ID")
+    private Integer id;
 
     @Column(name = "ROLE_NAME")
     private String roleName;
 
     @ManyToOne(cascade = {CascadeType.ALL})
-    @JoinColumn(name = "PARENT_ROLE_ID")
-    private RoleHierarchy parentRole;
+    @JoinColumn(name = "PARENT_ROLE_NAME", referencedColumnName = "ROLE_NAME")
+    private RoleHierarchy parentRoleName;
 
-    @OneToMany(mappedBy = "parentRole", cascade={CascadeType.ALL})
+    @OneToMany(mappedBy = "parentRoleName", cascade={CascadeType.ALL})
     private Set<RoleHierarchy> roleHierarchy = new HashSet<RoleHierarchy>();
 }
