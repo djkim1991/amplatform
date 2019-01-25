@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Data
 @AllArgsConstructor
@@ -12,5 +13,6 @@ import lombok.NoArgsConstructor;
 public class AuthoritiesDto {
 
   private String url;
+  private AntPathRequestMatcher antPathRequestMatcher;
   private String roleName;
 }

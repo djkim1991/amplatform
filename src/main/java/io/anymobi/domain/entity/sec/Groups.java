@@ -13,6 +13,8 @@ import java.util.Set;
 @ToString(exclude = {"users", "roles"})
 @EqualsAndHashCode(of = "id")
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Groups implements Serializable {
 
     @Id

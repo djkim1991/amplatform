@@ -1,9 +1,6 @@
 package io.anymobi.domain.entity.sec;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -14,6 +11,8 @@ import java.io.Serializable;
 @ToString(exclude = {"groups", "role"})
 @EqualsAndHashCode(of = "id")
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class GroupsRole implements Serializable {
 
     @Id

@@ -1,11 +1,9 @@
 package io.anymobi.domain.entity.sec;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,7 +13,9 @@ import java.util.Set;
 @ToString(exclude = {"roleResources"})
 @EqualsAndHashCode(of = "id")
 @Builder
-public class Resources {
+@NoArgsConstructor
+@AllArgsConstructor
+public class Resources implements Serializable {
 
     @Id
     @GeneratedValue
