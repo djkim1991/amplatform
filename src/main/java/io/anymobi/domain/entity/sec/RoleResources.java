@@ -22,11 +22,11 @@ public class RoleResources implements Serializable {
   private Integer id;
 
   @ManyToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "ROLE_ID", referencedColumnName = "ROLE_NAME")
+  @JoinColumn(name = "ROLE_NAME", referencedColumnName = "ROLE_NAME")
   private Role role;
 
   @ManyToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "RESOURCE_ID", referencedColumnName = "RESOURCE_NAME")
+  @JoinColumn(name = "RESOURCE_NAME", referencedColumnName = "RESOURCE_NAME")
   private Resources resources;
 
 }

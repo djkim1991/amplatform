@@ -24,14 +24,14 @@ public class GroupsUser implements Serializable {
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "GROUP_ID", referencedColumnName = "GROUP_NAME")
+    @JoinColumn(name = "GROUP_NAME", referencedColumnName = "GROUP_NAME")
     private Groups groups;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_ID", referencedColumnName = "USERNAME")
+    @JoinColumn(name = "USERNAME", referencedColumnName = "USERNAME")
     private User user;
 
-    @OneToMany(targetEntity = GroupsRole.class, fetch = FetchType.EAGER, mappedBy = "groups")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "groups")
     private List<GroupsRole> groupRoles = new ArrayList<>();
 
 }

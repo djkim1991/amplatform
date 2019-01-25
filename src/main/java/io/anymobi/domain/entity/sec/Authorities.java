@@ -23,10 +23,10 @@ public class Authorities implements Serializable {
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_ID", referencedColumnName = "USERNAME")
+    @JoinColumn(name = "USERNAME", referencedColumnName = "USERNAME")
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ROLE_ID", referencedColumnName = "ROLE_NAME")
+    @JoinColumn(name = "ROLE_NAME", referencedColumnName = "ROLE_NAME")
     private Role role;
 }
