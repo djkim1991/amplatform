@@ -39,6 +39,9 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     private RoleResourcesRepository roleResourcesRepository;
 
     @Autowired
+    private RoleHierarchyRepository roleHierarchyRepository;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Override
@@ -54,12 +57,24 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         Groups groups = createGroupsIfNotFound("사용자그룹");
         Resources resources = createResourceIfNotFound("/user/**");
 
+        createRolesAndResourcesAndGroupsAndHierarchy(role, user, groups, resources);
+
+        role = createRoleIfNotFound("ROLE_ADMIN", "관리자");
+        user = createUserIfNotFound("admin", "admin@test.com", "adminFirst", "adminLast", "pass", role);
+        groups = createGroupsIfNotFound("관리자그룹");
+        resources = createResourceIfNotFound("/admin/**");
+
+        createRolesAndResourcesAndGroupsAndHierarchy(role, user, groups, resources);
+
+        alreadySetup = true;
+    }
+
+    private void createRolesAndResourcesAndGroupsAndHierarchy(Role role, User user, Groups groups, Resources resources) {
         createAuthoritiesIfNotFound(role, user);
         createGroupsRoleIfNotFound(groups, role);
         createGroupsUserIfNotFound(groups, user);
         createRoleResourceIfNotFound(role, resources);
-
-        alreadySetup = true;
+        createRoleHierarchyIfNotFound(role);
     }
 
     @Transactional
@@ -166,5 +181,18 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
                     .build();
         }
         return roleResourcesRepository.save(roleResource);
+    }
+
+    @Transactional
+    public void createRoleHierarchyIfNotFound(Role role) {
+
+        RoleHierarchy roleHierarchy = roleHierarchyRepository.findByChildName(role.getRoleName());
+        if (roleHierarchy == null) {
+            roleHierarchy = RoleHierarchy.builder()
+                    .childName(role.getRoleName())
+                    .build();
+        }
+        RoleHierarchy savedroleHierarchy = roleHierarchyRepository.save(roleHierarchy);
+        savedroleHierarchy.setParentRoleName(savedroleHierarchy);
     }
 }

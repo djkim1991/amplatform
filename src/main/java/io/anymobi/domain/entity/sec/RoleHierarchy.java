@@ -1,9 +1,6 @@
 package io.anymobi.domain.entity.sec;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -15,17 +12,19 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class RoleHierarchy {
 
     @Id
+    @GeneratedValue
     @Column(name = "ROLE_HIERARCHY_ID")
-    private Integer id;
+    private Long id;
 
-    @Column(name = "ROLE_NAME")
-    private String roleName;
+    @Column(name = "CHILD_NAME")
+    private String childName;
 
     @ManyToOne(cascade = {CascadeType.ALL})
-    @JoinColumn(name = "PARENT_ROLE_NAME", referencedColumnName = "ROLE_NAME")
+    @JoinColumn(name = "PARENT_ROLE_NAME", referencedColumnName = "CHILD_NAME")
     private RoleHierarchy parentRoleName;
 
     @OneToMany(mappedBy = "parentRoleName", cascade={CascadeType.ALL})
