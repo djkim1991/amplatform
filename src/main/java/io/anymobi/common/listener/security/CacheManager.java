@@ -14,9 +14,9 @@ public class CacheManager implements ApplicationListener<CacheEventMessage> {
     //private Map<String, List<AuthoritiesDto>> authorities;
     private List<AuthoritiesDto> authorities;
 
-    //public Map<String, List<AuthoritiesDto>> getAuthorities() {
-     //   return authorities;
-    //}
+//    public Map<String, List<AuthoritiesDto>> getAuthorities() {
+//        return authorities;
+//    }
 
     public List<AuthoritiesDto> getAuthorities() {
         return authorities;

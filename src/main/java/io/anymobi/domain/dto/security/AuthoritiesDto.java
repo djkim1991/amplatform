@@ -12,7 +12,6 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @Builder
 public class AuthoritiesDto {
 
-  private String url;
-  private AntPathRequestMatcher antPathRequestMatcher;
   private String roleName;
+  private AntPathRequestMatcher antPathRequestMatcher;
 }

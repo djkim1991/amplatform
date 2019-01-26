@@ -13,8 +13,11 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * Package : io.anymobi.common.init
@@ -40,19 +43,12 @@ public class ApplicationInitializer implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
 
         List<RoleResources> roleResources = roleResourcesRepository.findAll();
-        List<AuthoritiesDto> authorities = new ArrayList<>();
 
-        roleResources.stream().forEach(roleResource -> {
-            authorities.add(AuthoritiesDto.builder()
-                    .roleName(roleResource.getRole().getRoleName())
-                    .antPathRequestMatcher(new AntPathRequestMatcher(roleResource.getResources().getResourceName()))
-                    .url(roleResource.getResources().getResourceName()).build());
-        });
+        List<AuthoritiesDto> authorities = roleResources.stream().collect(Collectors.groupingBy(roleResource -> roleResource.getResources().getResourceName(), toList()))
+                .entrySet().stream().map(entry -> entry.getValue().stream().map(e -> {
+                    return new AuthoritiesDto(e.getRole().getRoleName(), new AntPathRequestMatcher(e.getResources().getResourceName()));
+                }).collect(toList())).flatMap(Collection::stream).collect(toList());
 
-        authorities.stream().forEach(userRoleDto -> {
-            log.info("role name {} ", userRoleDto.getRoleName());
-            log.info("url {}", userRoleDto.getUrl());
-        });
         applicationContext.publishEvent(new CacheEventMessage(this, authorities));
     }
 }

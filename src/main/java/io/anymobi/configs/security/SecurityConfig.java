@@ -1,5 +1,6 @@
 package io.anymobi.configs.security;
 
+import io.anymobi.common.filter.CsrfHeaderFilter;
 import io.anymobi.common.handler.security.CustomAccessDeniedHandler;
 import io.anymobi.services.jpa.security.CustomRememberMeServices;
 import io.anymobi.common.handler.security.google2fa.CustomAuthenticationProvider;
@@ -37,6 +38,9 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.authentication.rememberme.InMemoryTokenRepositoryImpl;
+import org.springframework.security.web.csrf.CsrfFilter;
+import org.springframework.security.web.csrf.CsrfTokenRepository;
+import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
 import java.util.ArrayList;
@@ -113,8 +117,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/","/login").permitAll()
                 .antMatchers("/invalidSession*").anonymous()
-                //.antMatchers("/user/updatePassword*","/user/savePassword*","/updatePassword*").hasAuthority("CHANGE_PASSWORD_PRIVILEGE")
-                //.anyRequest().hasAuthority("ROLE_USER")
                 .and()
                 .exceptionHandling().accessDeniedPage("/denied")
                 .accessDeniedHandler(accessDeniedHandler)
@@ -142,7 +144,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .rememberMe().rememberMeServices(rememberMeServices()).key("theKey")
                 .and()
-                .addFilter(filterSecurityInterceptor());
+                .addFilter(filterSecurityInterceptor())
+                .addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class)
+                .csrf().csrfTokenRepository(csrfTokenRepository()).disable();
     }
 
     @Bean
@@ -151,6 +155,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         authProvider.setUserDetailsService(userDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
+    }
+
+    private CsrfTokenRepository csrfTokenRepository() {
+        HttpSessionCsrfTokenRepository repository = new HttpSessionCsrfTokenRepository();
+        repository.setHeaderName("X-XSRF-TOKEN");
+        return repository;
     }
 
     @Bean

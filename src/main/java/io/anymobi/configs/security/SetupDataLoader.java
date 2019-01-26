@@ -55,7 +55,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         Role role = createRoleIfNotFound("ROLE_USER", "일반사용자");
         User user = createUserIfNotFound("user1", "user1@test.com", "userFirst1", "userLast1", "pass", role);
         Groups groups = createGroupsIfNotFound("사용자그룹");
-        Resources resources = createResourceIfNotFound("/user/**");
+        Resources resources = createResourceIfNotFound("/users/**");
 
         createRolesAndResourcesAndGroupsAndHierarchy(role, user, groups, resources);
 
