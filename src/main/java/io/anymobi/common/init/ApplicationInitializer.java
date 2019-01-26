@@ -19,15 +19,6 @@ import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
-/**
- * Package : io.anymobi.common.init
- * Developer Team : Anymobi System Development Division
- * Date : 2019-01-25
- * Time : 오후 11:58
- * Created by leaven
- * Github : http://github.com/onjsdnjs
- */
-
 @Component
 @Slf4j
 public class ApplicationInitializer implements ApplicationRunner {
