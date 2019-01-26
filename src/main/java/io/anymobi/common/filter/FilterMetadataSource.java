@@ -46,10 +46,10 @@ public class FilterMetadataSource implements FilterInvocationSecurityMetadataSou
 
         //List<String> roles = authorities.stream().map(AuthoritiesDto::getRoleName).collect(Collectors.toList());
 
-        String[] stockArr = new String[roleNames.size()];
-        stockArr = roleNames.toArray(stockArr);
+        String[] roleArr = new String[roleNames.size()];
+        roleArr = roleNames.toArray(roleArr);
 
-        return SecurityConfig.createList(stockArr);
+        return SecurityConfig.createList(roleArr);
     }
 
     @Override
