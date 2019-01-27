@@ -111,7 +111,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
-        // @formatter:off
         http
                 .csrf().disable()
                 .authorizeRequests()
@@ -134,8 +133,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement()
                 .invalidSessionUrl("/users/invalidSession.html")
                 .maximumSessions(1)
-                .maxSessionsPreventsLogin(false)
-                .expiredUrl("/error")
+                .maxSessionsPreventsLogin(true)
+                //.expiredUrl("/error")
                 .sessionRegistry(sessionRegistry()).and()
                 .sessionFixation().none()
                 .and()

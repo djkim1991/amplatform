@@ -45,6 +45,9 @@ public class CustomAuthenticationFailureHandler extends SimpleUrlAuthenticationF
 
         } else if (exception.getMessage().equalsIgnoreCase("blocked")) {
             errorMessage = messages.getMessage("auth.message.blocked", null, locale);
+
+        }else if (exception.getMessage().equalsIgnoreCase("Maximum sessions of 1 for this principal exceeded")) {
+            errorMessage = messages.getMessage("message.sessionExceeded", null, locale);
         }
 
         request.getSession().setAttribute(WebAttributes.AUTHENTICATION_EXCEPTION, errorMessage);
