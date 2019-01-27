@@ -21,7 +21,6 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Package : io.anymobi.services.jpa.security.impl
  * Developer Team : Anymobi System Development Division
  * Date : 2019-01-27
- * Time : 오후 7:52
  * Created by leaven
  * Github : http://github.com/onjsdnjs
  */
