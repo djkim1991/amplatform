@@ -53,5 +53,6 @@ public class ResourceMetaServiceImpl implements ResourceMetaService {
         allResources.clear();
 
         applicationInitializer.publishEvent(authorities);
+        log.info("Role Resources Authorities - Role and Resources reloaded at Runtime!");
     }
 }
