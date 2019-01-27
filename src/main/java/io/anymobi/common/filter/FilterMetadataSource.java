@@ -3,7 +3,6 @@ package io.anymobi.common.filter;
 import io.anymobi.common.listener.security.CacheManager;
 import io.anymobi.domain.dto.security.AuthoritiesDto;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.SecurityConfig;
@@ -15,18 +14,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-//import io.anymobi.services.jpa.security.ResourceMetaService;
-
-
 @Slf4j
-public class FilterMetadataSource implements FilterInvocationSecurityMetadataSource, InitializingBean {
-
-//    @Autowired
-//    private ResourceMetaService resourceMetaService;
+public class FilterMetadataSource implements FilterInvocationSecurityMetadataSource {
 
     @Autowired
     private CacheManager cacheManager;
-
 
     @Override
     public Collection<ConfigAttribute> getAttributes(Object object) throws IllegalArgumentException {
@@ -35,21 +27,17 @@ public class FilterMetadataSource implements FilterInvocationSecurityMetadataSou
         List<AuthoritiesDto> authorities = cacheManager.getAuthorities();
         boolean isMatch = false;
         List<String> roleNames = new ArrayList<>();
+
         for(AuthoritiesDto authoritiesDto : authorities){
             if(authoritiesDto.getAntPathRequestMatcher().matches(request)){
                 isMatch = true;
                 roleNames.add(authoritiesDto.getRoleName());
             }
         }
-        if(!isMatch){
-            return null;
-        }
 
-        //List<String> roles = authorities.stream().map(AuthoritiesDto::getRoleName).collect(Collectors.toList());
+        if(!isMatch) return null;
 
-        String[] roleArr = new String[roleNames.size()];
-        roleArr = roleNames.toArray(roleArr);
-
+        String[] roleArr = roleNames.toArray(new String[]{});
         return SecurityConfig.createList(roleArr);
     }
 
@@ -63,8 +51,4 @@ public class FilterMetadataSource implements FilterInvocationSecurityMetadataSou
         return FilterInvocation.class.isAssignableFrom(clazz);
     }
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        //resourceMetaService.findAllResources();
-    }
 }

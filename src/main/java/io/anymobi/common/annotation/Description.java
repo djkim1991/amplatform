@@ -1,4 +1,4 @@
-package io.anymobi.common;
+package io.anymobi.common.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -18,7 +18,7 @@ public class RoleResources implements Serializable {
     @Id
     @GeneratedValue
     @Column(name = "ID", unique = true, nullable = false)
-    private Integer id;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ROLE_NAME", referencedColumnName = "ROLE_NAME")

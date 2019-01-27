@@ -1,6 +1,5 @@
 package io.anymobi.controller.event;
 
-import io.anymobi.common.Description;
 import io.anymobi.common.validator.EventValidator;
 import io.anymobi.domain.entity.Event;
 import org.junit.Test;
@@ -13,7 +12,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class EventValidatorTest {
 
-    @Description("Validate valid event")
     @Test
     public void testValidation() {
         // Given
@@ -33,7 +31,6 @@ public class EventValidatorTest {
         assertThat(errors.hasErrors()).isFalse();
     }
 
-    @Description("Validate invalid event")
     @Test
     public void testValidationFail() {
         // Given

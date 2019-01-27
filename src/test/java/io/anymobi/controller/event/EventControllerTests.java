@@ -2,7 +2,6 @@ package io.anymobi.controller.event;
 
 import io.anymobi.common.AppSecurityProperties;
 import io.anymobi.common.BaseControllerTests;
-import io.anymobi.common.Description;
 import io.anymobi.common.enums.EventStatus;
 import io.anymobi.domain.dto.event.EventDto;
 import io.anymobi.domain.entity.Event;
@@ -58,7 +57,6 @@ public class EventControllerTests extends BaseControllerTests {
         this.userRepository.deleteAll();
     }
 
-    @Description("Trying to create new event with correct data.")
     @Test
     public void createEvent() throws Exception {
         // Given
@@ -98,7 +96,6 @@ public class EventControllerTests extends BaseControllerTests {
         ;
     }
 
-    @Description("Trying to create an event with wrong data and fail.")
     @Test
     public void createNewEvent_bindingError() throws Exception {
         Event event = Event.builder().build();
@@ -124,7 +121,6 @@ public class EventControllerTests extends BaseControllerTests {
                 ))*/;
     }
 
-    @Description("Getting an event successfully as a user not manager of the event")
     @Test
     public void getEvent() throws Exception {
         // Given
@@ -155,7 +151,6 @@ public class EventControllerTests extends BaseControllerTests {
         ;
     }
 
-    @Description("Getting an event successfully as a manager of the event")
     @Test
     public void getEventAsAManager() throws Exception {
         // Given
@@ -180,7 +175,6 @@ public class EventControllerTests extends BaseControllerTests {
         ;*/
     }
 
-    @Description("Trying to get non-existing event.")
     @Test
     public void getEventFail() throws Exception {
         // Given
@@ -197,7 +191,6 @@ public class EventControllerTests extends BaseControllerTests {
         ;
     }
 
-    @Description("Trying to get all events.")
     @Test
     public void getEvents() throws Exception {
         // Given
@@ -235,7 +228,6 @@ public class EventControllerTests extends BaseControllerTests {
         ;
     }
 
-    @Description("Try to get events without token")
     @Test
     public void getEventAnonymous() throws Exception {
         // Given
@@ -254,7 +246,6 @@ public class EventControllerTests extends BaseControllerTests {
         ;
     }
 
-    @Description("Manager can update existing event with correct data.")
     @Test
     public void updateEvent() throws Exception {
         // Given
@@ -302,7 +293,6 @@ public class EventControllerTests extends BaseControllerTests {
         ;*/
     }
 
-    @Description("Trying to update existing event with wrong data")
     @Test
     public void updateEvent_fail() throws Exception {
         // Given
@@ -319,7 +309,6 @@ public class EventControllerTests extends BaseControllerTests {
         ;
     }
 
-    @Description("If a user trying to update existing event, it will response 403 Forbidden.")
     @Test
     public void updateEvent_forbidden() throws Exception {
         // Given

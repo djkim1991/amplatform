@@ -1,6 +1,5 @@
 package io.anymobi.user;
 
-import io.anymobi.common.Description;
 import io.anymobi.repositories.jpa.security.UserRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,7 +20,6 @@ public class UserRepositoryTest {
         userRepository.deleteAll();
     }
 
-    @Description("Save new user and check generated id")
     @Test
     public void saveUser() {
        /* // When
@@ -43,7 +41,6 @@ public class UserRepositoryTest {
                     .build();
     }*/
 
-    @Description("Find existing use by email")
     @Test
     public void findByEmail() {
         // Given

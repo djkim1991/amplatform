@@ -1,7 +1,7 @@
 /*
 package io.anymobi.user;
 
-import io.anymobi.common.Description;
+import io.anymobi.common.annotation.Description;
 import io.anymobi.common.enums.UserRole;
 import io.anymobi.domain.entity.User;
 import io.anymobi.repositories.jpa.security.UserRepository;
