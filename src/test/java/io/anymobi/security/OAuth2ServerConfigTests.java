@@ -1,7 +1,7 @@
 package io.anymobi.security;
 
 import io.anymobi.common.AppSecurityProperties;
-import io.anymobi.services.jpa.UserService;
+import io.anymobi.services.jpa.users.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

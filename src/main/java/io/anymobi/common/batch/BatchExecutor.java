@@ -1,7 +1,7 @@
 package io.anymobi.common.batch;
 
 import io.anymobi.common.provider.MqPublisher;
-import io.anymobi.services.jpa.IUserService;
+import io.anymobi.services.jpa.users.IUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.Scheduled;

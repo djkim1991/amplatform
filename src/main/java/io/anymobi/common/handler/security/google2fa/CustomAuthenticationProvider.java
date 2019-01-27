@@ -37,7 +37,6 @@ public class CustomAuthenticationProvider extends DaoAuthenticationProvider {
             throw new BadCredentialsException("not user confirm");
         }
 
-        // to verify verification code
         if (user.isUsing2FA()) {
             final String verificationCode = ((CustomWebAuthenticationDetails) auth.getDetails()).getVerificationCode();
             final Totp totp = new Totp(user.getSecret());
@@ -51,6 +50,7 @@ public class CustomAuthenticationProvider extends DaoAuthenticationProvider {
     }
 
     private boolean matchPassword(String password, Object credentials) {
+
         return password.equals(credentials);
     }
 

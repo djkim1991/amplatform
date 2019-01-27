@@ -1,6 +1,6 @@
 package io.anymobi.controller.web;
 
-import io.anymobi.services.jpa.security.RoleResourceService;
+import io.anymobi.services.jpa.security.impl.RoleResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

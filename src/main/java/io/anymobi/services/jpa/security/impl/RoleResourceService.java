@@ -1,4 +1,4 @@
-package io.anymobi.services.jpa.security;
+package io.anymobi.services.jpa.security.impl;
 
 import io.anymobi.repositories.jpa.security.RoleResourcesRepository;
 import org.springframework.beans.factory.annotation.Autowired;

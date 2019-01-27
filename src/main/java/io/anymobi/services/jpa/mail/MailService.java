@@ -1,4 +1,4 @@
-package io.anymobi.services.jpa;
+package io.anymobi.services.jpa.mail;
 
 import io.anymobi.domain.dto.security.EmailConfirm;
 import lombok.extern.slf4j.Slf4j;

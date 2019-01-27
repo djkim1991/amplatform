@@ -1,4 +1,4 @@
-package io.anymobi.services.jpa;
+package io.anymobi.services.jpa.mail;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

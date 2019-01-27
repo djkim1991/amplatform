@@ -2,11 +2,11 @@ package io.anymobi.configs.security;
 
 import io.anymobi.common.filter.CsrfHeaderFilter;
 import io.anymobi.common.handler.security.CustomAccessDeniedHandler;
-import io.anymobi.services.jpa.security.CustomRememberMeServices;
+import io.anymobi.services.jpa.security.impl.CustomRememberMeServices;
 import io.anymobi.common.handler.security.google2fa.CustomAuthenticationProvider;
 import io.anymobi.common.handler.security.google2fa.CustomWebAuthenticationDetailsSource;
 import io.anymobi.repositories.jpa.security.UserRepository;
-import io.anymobi.services.jpa.security.RoleHierarchyService;
+import io.anymobi.services.jpa.security.impl.RoleHierarchyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

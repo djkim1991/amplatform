@@ -9,7 +9,7 @@ import io.anymobi.domain.entity.Event;
 import io.anymobi.domain.entity.sec.User;
 import io.anymobi.repositories.jpa.EventRepository;
 import io.anymobi.repositories.jpa.security.UserRepository;
-import io.anymobi.services.jpa.UserService;
+import io.anymobi.services.jpa.users.UserService;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;

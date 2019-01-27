@@ -1,17 +1,15 @@
 package io.anymobi.controller.web;
 
 import io.anymobi.domain.entity.sec.ActiveUserStore;
-import io.anymobi.domain.entity.sec.Role;
 import io.anymobi.services.jpa.security.ISecurityUserService;
 import io.anymobi.domain.entity.sec.User;
-import io.anymobi.services.jpa.IUserService;
-import io.anymobi.services.jpa.security.UserDetailsServiceImpl;
+import io.anymobi.services.jpa.users.IUserService;
+import io.anymobi.services.jpa.security.impl.UserDetailsServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;

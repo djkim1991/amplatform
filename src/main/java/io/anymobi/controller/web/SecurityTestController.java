@@ -1,7 +1,7 @@
 package io.anymobi.controller.web;
 
 import io.anymobi.domain.dto.security.UserDto;
-import io.anymobi.services.jpa.UserService;
+import io.anymobi.services.jpa.users.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,6 @@
 package io.anymobi.common.listener.security;
 
-import io.anymobi.services.jpa.security.LoginAttemptService;
+import io.anymobi.services.jpa.security.impl.LoginAttemptService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.security.authentication.event.AuthenticationFailureBadCredentialsEvent;

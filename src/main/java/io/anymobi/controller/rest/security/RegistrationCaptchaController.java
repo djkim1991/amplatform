@@ -4,7 +4,7 @@ import io.anymobi.common.handler.security.captcha.ICaptchaService;
 import io.anymobi.common.listener.security.OnRegistrationCompleteEvent;
 import io.anymobi.domain.dto.security.UserDto;
 import io.anymobi.domain.entity.sec.User;
-import io.anymobi.services.jpa.IUserService;
+import io.anymobi.services.jpa.users.IUserService;
 import io.anymobi.utils.GenericResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

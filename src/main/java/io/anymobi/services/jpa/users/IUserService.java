@@ -1,4 +1,4 @@
-package io.anymobi.services.jpa;
+package io.anymobi.services.jpa.users;
 
 import io.anymobi.common.exception.UserAlreadyExistException;
 import io.anymobi.domain.dto.security.UserDto;

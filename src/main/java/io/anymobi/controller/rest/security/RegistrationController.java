@@ -6,7 +6,7 @@ import io.anymobi.domain.dto.security.PasswordDto;
 import io.anymobi.domain.dto.security.UserDto;
 import io.anymobi.domain.entity.sec.User;
 import io.anymobi.domain.entity.sec.VerificationToken;
-import io.anymobi.services.jpa.IUserService;
+import io.anymobi.services.jpa.users.IUserService;
 import io.anymobi.utils.GenericResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

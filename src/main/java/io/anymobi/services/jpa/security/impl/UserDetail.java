@@ -1,4 +1,4 @@
-package io.anymobi.services.jpa.security;
+package io.anymobi.services.jpa.security.impl;
 
 import io.anymobi.domain.entity.sec.User;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
