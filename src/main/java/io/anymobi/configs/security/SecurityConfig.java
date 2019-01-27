@@ -115,7 +115,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/", "/login").permitAll()
+                .antMatchers("/","/login").permitAll()
                 .antMatchers("/invalidSession*").anonymous()
                 .and()
                 .exceptionHandling().accessDeniedPage("/denied")
@@ -142,7 +142,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessHandler(logoutSuccessHandler)
                 .invalidateHttpSession(false)
                 .logoutSuccessUrl("/logout.html?logSucc=true")
-                .deleteCookies("SESSION", "remember-me")
+                .deleteCookies("SESSION","remember-me")
                 .permitAll()
                 .and()
                 .rememberMe().rememberMeServices(rememberMeServices()).key("theKey")
@@ -168,16 +168,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-
-
-
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
     @Bean
     public SessionRegistry sessionRegistry() {
-        return
-                new SessionRegistryImpl();
+        return new SessionRegistryImpl();
     }
 
     @Bean
