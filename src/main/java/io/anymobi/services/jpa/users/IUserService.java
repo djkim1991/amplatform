@@ -48,15 +48,15 @@ public interface IUserService {
 
     List<String> getUsersFromSessionRegistry();
 
-    public Optional<User> findById(Long id);
+    Optional<User> findById(Long id);
 
-    public List<User> findAll();
+    List<User> findAll();
 
-    public User save(User user);
+    User save(User user);
 
-    public boolean isExist(User user);
+    boolean isExist(User user);
 
-    public void deleteById(Long id);
+    void deleteById(Long id);
 
-    public void socketService(String localDateTime);
+    void socketService(String localDateTime);
 }

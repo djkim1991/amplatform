@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
  * Package : io.anymobi.services.jpa.security
  * Developer Team : Anymobi System Development Division
  * Date : 2019-01-19
- * Time : 오후 6:14
  * Created by leaven
  * Github : http://github.com/onjsdnjs
  */
