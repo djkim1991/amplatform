@@ -1,4 +1,4 @@
-package io.anymobi.configs.security;
+package io.anymobi.common.listener.security;
 
 import io.anymobi.domain.entity.sec.*;
 import io.anymobi.repositories.jpa.security.*;
