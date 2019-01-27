@@ -3,6 +3,7 @@ package io.anymobi.domain.entity.sec;
 import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,7 +14,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class RoleHierarchy {
+public class RoleHierarchy implements Serializable {
 
     @Id
     @GeneratedValue
@@ -24,9 +25,9 @@ public class RoleHierarchy {
     private String childName;
 
     @ManyToOne(cascade = {CascadeType.ALL})
-    @JoinColumn(name = "PARENT_ROLE_NAME", referencedColumnName = "CHILD_NAME")
-    private RoleHierarchy parentRoleName;
+    @JoinColumn(name = "PARENT_NAME", referencedColumnName = "CHILD_NAME")
+    private RoleHierarchy parentName;
 
-    @OneToMany(mappedBy = "parentRoleName", cascade={CascadeType.ALL})
+    @OneToMany(mappedBy = "parentName", cascade={CascadeType.ALL})
     private Set<RoleHierarchy> roleHierarchy = new HashSet<RoleHierarchy>();
 }

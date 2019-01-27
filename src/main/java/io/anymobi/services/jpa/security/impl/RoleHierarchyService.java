@@ -24,8 +24,8 @@ public class RoleHierarchyService {
         StringBuffer concatedRoles = new StringBuffer();
         while (itr.hasNext()) {
             RoleHierarchy model = itr.next();
-            if (model.getParentRoleName() != null) {
-                concatedRoles.append(model.getParentRoleName().getChildName());
+            if (model.getParentName() != null) {
+                concatedRoles.append(model.getParentName().getChildName());
                 concatedRoles.append(" > ");
                 concatedRoles.append(model.getChildName());
                 concatedRoles.append("\n");

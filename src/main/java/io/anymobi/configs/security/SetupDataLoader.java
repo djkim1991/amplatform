@@ -51,37 +51,35 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         if (alreadySetup) {
             return;
         }
+        Role parentRole = createRoleIfNotFound("ROLE_ADMIN", "관리자");
+        User user = createUserIfNotFound("admin", "admin@test.com", "adminFirst", "adminLast", "pass", parentRole);
+        Groups groups = createGroupsIfNotFound("관리자그룹");
+        Resources resources = createResourceIfNotFound("/admin/**");
+        createRolesAndResourcesAndGroups(parentRole, user, groups, resources);
 
-        Role role = createRoleIfNotFound("ROLE_USER", "일반사용자");
-        User user = createUserIfNotFound("user1", "user1@test.com", "userFirst1", "userLast1", "pass", role);
-        Groups groups = createGroupsIfNotFound("사용자그룹");
-        Resources resources = createResourceIfNotFound("/users/**");
+        Role childRole = createRoleIfNotFound("ROLE_USER", "일반사용자");
+        user = createUserIfNotFound("user1", "user1@test.com", "userFirst1", "userLast1", "pass", childRole);
+        groups = createGroupsIfNotFound("사용자그룹");
+        resources = createResourceIfNotFound("/users/**");
+        createRolesAndResourcesAndGroups(childRole, user, groups, resources);
 
-        createRolesAndResourcesAndGroupsAndHierarchy(role, user, groups, resources);
+        createRoleHierarchyIfNotFound(childRole, parentRole);
 
-        role = createRoleIfNotFound("ROLE_USER2", "일반사용자2");
-        user = createUserIfNotFound("user2", "user2@test.com", "userFirst2", "userLast2", "pass", role);
+        childRole = createRoleIfNotFound("ROLE_USER2", "일반사용자2");
+        user = createUserIfNotFound("user2", "user2@test.com", "userFirst2", "userLast2", "pass", childRole);
         groups = createGroupsIfNotFound("사용자그룹");
         resources = createResourceIfNotFound("/users/**");
 
-        createRolesAndResourcesAndGroupsAndHierarchy(role, user, groups, resources);
-
-        role = createRoleIfNotFound("ROLE_ADMIN", "관리자");
-        user = createUserIfNotFound("admin", "admin@test.com", "adminFirst", "adminLast", "pass", role);
-        groups = createGroupsIfNotFound("관리자그룹");
-        resources = createResourceIfNotFound("/admin/**");
-
-        createRolesAndResourcesAndGroupsAndHierarchy(role, user, groups, resources);
+        createRolesAndResourcesAndGroups(childRole, user, groups, resources);
 
         alreadySetup = true;
     }
 
-    private void createRolesAndResourcesAndGroupsAndHierarchy(Role role, User user, Groups groups, Resources resources) {
+    private void createRolesAndResourcesAndGroups(Role role, User user, Groups groups, Resources resources) {
         createAuthoritiesIfNotFound(role, user);
         createGroupsRoleIfNotFound(groups, role);
         createGroupsUserIfNotFound(groups, user);
         createRoleResourceIfNotFound(role, resources);
-        createRoleHierarchyIfNotFound(role);
     }
 
     @Transactional
@@ -191,15 +189,24 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     }
 
     @Transactional
-    public void createRoleHierarchyIfNotFound(Role role) {
+    public void createRoleHierarchyIfNotFound(Role childRole, Role parentRole) {
 
-        RoleHierarchy roleHierarchy = roleHierarchyRepository.findByChildName(role.getRoleName());
+        RoleHierarchy roleHierarchy = roleHierarchyRepository.findByChildName(parentRole.getRoleName());
         if (roleHierarchy == null) {
             roleHierarchy = RoleHierarchy.builder()
-                    .childName(role.getRoleName())
+                    .childName(parentRole.getRoleName())
                     .build();
         }
-        RoleHierarchy savedroleHierarchy = roleHierarchyRepository.save(roleHierarchy);
-        savedroleHierarchy.setParentRoleName(savedroleHierarchy);
+        RoleHierarchy parentRoleHierarchy = roleHierarchyRepository.save(roleHierarchy);
+
+        roleHierarchy = roleHierarchyRepository.findByChildName(childRole.getRoleName());
+        if (roleHierarchy == null) {
+            roleHierarchy = RoleHierarchy.builder()
+                    .childName(childRole.getRoleName())
+                    .build();
+        }
+
+        RoleHierarchy childRoleHierarchy = roleHierarchyRepository.save(roleHierarchy);
+        childRoleHierarchy.setParentName(parentRoleHierarchy);
     }
 }
