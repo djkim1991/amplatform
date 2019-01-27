@@ -1,4 +1,4 @@
-package io.anymobi.common.handler.security.google2fa;
+package io.anymobi.common.handler.security.authentication;
 
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 

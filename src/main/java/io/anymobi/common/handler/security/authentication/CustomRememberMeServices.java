@@ -1,4 +1,4 @@
-package io.anymobi.services.jpa.security.impl;
+package io.anymobi.common.handler.security.authentication;
 
 import io.anymobi.domain.entity.sec.User;
 import io.anymobi.repositories.jpa.security.UserRepository;

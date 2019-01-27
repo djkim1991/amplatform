@@ -1,7 +1,8 @@
-package io.anymobi.services.jpa.security.impl;
+package io.anymobi.common.handler.security.authentication;
 
 import io.anymobi.domain.entity.sec.User;
 import io.anymobi.repositories.jpa.security.UserRepository;
+import io.anymobi.services.jpa.security.impl.LoginAttemptService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
