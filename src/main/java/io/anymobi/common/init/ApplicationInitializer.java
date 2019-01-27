@@ -17,7 +17,6 @@ import java.util.List;
 @Slf4j
 public class ApplicationInitializer implements ApplicationRunner {
 
-
     @Autowired
     private ResourceMetaService resourceMetaServiceImpl;
 
