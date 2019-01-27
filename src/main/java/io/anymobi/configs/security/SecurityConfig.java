@@ -117,6 +117,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/","/login").permitAll()
                 .antMatchers("/invalidSession*").anonymous()
+                .anyRequest().fullyAuthenticated()
                 .and()
                 .exceptionHandling().accessDeniedPage("/denied")
                 .accessDeniedHandler(accessDeniedHandler)
