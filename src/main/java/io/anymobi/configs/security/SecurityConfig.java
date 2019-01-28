@@ -2,11 +2,9 @@ package io.anymobi.configs.security;
 
 import io.anymobi.common.filter.CsrfHeaderFilter;
 import io.anymobi.common.handler.security.CustomAccessDeniedHandler;
-import io.anymobi.common.handler.security.authentication.CustomRememberMeServices;
 import io.anymobi.common.handler.security.authentication.CustomAuthenticationProvider;
+import io.anymobi.common.handler.security.authentication.CustomRememberMeServices;
 import io.anymobi.common.handler.security.authentication.CustomWebAuthenticationDetailsSource;
-import io.anymobi.repositories.jpa.security.UserRepository;
-import io.anymobi.services.jpa.security.impl.RoleHierarchyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -74,18 +72,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private CustomWebAuthenticationDetailsSource authenticationDetailsSource;
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private RoleHierarchyService roleHierarchyService;
-
-    @Autowired
     private FilterInvocationSecurityMetadataSource filterInvocationSecurityMetadataSource;
-
-    public SecurityConfig() {
-        super();
-    }
-
 
     @Bean
     @Override
@@ -114,7 +101,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/","/login").permitAll()
+                .antMatchers("/", "/login").permitAll()
                 .antMatchers("/invalidSession*").anonymous()
                 .anyRequest().fullyAuthenticated()
                 .and()
@@ -142,7 +129,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessHandler(logoutSuccessHandler)
                 .invalidateHttpSession(false)
                 .logoutSuccessUrl("/logout.html?logSucc=true")
-                .deleteCookies("SESSION","remember-me")
+                .deleteCookies("SESSION", "remember-me")
                 .permitAll()
                 .and()
                 .rememberMe().rememberMeServices(rememberMeServices()).key("theKey")
