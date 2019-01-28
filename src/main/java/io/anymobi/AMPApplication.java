@@ -2,13 +2,11 @@ package io.anymobi;
 
 import io.anymobi.common.filter.FilterMetadataSource;
 import io.anymobi.common.listener.security.CacheManager;
-//import io.anymobi.services.jpa.security.ResourceMetaService;
 import io.anymobi.services.jpa.security.ResourceMetaService;
 import io.anymobi.services.jpa.security.impl.ResourceMetaServiceImpl;
 import org.springframework.amqp.core.Queue;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.task.TaskExecutionAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -16,10 +14,9 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.filter.CharacterEncodingFilter;
-
 import java.nio.charset.Charset;
 
-@SpringBootApplication(exclude = {TaskExecutionAutoConfiguration.class})
+@SpringBootApplication
 @EnableJpaRepositories(basePackages = "io.anymobi.repositories.jpa")
 @EnableTransactionManagement
 public class AMPApplication {
