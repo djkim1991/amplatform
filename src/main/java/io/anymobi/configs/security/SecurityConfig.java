@@ -1,10 +1,13 @@
 package io.anymobi.configs.security;
 
 import io.anymobi.common.filter.CsrfHeaderFilter;
+import io.anymobi.common.filter.FilterMetadataSource;
 import io.anymobi.common.handler.security.CustomAccessDeniedHandler;
 import io.anymobi.common.handler.security.authentication.CustomAuthenticationProvider;
 import io.anymobi.common.handler.security.authentication.CustomRememberMeServices;
 import io.anymobi.common.handler.security.authentication.CustomWebAuthenticationDetailsSource;
+import io.anymobi.services.jpa.security.ResourceMetaService;
+import io.anymobi.services.jpa.security.impl.ResourceMetaServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -204,5 +207,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public RoleHierarchy roleHierarchy() {
         RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
         return roleHierarchy;
+    }
+
+    @Bean
+    public ResourceMetaService resourceMetaService(){
+        return new ResourceMetaServiceImpl();
+    }
+
+    @Bean
+    public FilterMetadataSource filterMetadataSource(){
+        return new FilterMetadataSource();
     }
 }
