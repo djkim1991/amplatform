@@ -44,12 +44,12 @@ public class ApplicationInitializer implements ApplicationRunner {
         setRoleHierarchy();
     }
 
+    public void publishEvent(List<AuthoritiesDto> authorities) {
+        applicationContext.publishEvent(new CacheEventMessage(this, authorities));
+    }
+
     private void setRoleHierarchy() {
         String allHierarchy = roleHierarchyService.findAllHierarchy();
         roleHierarchy.setHierarchy(allHierarchy);
-    }
-
-    public void publishEvent(List<AuthoritiesDto> authorities) {
-        applicationContext.publishEvent(new CacheEventMessage(this, authorities));
     }
 }
