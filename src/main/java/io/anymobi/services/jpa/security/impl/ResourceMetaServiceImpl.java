@@ -37,7 +37,10 @@ public class ResourceMetaServiceImpl implements ResourceMetaService {
 
         List<AuthoritiesDto> authorities = roleResources.stream().collect(Collectors.groupingBy(roleResource -> roleResource.getResources().getResourceName(), toList()))
                 .entrySet().stream().map(entry -> entry.getValue().stream().map(e -> {
-                    return new AuthoritiesDto(e.getRole().getRoleName(), new AntPathRequestMatcher(e.getResources().getResourceName()));
+                    return AuthoritiesDto.builder()
+                            .roleName(e.getRole().getRoleName())
+                            .antPathRequestMatcher(new AntPathRequestMatcher(e.getResources().getResourceName()))
+                            .build();
                 }).collect(toList())).flatMap(Collection::stream).collect(toList());
         return authorities;
     }
