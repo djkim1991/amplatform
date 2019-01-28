@@ -1,6 +1,5 @@
 package io.anymobi.common.batch;
 
-import io.anymobi.common.provider.MqPublisher;
 import io.anymobi.services.jpa.users.IUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
@@ -15,12 +14,10 @@ import java.time.format.DateTimeFormatter;
 public class BatchExecutor {
 
     private final Environment environment;
-    private final MqPublisher mqPublisher;
     private final IUserService userService;
 
-    public BatchExecutor(Environment environment, MqPublisher mqPublisher, IUserService userService) {
+    public BatchExecutor(Environment environment, IUserService userService) {
         this.environment = environment;
-        this.mqPublisher = mqPublisher;
         this.userService = userService;
     }
 
