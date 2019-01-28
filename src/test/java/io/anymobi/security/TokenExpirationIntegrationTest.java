@@ -44,8 +44,6 @@ public class TokenExpirationIntegrationTest {
     private Long token_id;
     private Long user_id;
 
-    //
-
     @Before
     public void givenUserWithExpiredToken() {
         User user = new User();
@@ -60,16 +58,7 @@ public class TokenExpirationIntegrationTest {
         verificationToken.setExpiryDate(Date.from(Instant.now().minus(2, ChronoUnit.DAYS)));
 
         entityManager.persist(verificationToken);
-
-        /*
-            flush managed entities to the database to populate identifier field
-         */
         entityManager.flush();
-
-        /*
-            remove managed entities from the persistence context
-            so that subsequent SQL queries hit the database
-         */
         entityManager.clear();
 
         token_id = verificationToken.getId();

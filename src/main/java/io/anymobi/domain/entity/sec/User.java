@@ -1,11 +1,13 @@
 package io.anymobi.domain.entity.sec;
 
+import io.anymobi.common.enums.UserRole;
 import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = "USERNAME"))
@@ -19,7 +21,7 @@ public class User implements Serializable {
 
     @Id
     @GeneratedValue
-    @Column(name = "USER_ID", unique = true, nullable = false)
+    @Column(name = "ResourcesRepository", unique = true, nullable = false)
     private Long id;
 
     private String firstName;
@@ -39,6 +41,12 @@ public class User implements Serializable {
     private boolean isUsing2FA;
 
     private String secret;
+
+    @Transient
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Enumerated(EnumType.STRING)
+    private Set<UserRole> roles;
+
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private List<Authorities> userRoles = new ArrayList<>();

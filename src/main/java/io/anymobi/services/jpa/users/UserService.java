@@ -295,4 +295,10 @@ public class UserService implements IUserService {
         });
     }
 
+    public User createUser(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return userRepository.save(user);
+    }
+
+
 }

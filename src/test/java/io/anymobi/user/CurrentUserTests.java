@@ -24,19 +24,19 @@ public class CurrentUserTests {
         System.out.println(expression.getValue(context));
     }
 
-//    @Test
-//    public void currenttPrincipalToUser() {
-//        // Given
-//        Principal principal = new
-//        ExpressionParser parser = new SpelExpressionParser();
-//        StandardEvaluationContext context = new StandardEvaluationContext();
-//        context.setRootObject(principal);
-//        context.setVariable("this", principal);
-//
-//        // When
-//        Expression expression = parser.parseExpression("#this == 'anonymousUser' ? null : user");
-//
-//        // Then
-//        System.out.println(expression.getValue(context));
-//    }
+    /*@Test
+    public void currenttPrincipalToUser() {
+        // Given
+        Principal principal =
+        ExpressionParser parser = new SpelExpressionParser();
+        StandardEvaluationContext context = new StandardEvaluationContext();
+        context.setRootObject(principal);
+        context.setVariable("this", principal);
+
+        // When
+        Expression expression = parser.parseExpression("#this == 'anonymousUser' ? null : user");
+
+        // Then
+        System.out.println(expression.getValue(context));
+    }*/
 }

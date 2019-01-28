@@ -3,12 +3,14 @@ package io.anymobi.controller.event;
 import io.anymobi.common.AppSecurityProperties;
 import io.anymobi.common.BaseControllerTests;
 import io.anymobi.common.enums.EventStatus;
+import io.anymobi.common.enums.UserRole;
 import io.anymobi.domain.dto.event.EventDto;
 import io.anymobi.domain.entity.Event;
 import io.anymobi.domain.entity.sec.User;
 import io.anymobi.repositories.jpa.EventRepository;
 import io.anymobi.repositories.jpa.security.UserRepository;
 import io.anymobi.services.jpa.users.UserService;
+import org.assertj.core.internal.bytebuddy.utility.RandomString;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,6 +26,8 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
@@ -106,19 +110,19 @@ public class EventControllerTests extends BaseControllerTests {
                     .content(objectMapper.writeValueAsString(event)))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
-                /*.andExpect(jsonPath("$.content[0].defaultMessage").isNotEmpty())
+                .andExpect(jsonPath("$.content[0].defaultMessage").isNotEmpty())
                 .andExpect(jsonPath("$.content[0].field").isNotEmpty())
                 .andExpect(jsonPath("$.content[0].defaultMessage").isNotEmpty())
                 .andExpect(jsonPath("$.content[0].rejectedValue").exists())
-                .andExpect(jsonPath("$.content[0].rejectedValue").isEmpty())*/
-                /*.andDo(document("errors",
+                .andExpect(jsonPath("$.content[0].rejectedValue").isEmpty())
+                .andDo(document("errors",
                     links(
                         linkWithRel("index").description("Link to index")
                     ),
                     relaxedResponseFields(
                         fieldWithPath("content").description("Error content")
                     )
-                ))*/;
+                ));
     }
 
     @Test
@@ -154,7 +158,7 @@ public class EventControllerTests extends BaseControllerTests {
     @Test
     public void getEventAsAManager() throws Exception {
         // Given
-        /*Set<UserRole> roleSet =new HashSet<>();
+        Set<UserRole> roleSet =new HashSet<>();
         roleSet.add(UserRole.USER);
         String email = "manager@email.com";
         String originalPassword = "manager";
@@ -172,7 +176,7 @@ public class EventControllerTests extends BaseControllerTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("_links.self").hasJsonPath())
                 .andExpect(jsonPath("_links.update").hasJsonPath())
-        ;*/
+        ;
     }
 
     @Test
@@ -249,7 +253,7 @@ public class EventControllerTests extends BaseControllerTests {
     @Test
     public void updateEvent() throws Exception {
         // Given
-        /*Set<UserRole> roleSet =new HashSet<>();
+        Set<UserRole> roleSet =new HashSet<>();
         roleSet.add(UserRole.USER);
         String email = "manager@email.com";
         String originalPassword = "manager";
@@ -290,7 +294,7 @@ public class EventControllerTests extends BaseControllerTests {
                         fieldWithPath("id").description("id of the event")
                     )
                 ))
-        ;*/
+        ;
     }
 
     @Test
@@ -312,7 +316,7 @@ public class EventControllerTests extends BaseControllerTests {
     @Test
     public void updateEvent_forbidden() throws Exception {
         // Given
-       /* Set<UserRole> roleSet =new HashSet<>();
+        Set<UserRole> roleSet =new HashSet<>();
         roleSet.add(UserRole.USER);
         String managerEmail = "manager@email.com";
         String managerPassword = "manager";
@@ -343,7 +347,7 @@ public class EventControllerTests extends BaseControllerTests {
                 .content(objectMapper.writeValueAsString(eventDto)))
                 .andDo(print())
                 .andExpect(status().isForbidden())
-        ;*/
+        ;
     }
 
 
@@ -391,20 +395,19 @@ public class EventControllerTests extends BaseControllerTests {
 
     private String getAccessToken() throws Exception {
 
-        /*Set<UserRole> roleSet =new HashSet<>();
-        roleSet.add(UserRole.USER);*/
+        Set<UserRole> roleSet =new HashSet<>();
+        roleSet.add(UserRole.USER);
 
         String email = "User" + System.currentTimeMillis() + "@email.com";
         String password = "pass";
 
-        /*User user = User.builder()
+        User user = User.builder()
                 .email(email)
                 .password(password)
                // .roles(roleSet)
-                .build();*/
+                .build();
 
-       // User newUser = userService.createUser(user);
-        User newUser = new User();
+        User newUser = userService.createUser(user);
         return getAccessToken(newUser, password);
     }
 

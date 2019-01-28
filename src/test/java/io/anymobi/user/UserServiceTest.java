@@ -1,11 +1,10 @@
-/*
 package io.anymobi.user;
 
 import io.anymobi.common.annotation.Description;
 import io.anymobi.common.enums.UserRole;
-import io.anymobi.domain.entity.User;
+import io.anymobi.common.handler.security.authentication.UserDetailsServiceImpl;
+import io.anymobi.domain.entity.sec.User;
 import io.anymobi.repositories.jpa.security.UserRepository;
-import io.anymobi.services.jpa.UserService;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.springframework.security.core.GrantedAuthority;
@@ -28,9 +27,9 @@ public class UserServiceTest {
         Set<UserRole> roleSet =new HashSet<>();
         roleSet.add(UserRole.ADMIN);
         roleSet.add(UserRole.USER);
-        UserRepository userRepository = Mockito.mock(UserRepository.class);
-        UserService userService = new UserService();
-        userService.userRepository = userRepository;
+        UserRepository uRepository = Mockito.mock(UserRepository.class);
+        UserDetailsServiceImpl userService = new UserDetailsServiceImpl();
+        UserRepository userRepository = uRepository;
         String email = "keesun@email.com";
         String password = "pass";
         User user = User.builder()
@@ -53,13 +52,13 @@ public class UserServiceTest {
     @Test(expected = UsernameNotFoundException.class)
     public void usernameNotfoundException() {
         // Given
-        UserRepository userRepository = Mockito.mock(UserRepository.class);
-        UserService userService = new UserService();
-        userService.userRepository = userRepository;
+        UserRepository uRepository = Mockito.mock(UserRepository.class);
+        UserDetailsServiceImpl userService = new UserDetailsServiceImpl();
+        UserRepository userRepository = uRepository;
         Mockito.when(userRepository.findByEmailIgnoreCase(anyString())).thenReturn(Optional.empty());
 
         // When
         userService.loadUserByUsername("keesun@email.com");
     }
 
-}*/
+}
