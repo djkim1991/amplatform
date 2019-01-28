@@ -1,11 +1,13 @@
 package io.anymobi.common.handler.security.authentication;
 
 import io.anymobi.domain.entity.sec.User;
+import lombok.Data;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Data
 public class UserDetail extends org.springframework.security.core.userdetails.User {
   private User user;
   private List<String> roles;

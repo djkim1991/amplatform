@@ -10,7 +10,7 @@ import java.util.List;
 @Entity
 @Table(name = "groups_user")
 @Data
-@ToString(exclude = {"groups", "user"})
+@ToString(exclude = {"groups", "user", "groupRoles"})
 @EqualsAndHashCode(of = "id")
 @Builder
 @NoArgsConstructor

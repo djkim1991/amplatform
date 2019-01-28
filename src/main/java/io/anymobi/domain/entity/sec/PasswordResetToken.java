@@ -1,9 +1,6 @@
 package io.anymobi.domain.entity.sec;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Calendar;
@@ -14,6 +11,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = {"expiryDate","token","user"})
+@ToString(exclude = {"user"})
 public class PasswordResetToken {
 
     private static final int EXPIRATION = 60 * 24;

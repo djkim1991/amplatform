@@ -21,6 +21,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter @Setter @EqualsAndHashCode(of = "id")
 @Builder @NoArgsConstructor @AllArgsConstructor
+@ToString(exclude = {"manager"})
 public class Event {
 
     @Id @GeneratedValue

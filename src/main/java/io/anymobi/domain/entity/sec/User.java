@@ -12,7 +12,7 @@ import java.util.Set;
 @Entity
 @Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = "USERNAME"))
 @Data
-@ToString(exclude = {"userRoles", "groupUsers"})
+@ToString(exclude = {"userRoles", "groupUsers", "roles"})
 @Builder
 @EqualsAndHashCode(of = "id")
 @NoArgsConstructor
