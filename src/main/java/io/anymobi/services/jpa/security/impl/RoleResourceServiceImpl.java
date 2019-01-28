@@ -5,10 +5,11 @@ import io.anymobi.common.listener.security.CacheManager;
 import io.anymobi.domain.dto.security.AuthoritiesDto;
 import io.anymobi.domain.entity.sec.RoleResources;
 import io.anymobi.repositories.jpa.security.RoleResourcesRepository;
-import io.anymobi.services.jpa.security.ResourceMetaService;
+import io.anymobi.services.jpa.security.RoleResourceService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
@@ -17,8 +18,9 @@ import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
+@Service
 @Slf4j
-public class ResourceMetaServiceImpl implements ResourceMetaService {
+public class RoleResourceServiceImpl implements RoleResourceService {
 
     @Autowired
     private RoleResourcesRepository roleResourcesRepository;
@@ -46,6 +48,7 @@ public class ResourceMetaServiceImpl implements ResourceMetaService {
     }
 
     @Override
+    @Transactional
     public void resourcesReload() {
 
         List<AuthoritiesDto> authorities = cacheManager.getAuthorities();
@@ -57,5 +60,13 @@ public class ResourceMetaServiceImpl implements ResourceMetaService {
 
         applicationInitializer.publishEvent(authorities);
         log.info("Role Resources Authorities - Role and Resources reloaded at Runtime!");
+    }
+
+    @Override
+    @Transactional
+    public void resourcesDelete(Long id) {
+
+        roleResourcesRepository.deleteById(id);
+        resourcesReload();
     }
 }

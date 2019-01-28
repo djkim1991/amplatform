@@ -1,6 +1,6 @@
 package io.anymobi.common.listener.security;
 
-import io.anymobi.services.jpa.security.impl.LoginAttemptService;
+import io.anymobi.services.jpa.security.impl.LoginAttemptServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
@@ -14,7 +14,7 @@ public class AuthenticationSuccessEventListener implements ApplicationListener<A
     private HttpServletRequest request;
 
     @Autowired
-    private LoginAttemptService loginAttemptService;
+    private LoginAttemptServiceImpl loginAttemptService;
 
     @Override
     public void onApplicationEvent(final AuthenticationSuccessEvent e) {

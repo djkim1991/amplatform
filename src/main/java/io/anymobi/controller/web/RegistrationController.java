@@ -1,7 +1,6 @@
 package io.anymobi.controller.web;
 
 import io.anymobi.domain.entity.sec.ActiveUserStore;
-import io.anymobi.services.jpa.security.ISecurityUserService;
 import io.anymobi.domain.entity.sec.User;
 import io.anymobi.services.jpa.users.IUserService;
 import io.anymobi.common.handler.security.authentication.UserDetailsServiceImpl;
@@ -34,9 +33,6 @@ public class RegistrationController {
     ActiveUserStore activeUserStore;
 
     @Autowired
-    private ISecurityUserService securityUserService;
-
-    @Autowired
     private MessageSource messages;
 
     @RequestMapping(value = "/users/loggedUsers", method = RequestMethod.GET)
@@ -50,7 +46,6 @@ public class RegistrationController {
         model.addAttribute("users", userService.getUsersFromSessionRegistry());
         return "/users/users";
     }
-
 
     @RequestMapping(value = "/users/registrationConfirm", method = RequestMethod.GET)
     public String confirmRegistration(final HttpServletRequest request, final Model model, @RequestParam("token") final String token) throws UnsupportedEncodingException {
@@ -76,14 +71,13 @@ public class RegistrationController {
 
     @RequestMapping(value = "/users/changePassword", method = RequestMethod.GET)
     public String showChangePasswordPage(final Locale locale, final Model model, @RequestParam("id") final long id, @RequestParam("token") final String token) {
-        final String result = securityUserService.validatePasswordResetToken(id, token);
+        final String result = userService.validatePasswordResetToken(id, token);
         if (result != null) {
             model.addAttribute("message", messages.getMessage("auth.message." + result, null, locale));
             return "redirect:/login?lang=" + locale.getLanguage();
         }
         return "redirect:/users/updatePassword.html?lang=" + locale.getLanguage();
     }
-
 
     public void authWithoutPassword(User user) {
 

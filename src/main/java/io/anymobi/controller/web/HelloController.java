@@ -1,6 +1,6 @@
 package io.anymobi.controller.web;
 
-import io.anymobi.services.jpa.security.impl.RoleResourceService;
+import io.anymobi.services.jpa.security.RoleResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -74,7 +74,7 @@ public class HelloController {
     @RequestMapping("/delete/{id}")
     @ResponseBody
     public String delete(@PathVariable Long id) {
-        roleResourceService.delete(id);
+        roleResourceService.resourcesDelete(id);
         return "ok";
     }
 }

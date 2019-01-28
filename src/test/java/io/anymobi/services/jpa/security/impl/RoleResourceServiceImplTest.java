@@ -5,7 +5,7 @@ import io.anymobi.common.annotation.Description;
 import io.anymobi.common.init.ApplicationInitializer;
 import io.anymobi.common.listener.security.CacheManager;
 import io.anymobi.domain.dto.security.AuthoritiesDto;
-import io.anymobi.services.jpa.security.ResourceMetaService;
+import io.anymobi.services.jpa.security.RoleResourceService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,10 +26,10 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = { AMPApplication.class })
-public class ResourceMetaServiceImplTest {
+public class RoleResourceServiceImplTest {
 
     @Autowired
-    private ResourceMetaService resourceMetaServiceImpl;
+    private RoleResourceService roleResourceService;
 
     @Autowired
     private CacheManager cacheManager;
@@ -37,15 +37,12 @@ public class ResourceMetaServiceImplTest {
     @Autowired
     ApplicationInitializer applicationInitializer;
 
-    @Autowired
-    private RoleResourceService roleResourceService;
-
     @Description("자원권한 재 로딩")
     @Test
     public void resourcesReload(){
 
         List<AuthoritiesDto> authorities = cacheManager.getAuthorities();
-        List<AuthoritiesDto> allResources = resourceMetaServiceImpl.findAllResources();
+        List<AuthoritiesDto> allResources = roleResourceService.findAllResources();
 
         authorities.clear();
         authorities.addAll(allResources);
@@ -58,7 +55,7 @@ public class ResourceMetaServiceImplTest {
     @Test
     public void ResourcesReloadByDelete(){
 
-        roleResourceService.delete(15L);
+        roleResourceService.resourcesDelete(15L);
 
         assertThat(cacheManager.getAuthorities().size()).isEqualTo(2);
     }

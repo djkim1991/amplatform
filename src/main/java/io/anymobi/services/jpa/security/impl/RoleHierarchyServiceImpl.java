@@ -2,6 +2,7 @@ package io.anymobi.services.jpa.security.impl;
 
 import io.anymobi.domain.entity.sec.RoleHierarchy;
 import io.anymobi.repositories.jpa.security.RoleHierarchyRepository;
+import io.anymobi.services.jpa.security.RoleHierarchyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,12 +11,13 @@ import java.util.Iterator;
 import java.util.List;
 
 @Service
-public class RoleHierarchyService {
+public class RoleHierarchyServiceImpl implements RoleHierarchyService {
 
     @Autowired
     private RoleHierarchyRepository roleHierarchyRepository;
 
     @Transactional
+    @Override
     public String findAllHierarchy() {
 
         List<RoleHierarchy> rolesHierarchy = roleHierarchyRepository.findAll();

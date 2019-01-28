@@ -6,8 +6,8 @@ import io.anymobi.common.handler.security.CustomAccessDeniedHandler;
 import io.anymobi.common.handler.security.authentication.CustomAuthenticationProvider;
 import io.anymobi.common.handler.security.authentication.CustomRememberMeServices;
 import io.anymobi.common.handler.security.authentication.CustomWebAuthenticationDetailsSource;
-import io.anymobi.services.jpa.security.ResourceMetaService;
-import io.anymobi.services.jpa.security.impl.ResourceMetaServiceImpl;
+import io.anymobi.services.jpa.security.RoleResourceService;
+import io.anymobi.services.jpa.security.impl.RoleResourceServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -209,8 +209,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public ResourceMetaService resourceMetaService(){
-        return new ResourceMetaServiceImpl();
+    public RoleResourceService roleResourceService(){
+        return new RoleResourceServiceImpl();
     }
 
     @Bean
