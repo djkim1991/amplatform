@@ -1,13 +1,19 @@
 package io.anymobi.common.listener.security;
 
+import io.anymobi.domain.dto.event.EventDto;
+import io.anymobi.domain.entity.Event;
 import io.anymobi.domain.entity.sec.*;
+import io.anymobi.repositories.jpa.EventRepository;
 import io.anymobi.repositories.jpa.security.*;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 
 @Component
 public class SetupDataLoader implements ApplicationListener<ContextRefreshedEvent> {
@@ -44,6 +50,12 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private EventRepository eventRepository;
+
+    @Autowired
+    ModelMapper modelMapper;
+
     @Override
     @Transactional
     public void onApplicationEvent(final ContextRefreshedEvent event) {
@@ -51,6 +63,33 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         if (alreadySetup) {
             return;
         }
+        setupSecurityResources();
+        for(int i=1; i<=30; i++){
+            EventDto.CreateOrUpdate eventDto = setupEventData(i);
+            Event mapperEvent = modelMapper.map(eventDto, Event.class);
+            eventRepository.save(mapperEvent);
+        }
+
+        alreadySetup = true;
+    }
+
+    private EventDto.CreateOrUpdate setupEventData(int index) {
+
+        return EventDto.CreateOrUpdate.builder()
+                .name("test event" + index)
+                .description("testing event apis" + index)
+                .beginEnrollmentDateTime(LocalDateTime.of(2018, 10, 15, 0, 0))
+                .closeEnrollmentDateTime(LocalDateTime.of(2018, 11, 3, 23, 59))
+                .beginEventDateTime(LocalDateTime.of(2018, 11, 10, 9, 0))
+                .endEventDateTime(LocalDateTime.of(2018, 11, 10, 14, 0))
+                .location("anymobi" + index)
+                .basePrice(50000 + index)
+                .maxPrice(10000 + index)
+                .build();
+    }
+
+    private void setupSecurityResources() {
+
         Role parentRole = createRoleIfNotFound("ROLE_ADMIN", "관리자");
         User user = createUserIfNotFound("admin", "admin@test.com", "adminFirst", "adminLast", "pass", parentRole);
         Groups groups = createGroupsIfNotFound("관리자그룹");
@@ -88,8 +127,6 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         groups = createGroupsIfNotFound("사용자그룹");
         resources = createResourceIfNotFound("/users/console*");
         createRolesAndResourcesAndGroups(anonymousRole, null, groups, resources);
-
-        alreadySetup = true;
     }
 
     private void createRolesAndResourcesAndGroups(Role role, User user, Groups groups, Resources resources) {

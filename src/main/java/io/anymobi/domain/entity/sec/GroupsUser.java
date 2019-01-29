@@ -4,13 +4,11 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "groups_user")
 @Data
-@ToString(exclude = {"groups", "user", "groupRoles"})
+@ToString(exclude = {"groups", "user"})
 @EqualsAndHashCode(of = "id")
 @Builder
 @NoArgsConstructor
@@ -29,8 +27,4 @@ public class GroupsUser implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USERNAME", referencedColumnName = "USERNAME")
     private User user;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "groups")
-    private List<GroupsRole> groupRoles = new ArrayList<>();
-
 }

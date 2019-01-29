@@ -122,7 +122,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement()
                 .invalidSessionUrl("/users/invalidSession.html")
                 .maximumSessions(1)
-                .maxSessionsPreventsLogin(true)
+                .maxSessionsPreventsLogin(false)
                 //.expiredUrl("/error")
                 .sessionRegistry(sessionRegistry()).and()
                 .sessionFixation().none()

@@ -21,7 +21,7 @@ public class GroupsRole implements Serializable {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "GROUP_ID"/*, referencedColumnName = "GROUP_NAME"*/)
+    @JoinColumn(name = "GROUP_NAME", referencedColumnName = "GROUP_NAME")
     private Groups groups;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -29,6 +29,6 @@ public class Groups implements Serializable {
     private Set<GroupsUser> users = new HashSet<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "groups")
-    private Set<GroupsRole> roles = new HashSet<>();
+    private Set<GroupsRole> groupRoles = new HashSet<>();
 
 }

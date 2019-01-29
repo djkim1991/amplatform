@@ -58,7 +58,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         // 그룹 권한 할당
         userRoles.addAll(user.getGroupUsers()
                 .stream()
-                .map(groupsUser -> groupsUser.getGroupRoles().stream().map(groupsRole -> groupsRole.getRole().getRoleName()).collect(Collectors.toList()))
+                .map(groupsUser -> groupsUser.getGroups().getGroupRoles().stream().map(groupsRole -> groupsRole.getRole().getRoleName()).collect(Collectors.toList()))
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList()));
 
