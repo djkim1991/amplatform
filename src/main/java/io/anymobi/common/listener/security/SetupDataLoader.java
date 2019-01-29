@@ -93,40 +93,50 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         Role parentRole = createRoleIfNotFound("ROLE_ADMIN", "관리자");
         User user = createUserIfNotFound("admin", "admin@test.com", "adminFirst", "adminLast", "pass", parentRole);
         Groups groups = createGroupsIfNotFound("관리자그룹");
-        Resources resources = createResourceIfNotFound("/admin/**");
+        Resources resources = createResourceIfNotFound("/admin/**", "");
         createRolesAndResourcesAndGroups(parentRole, user, groups, resources);
 
-        Role childRole = createRoleIfNotFound("ROLE_USER", "일반사용자");
-        user = createUserIfNotFound("user1", "user1@test.com", "userFirst1", "userLast1", "pass", childRole);
+        Role childRole1 = createRoleIfNotFound("ROLE_USER", "일반사용자");
+        user = createUserIfNotFound("user1", "user1@test.com", "userFirst1", "userLast1", "pass", childRole1);
         groups = createGroupsIfNotFound("사용자그룹");
-        resources = createResourceIfNotFound("/users/**");
-        createRolesAndResourcesAndGroups(childRole, user, groups, resources);
+        resources = createResourceIfNotFound("/users/**", "");
+        createRolesAndResourcesAndGroups(childRole1, user, groups, resources);
 
-        createRoleHierarchyIfNotFound(childRole, parentRole);
+        createRoleHierarchyIfNotFound(childRole1, parentRole);
 
         Role anonymousRole = createRoleIfNotFound("ROLE_ANONYMOUS", "익명사용자");
         groups = createGroupsIfNotFound("사용자그룹");
-        resources = createResourceIfNotFound("/users/registration*");
+        resources = createResourceIfNotFound("/users/registration*", "");
         createRolesAndResourcesAndGroups(anonymousRole, null, groups, resources);
 
-        createRoleHierarchyIfNotFound(anonymousRole, childRole);
+        createRoleHierarchyIfNotFound(anonymousRole, childRole1);
 
-        childRole = createRoleIfNotFound("ROLE_USER2", "일반사용자2");
-        user = createUserIfNotFound("user2", "user2@test.com", "userFirst2", "userLast2", "pass", childRole);
+        Role childRole2 = createRoleIfNotFound("ROLE_USER2", "일반사용자2");
+        user = createUserIfNotFound("user2", "user2@test.com", "userFirst2", "userLast2", "pass", childRole2);
         groups = createGroupsIfNotFound("사용자그룹");
-        resources = createResourceIfNotFound("/users/**");
+        resources = createResourceIfNotFound("/users/**","");
 
-        createRolesAndResourcesAndGroups(childRole, user, groups, resources);
+        createRolesAndResourcesAndGroups(childRole2, user, groups, resources);
 
         anonymousRole = createRoleIfNotFound("ROLE_ANONYMOUS", "익명사용자");
         groups = createGroupsIfNotFound("사용자그룹");
-        resources = createResourceIfNotFound("/users/success*");
+        resources = createResourceIfNotFound("/users/success*","");
         createRolesAndResourcesAndGroups(anonymousRole, null, groups, resources);
 
         anonymousRole = createRoleIfNotFound("ROLE_ANONYMOUS", "익명사용자");
         groups = createGroupsIfNotFound("사용자그룹");
-        resources = createResourceIfNotFound("/users/console*");
+        resources = createResourceIfNotFound("/users/console*", "");
         createRolesAndResourcesAndGroups(anonymousRole, null, groups, resources);
+
+        anonymousRole = createRoleIfNotFound("ROLE_ANONYMOUS", "익명사용자");
+        groups = createGroupsIfNotFound("사용자그룹");
+        resources = createResourceIfNotFound("/api/**","GET");
+        createRolesAndResourcesAndGroups(anonymousRole, null, groups, resources);
+
+        resources = createResourceIfNotFound("/api/**", "PUT");
+        createRolesAndResourcesAndGroups(childRole1, null, groups, resources);
+        resources = createResourceIfNotFound("/api/**", "POST");
+        createRolesAndResourcesAndGroups(childRole1, null, groups, resources);
     }
 
     private void createRolesAndResourcesAndGroups(Role role, User user, Groups groups, Resources resources) {
@@ -171,12 +181,13 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         return userRepository.save(user);
     }
 
-    private Resources createResourceIfNotFound(String resourceName) {
-        Resources resources = resourcesRepository.findByResourceName(resourceName);
+    private Resources createResourceIfNotFound(String resourceName, String httpMethod) {
+        Resources resources = resourcesRepository.findByResourceNameAndHttpMethod(resourceName, httpMethod);
 
         if (resources == null) {
             resources = Resources.builder()
                     .resourceName(resourceName)
+                    .httpMethod(httpMethod)
                     .build();
         }
         return resourcesRepository.save(resources);

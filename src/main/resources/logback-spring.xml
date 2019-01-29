@@ -23,7 +23,7 @@
     <logger name="org.hibernate.SQL" level="INFO"/>
     <logger name="org.quartz.core" level="INFO"/>
     <logger name="org.mybatis" level="INFO"/>
-    <logger name="io.anymobi" level="INFO"/>
+    <logger name="io.anymobi" level="DEBUG"/>
 
     <root level="INFO">
         <appender-ref ref="dailyRollingFileAppender" />

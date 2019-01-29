@@ -22,8 +22,11 @@ public class Resources implements Serializable {
     @Column(name = "RESOURCE_ID", unique = true, nullable = false)
     private Long id;
 
-    @Column(name = "RESOURCE_NAME", unique = true, nullable = false)
+    @Column(name = "RESOURCE_NAME", nullable = false)
     private String resourceName;
+
+    @Column(name = "HTTP_METHOD")
+    private String httpMethod;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "resources")
     private Set<RoleResources> roleResources = new HashSet<>();

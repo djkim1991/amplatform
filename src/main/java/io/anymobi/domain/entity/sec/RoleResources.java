@@ -25,7 +25,8 @@ public class RoleResources implements Serializable {
     private Role role;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "RESOURCE_NAME", referencedColumnName = "RESOURCE_NAME")
+    @JoinColumns({@JoinColumn(name = "RESOURCE_NAME", referencedColumnName = "RESOURCE_NAME"),
+            @JoinColumn(name = "HTTP_METHOD", referencedColumnName = "HTTP_METHOD")})
     private Resources resources;
 
 }

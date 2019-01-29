@@ -41,7 +41,7 @@ public class RoleResourceServiceImpl implements RoleResourceService {
                 .entrySet().stream().map(entry -> entry.getValue().stream().map(e -> {
                     return AuthoritiesDto.builder()
                             .roleName(e.getRole().getRoleName())
-                            .antPathRequestMatcher(new AntPathRequestMatcher(e.getResources().getResourceName()))
+                            .antPathRequestMatcher(new AntPathRequestMatcher(e.getResources().getResourceName(),e.getResources().getHttpMethod()))
                             .build();
                 }).collect(toList())).flatMap(Collection::stream).collect(toList());
         return authorities;
