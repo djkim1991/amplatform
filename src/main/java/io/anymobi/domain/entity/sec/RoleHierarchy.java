@@ -1,5 +1,7 @@
 package io.anymobi.domain.entity.sec;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
 
 import javax.persistence.*;
@@ -15,6 +17,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Builder
 @ToString(exclude = {"parentName", "roleHierarchy"})
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 public class RoleHierarchy implements Serializable {
 
     @Id

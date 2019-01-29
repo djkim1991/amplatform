@@ -1,5 +1,7 @@
 package io.anymobi.domain.entity.sec;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.anymobi.common.enums.UserRole;
 import lombok.*;
 
@@ -21,7 +23,7 @@ public class User implements Serializable {
 
     @Id
     @GeneratedValue
-    @Column(name = "ResourcesRepository", unique = true, nullable = false)
+    @Column(name = "ID", unique = true, nullable = false)
     private Long id;
 
     private String firstName;

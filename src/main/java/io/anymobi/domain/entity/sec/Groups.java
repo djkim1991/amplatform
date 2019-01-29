@@ -10,7 +10,7 @@ import java.util.Set;
 @Entity
 @Table(name = "groups")
 @Data
-@ToString(exclude = {"users", "roles"})
+@ToString(exclude = {"users", "groupRoles"})
 @EqualsAndHashCode(of = "id")
 @Builder
 @NoArgsConstructor
