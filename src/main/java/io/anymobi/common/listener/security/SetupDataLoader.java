@@ -63,7 +63,9 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         if (alreadySetup) {
             return;
         }
+
         setupSecurityResources();
+
         for(int i=1; i<=30; i++){
             EventDto.CreateOrUpdate eventDto = setupEventData(i);
             Event mapperEvent = modelMapper.map(eventDto, Event.class);
@@ -71,21 +73,6 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         }
 
         alreadySetup = true;
-    }
-
-    private EventDto.CreateOrUpdate setupEventData(int index) {
-
-        return EventDto.CreateOrUpdate.builder()
-                .name("test event" + index)
-                .description("testing event apis" + index)
-                .beginEnrollmentDateTime(LocalDateTime.of(2018, 10, 15, 0, 0))
-                .closeEnrollmentDateTime(LocalDateTime.of(2018, 11, 3, 23, 59))
-                .beginEventDateTime(LocalDateTime.of(2018, 11, 10, 9, 0))
-                .endEventDateTime(LocalDateTime.of(2018, 11, 10, 14, 0))
-                .location("anymobi" + index)
-                .basePrice(50000 + index)
-                .maxPrice(10000 + index)
-                .build();
     }
 
     private void setupSecurityResources() {
@@ -275,5 +262,20 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 
         RoleHierarchy childRoleHierarchy = roleHierarchyRepository.save(roleHierarchy);
         childRoleHierarchy.setParentName(parentRoleHierarchy);
+    }
+
+    private EventDto.CreateOrUpdate setupEventData(int index) {
+
+        return EventDto.CreateOrUpdate.builder()
+                .name("test event" + index)
+                .description("testing event apis" + index)
+                .beginEnrollmentDateTime(LocalDateTime.of(2018, 10, 15, 0, 0))
+                .closeEnrollmentDateTime(LocalDateTime.of(2018, 11, 3, 23, 59))
+                .beginEventDateTime(LocalDateTime.of(2018, 11, 10, 9, 0))
+                .endEventDateTime(LocalDateTime.of(2018, 11, 10, 14, 0))
+                .location("anymobi" + index)
+                .basePrice(50000 + index)
+                .maxPrice(10000 + index)
+                .build();
     }
 }
