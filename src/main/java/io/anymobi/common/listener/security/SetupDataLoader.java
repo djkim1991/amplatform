@@ -77,11 +77,19 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 
     private void setupSecurityResources() {
 
-        Role parentRole = createRoleIfNotFound("ROLE_ADMIN", "관리자");
-        User user = createUserIfNotFound("admin", "admin@test.com", "adminFirst", "adminLast", "pass", parentRole);
+        Role adminRole = createRoleIfNotFound("ROLE_ADMIN", "관리자");
+        User user = createUserIfNotFound("admin", "admin@test.com", "adminFirst", "adminLast", "pass", adminRole);
         Groups groups = createGroupsIfNotFound("관리자그룹");
         Resources resources = createResourceIfNotFound("/admin/**", "");
-        createRolesAndResourcesAndGroups(parentRole, user, groups, resources);
+        createRolesAndResourcesAndGroups(adminRole, user, groups, resources);
+
+        Role managerRole = createRoleIfNotFound("ROLE_MANAGER", "매니저");
+        user = createUserIfNotFound("manager", "manager@test.com", "managerFirst", "managerLast", "pass", managerRole);
+        groups = createGroupsIfNotFound("매니저그룹");
+        resources = createResourceIfNotFound("/manager/**", "");
+        createRolesAndResourcesAndGroups(managerRole, user, groups, resources);
+
+        createRoleHierarchyIfNotFound(managerRole, adminRole);
 
         Role childRole1 = createRoleIfNotFound("ROLE_USER", "일반사용자");
         user = createUserIfNotFound("user1", "user1@test.com", "userFirst1", "userLast1", "pass", childRole1);
@@ -89,7 +97,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         resources = createResourceIfNotFound("/users/**", "");
         createRolesAndResourcesAndGroups(childRole1, user, groups, resources);
 
-        createRoleHierarchyIfNotFound(childRole1, parentRole);
+        createRoleHierarchyIfNotFound(childRole1, managerRole);
 
         Role anonymousRole = createRoleIfNotFound("ROLE_ANONYMOUS", "익명사용자");
         groups = createGroupsIfNotFound("사용자그룹");

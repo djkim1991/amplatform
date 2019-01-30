@@ -5,17 +5,23 @@ import io.anymobi.common.annotation.Description;
 import io.anymobi.common.init.ApplicationInitializer;
 import io.anymobi.common.listener.security.CacheManager;
 import io.anymobi.domain.dto.security.AuthoritiesDto;
+import io.anymobi.domain.entity.sec.Role;
+import io.anymobi.domain.entity.sec.RoleResources;
+import io.anymobi.repositories.jpa.security.ResourcesRepository;
+import io.anymobi.repositories.jpa.security.RoleRepository;
 import io.anymobi.services.jpa.security.RoleResourceService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-
 
 /**
  * Package : io.anymobi.services.jpa.security.impl
@@ -30,6 +36,12 @@ public class RoleResourceServiceImplTest {
 
     @Autowired
     private RoleResourceService roleResourceService;
+
+    @Autowired
+    private RoleRepository roleRepository;
+
+    @Autowired
+    private ResourcesRepository resourcesRepository;
 
     @Autowired
     private CacheManager cacheManager;
@@ -58,5 +70,18 @@ public class RoleResourceServiceImplTest {
         roleResourceService.resourcesDelete(15L);
 
         assertThat(cacheManager.getAuthorities().size()).isEqualTo(2);
+    }
+
+    @Test
+    @Transactional
+    public void getRoleResources(){
+
+        List<Role> roles = roleRepository.findAll();
+        List<RoleResources> roleResources = new ArrayList<>();
+        for (int i = 0; i <roles.size() ; i++) {
+            Set<RoleResources> roleResource = roles.get(i).getRoleResources();
+            roleResources.addAll(roleResource);
+        }
+        System.out.println(roleResources);
     }
 }
