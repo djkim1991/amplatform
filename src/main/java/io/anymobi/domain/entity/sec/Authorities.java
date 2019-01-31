@@ -2,6 +2,7 @@ package io.anymobi.domain.entity.sec;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import io.anymobi.domain.entity.users.User;
 import lombok.*;
 
 import javax.persistence.*;

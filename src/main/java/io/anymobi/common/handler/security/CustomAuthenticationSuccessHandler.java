@@ -1,12 +1,11 @@
 package io.anymobi.common.handler.security;
 
 import io.anymobi.domain.entity.sec.ActiveUserStore;
-import io.anymobi.domain.entity.sec.User;
+import io.anymobi.domain.entity.users.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.WebAttributes;

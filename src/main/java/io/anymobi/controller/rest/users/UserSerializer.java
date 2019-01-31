@@ -3,7 +3,7 @@ package io.anymobi.controller.rest.users;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
-import io.anymobi.domain.entity.sec.User;
+import io.anymobi.domain.entity.users.User;
 
 import java.io.IOException;
 

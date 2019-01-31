@@ -1,6 +1,6 @@
 package io.anymobi.common.handler.security.authentication;
 
-import io.anymobi.domain.entity.sec.User;
+import io.anymobi.domain.entity.users.User;
 import lombok.Data;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 

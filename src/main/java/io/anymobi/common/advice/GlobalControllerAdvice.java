@@ -1,7 +1,7 @@
 package io.anymobi.common.advice;
 
-import io.anymobi.domain.entity.sec.User;
-import io.anymobi.repositories.jpa.security.UserRepository;
+import io.anymobi.domain.entity.users.User;
+import io.anymobi.repositories.jpa.users.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;

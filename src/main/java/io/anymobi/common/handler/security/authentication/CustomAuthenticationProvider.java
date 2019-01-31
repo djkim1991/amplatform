@@ -1,7 +1,6 @@
 package io.anymobi.common.handler.security.authentication;
 
-import io.anymobi.domain.entity.sec.User;
-import io.anymobi.repositories.jpa.security.UserRepository;
+import io.anymobi.repositories.jpa.users.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.jboss.aerogear.security.otp.Totp;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +14,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.util.AntPathMatcher;
 
 import javax.transaction.Transactional;
 import java.util.Collection;
-import java.util.List;
+
 @Slf4j
 public class CustomAuthenticationProvider extends DaoAuthenticationProvider {
 

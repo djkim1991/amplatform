@@ -1,12 +1,14 @@
-package io.anymobi.domain.entity.sec;
+package io.anymobi.domain.entity.users;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.anymobi.common.enums.SocialType;
 import io.anymobi.common.enums.UserRole;
+import io.anymobi.domain.entity.sec.Authorities;
+import io.anymobi.domain.entity.sec.GroupsUser;
 import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -43,6 +45,19 @@ public class User implements Serializable {
     private boolean isUsing2FA;
 
     private String secret;
+
+    @Column
+    private String pincipal;
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    private SocialType socialType;
+
+    @Column
+    private LocalDateTime createdDate;
+
+    @Column
+    private LocalDateTime updatedDate;
 
     @Transient
     @ElementCollection(fetch = FetchType.EAGER)

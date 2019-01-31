@@ -1,7 +1,7 @@
 package io.anymobi.repositories.jpa.security;
 
 import io.anymobi.domain.entity.sec.PasswordResetToken;
-import io.anymobi.domain.entity.sec.User;
+import io.anymobi.domain.entity.users.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

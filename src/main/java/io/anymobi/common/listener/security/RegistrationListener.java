@@ -1,6 +1,6 @@
 package io.anymobi.common.listener.security;
 
-import io.anymobi.domain.entity.sec.User;
+import io.anymobi.domain.entity.users.User;
 import io.anymobi.services.jpa.mail.AbstractMailService;
 import io.anymobi.services.jpa.users.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;

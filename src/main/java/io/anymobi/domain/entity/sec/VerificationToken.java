@@ -1,5 +1,6 @@
 package io.anymobi.domain.entity.sec;
 
+import io.anymobi.domain.entity.users.User;
 import lombok.*;
 
 import javax.persistence.*;

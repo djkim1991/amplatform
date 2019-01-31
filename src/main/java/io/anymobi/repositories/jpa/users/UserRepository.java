@@ -1,7 +1,7 @@
-package io.anymobi.repositories.jpa.security;
+package io.anymobi.repositories.jpa.users;
 
 
-import io.anymobi.domain.entity.sec.User;
+import io.anymobi.domain.entity.users.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

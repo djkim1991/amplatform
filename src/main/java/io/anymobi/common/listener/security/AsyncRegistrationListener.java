@@ -2,7 +2,7 @@ package io.anymobi.common.listener.security;
 
 import io.anymobi.common.provider.MqPublisher;
 import io.anymobi.domain.dto.security.EmailConfirm;
-import io.anymobi.domain.entity.sec.User;
+import io.anymobi.domain.entity.users.User;
 import io.anymobi.services.jpa.users.IUserService;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Profile;

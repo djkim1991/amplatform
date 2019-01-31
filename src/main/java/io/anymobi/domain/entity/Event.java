@@ -12,7 +12,7 @@ package io.anymobi.domain.entity;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.anymobi.common.enums.EventStatus;
 import io.anymobi.controller.rest.users.UserSerializer;
-import io.anymobi.domain.entity.sec.User;
+import io.anymobi.domain.entity.users.User;
 import lombok.*;
 
 import javax.persistence.*;

@@ -1,7 +1,7 @@
 package io.anymobi.controller.web;
 
 import io.anymobi.domain.entity.sec.ActiveUserStore;
-import io.anymobi.domain.entity.sec.User;
+import io.anymobi.domain.entity.users.User;
 import io.anymobi.services.jpa.users.IUserService;
 import io.anymobi.common.handler.security.authentication.UserDetailsServiceImpl;
 import lombok.extern.slf4j.Slf4j;

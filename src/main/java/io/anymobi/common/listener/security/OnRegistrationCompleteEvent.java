@@ -1,6 +1,6 @@
 package io.anymobi.common.listener.security;
 
-import io.anymobi.domain.entity.sec.User;
+import io.anymobi.domain.entity.users.User;
 import org.springframework.context.ApplicationEvent;
 
 import java.util.Locale;

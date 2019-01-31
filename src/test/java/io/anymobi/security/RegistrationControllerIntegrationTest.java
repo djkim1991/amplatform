@@ -1,8 +1,8 @@
 package io.anymobi.security;
 
 import io.anymobi.AMPApplication;
-import io.anymobi.domain.entity.sec.User;
 import io.anymobi.domain.entity.sec.VerificationToken;
+import io.anymobi.domain.entity.users.User;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -1,7 +1,7 @@
 package io.anymobi.common.handler.security.authentication;
 
-import io.anymobi.domain.entity.sec.User;
-import io.anymobi.repositories.jpa.security.UserRepository;
+import io.anymobi.domain.entity.users.User;
+import io.anymobi.repositories.jpa.users.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationDetailsSource;
 import org.springframework.security.authentication.RememberMeAuthenticationToken;

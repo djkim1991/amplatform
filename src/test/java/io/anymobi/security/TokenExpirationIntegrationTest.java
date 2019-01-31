@@ -1,10 +1,10 @@
 package io.anymobi.security;
 
 import io.anymobi.common.handler.security.task.TokensPurgeTask;
-import io.anymobi.domain.entity.sec.User;
 import io.anymobi.domain.entity.sec.VerificationToken;
-import io.anymobi.repositories.jpa.security.UserRepository;
+import io.anymobi.domain.entity.users.User;
 import io.anymobi.repositories.jpa.security.VerificationTokenRepository;
+import io.anymobi.repositories.jpa.users.UserRepository;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
