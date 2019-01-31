@@ -1,4 +1,4 @@
-package io.anymobi.controller.web;
+package io.anymobi.controller.web.users;
 
 import io.anymobi.domain.entity.sec.ActiveUserStore;
 import io.anymobi.domain.entity.users.User;

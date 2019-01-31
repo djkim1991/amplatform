@@ -1,4 +1,4 @@
-package io.anymobi.controller.web;
+package io.anymobi.controller.web.users;
 
 import io.anymobi.domain.dto.security.MemberDto;
 import io.anymobi.services.mybatis.member.MemberService;

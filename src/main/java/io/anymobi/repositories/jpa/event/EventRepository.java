@@ -1,4 +1,4 @@
-package io.anymobi.repositories.jpa;
+package io.anymobi.repositories.jpa.event;
 
 /**
  * Package : io.anymobi.repositories.jpa
@@ -8,7 +8,7 @@ package io.anymobi.repositories.jpa;
  * Created by leaven
  * Github : http://github.com/onjsdnjs
  */
-import io.anymobi.domain.entity.Event;
+import io.anymobi.domain.entity.event.Event;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface EventRepository extends JpaRepository<Event, Integer> {

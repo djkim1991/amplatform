@@ -1,7 +1,7 @@
 package io.anymobi.controller.event;
 
 import io.anymobi.common.validator.EventValidator;
-import io.anymobi.domain.entity.Event;
+import io.anymobi.domain.entity.event.Event;
 import org.junit.Test;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;

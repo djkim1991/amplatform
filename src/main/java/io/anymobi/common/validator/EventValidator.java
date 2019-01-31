@@ -1,6 +1,6 @@
 package io.anymobi.common.validator;
 
-import io.anymobi.domain.entity.Event;
+import io.anymobi.domain.entity.event.Event;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;

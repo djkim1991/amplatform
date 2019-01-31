@@ -1,10 +1,10 @@
 package io.anymobi.common.listener.security;
 
 import io.anymobi.domain.dto.event.EventDto;
-import io.anymobi.domain.entity.Event;
+import io.anymobi.domain.entity.event.Event;
 import io.anymobi.domain.entity.sec.*;
 import io.anymobi.domain.entity.users.User;
-import io.anymobi.repositories.jpa.EventRepository;
+import io.anymobi.repositories.jpa.event.EventRepository;
 import io.anymobi.repositories.jpa.security.*;
 import io.anymobi.repositories.jpa.users.UserRepository;
 import org.modelmapper.ModelMapper;

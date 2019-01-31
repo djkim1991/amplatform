@@ -1,4 +1,4 @@
-package io.anymobi.controller.web;
+package io.anymobi.controller.web.board;
 
 import io.anymobi.common.annotation.SocialUser;
 import io.anymobi.domain.entity.users.User;

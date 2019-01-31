@@ -1,4 +1,4 @@
-package io.anymobi.domain.entity;
+package io.anymobi.domain.entity.event;
 
 /**
  * Package : io.anymobi.domain.entity
