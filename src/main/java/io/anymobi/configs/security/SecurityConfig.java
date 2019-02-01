@@ -1,14 +1,14 @@
 package io.anymobi.configs.security;
 
 import io.anymobi.common.filter.CsrfHeaderFilter;
-import io.anymobi.common.filter.FilterMetadataSource;
 import io.anymobi.common.handler.security.CustomAccessDeniedHandler;
+import io.anymobi.common.handler.security.CustomOAuth2Provider;
 import io.anymobi.common.handler.security.authentication.CustomAuthenticationProvider;
 import io.anymobi.common.handler.security.authentication.CustomRememberMeServices;
 import io.anymobi.common.handler.security.authentication.CustomWebAuthenticationDetailsSource;
-import io.anymobi.services.jpa.security.RoleResourceService;
-import io.anymobi.services.jpa.security.impl.RoleResourceServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.AccessDecisionVoter;
@@ -23,11 +23,15 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.oauth2.client.CommonOAuth2Provider;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.registration.ClientRegistration;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
 import org.springframework.security.web.access.AccessDeniedHandler;
@@ -35,6 +39,7 @@ import org.springframework.security.web.access.intercept.FilterInvocationSecurit
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.authentication.rememberme.InMemoryTokenRepositoryImpl;
@@ -42,9 +47,12 @@ import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
+import org.springframework.web.filter.CharacterEncodingFilter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Configuration
 @EnableWebSecurity
@@ -100,16 +108,27 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
+        CharacterEncodingFilter filter = new CharacterEncodingFilter();
         http
-                .csrf().disable()
-                .authorizeRequests()
-                .antMatchers("/", "/login").permitAll()
-                .antMatchers("/invalidSession*").anonymous()
-                .anyRequest().fullyAuthenticated()
-                .and()
-                .exceptionHandling().accessDeniedPage("/denied")
+            .csrf().disable()
+            .authorizeRequests()
+                .anyRequest().authenticated()
+
+            .and()
+                .oauth2Login()
+                .defaultSuccessUrl("/loginSuccess")
+                .failureUrl("/loginFailure")
+
+            .and()
+                .headers().frameOptions().disable()
+
+            .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login"))
+                .accessDeniedPage("/denied")
                 .accessDeniedHandler(accessDeniedHandler)
-                .and()
+
+            .and()
                 .formLogin()
                 .loginPage("/login")
                 .defaultSuccessUrl("/homepage.html")
@@ -118,7 +137,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .failureHandler(authenticationFailureHandler)
                 .authenticationDetailsSource(authenticationDetailsSource)
                 .permitAll()
-                .and()
+
+            .and()
                 .sessionManagement()
                 .invalidSessionUrl("/users/invalidSession.html")
                 .maximumSessions(1)
@@ -126,17 +146,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //.expiredUrl("/error")
                 .sessionRegistry(sessionRegistry()).and()
                 .sessionFixation().none()
-                .and()
+
+            .and()
                 .logout()
                 .logoutSuccessHandler(logoutSuccessHandler)
                 .logoutSuccessUrl("/logout.html?logSucc=true")
                 .clearAuthentication(true)
                 .invalidateHttpSession(true)
-                .deleteCookies("SESSION", "remember-me")
+                .deleteCookies("SESSION","JSESSIONID", "remember-me")
                 .permitAll()
-                .and()
+
+            .and()
                 .rememberMe().rememberMeServices(rememberMeServices()).key("theKey")
-                .and()
+
+            .and()
+                .addFilterBefore(filter, CsrfFilter.class)
                 .addFilter(filterSecurityInterceptor())
                 .addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class)
                 .csrf().csrfTokenRepository(csrfTokenRepository()).disable();
@@ -154,6 +178,43 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         HttpSessionCsrfTokenRepository repository = new HttpSessionCsrfTokenRepository();
         repository.setHeaderName("X-XSRF-TOKEN");
         return repository;
+    }
+
+    @Bean
+    public ClientRegistrationRepository clientRegistrationRepository(OAuth2ClientProperties oAuth2ClientProperties, @Value("${custom.oauth2.kakao.client-id}") String kakaoClientId) {
+        List<ClientRegistration> registrations = oAuth2ClientProperties.getRegistration().keySet().stream()
+                .map(client -> getRegistration(oAuth2ClientProperties, client))
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+
+        registrations.add(CustomOAuth2Provider.KAKAO.getBuilder("kakao")
+                .clientId(kakaoClientId)
+                .clientSecret("test") //필요없는 값인데 null이면 실행이 안되도록 설정되어 있음
+                .jwkSetUri("test") //필요없는 값인데 null이면 실행이 안되도록 설정되어 있음
+                .build());
+
+        return new InMemoryClientRegistrationRepository(registrations);
+    }
+
+    private ClientRegistration getRegistration(OAuth2ClientProperties clientProperties, String client) {
+        if ("google".equals(client)) {
+            OAuth2ClientProperties.Registration registration = clientProperties.getRegistration().get("google");
+            return CommonOAuth2Provider.GOOGLE.getBuilder(client)
+                    .clientId(registration.getClientId())
+                    .clientSecret(registration.getClientSecret())
+                    .scope("email", "profile")
+                    .build();
+        }
+        if ("facebook".equals(client)) {
+            OAuth2ClientProperties.Registration registration = clientProperties.getRegistration().get("facebook");
+            return CommonOAuth2Provider.FACEBOOK.getBuilder(client)
+                    .clientId(registration.getClientId())
+                    .clientSecret(registration.getClientSecret())
+                    .userInfoUri("https://graph.facebook.com/me?fields=id,name,email,link")
+                    .scope("email")
+                    .build();
+        }
+        return null;
     }
 
     @Bean
@@ -209,13 +270,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return roleHierarchy;
     }
 
-    @Bean
-    public RoleResourceService roleResourceService(){
-        return new RoleResourceServiceImpl();
-    }
-
-    @Bean
-    public FilterMetadataSource filterMetadataSource(){
-        return new FilterMetadataSource();
-    }
 }

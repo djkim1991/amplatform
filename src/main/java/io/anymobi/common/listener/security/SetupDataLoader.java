@@ -90,7 +90,6 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         groups = createGroupsIfNotFound("매니저그룹");
         resources = createResourceIfNotFound("/manager/**", "");
         createRolesAndResourcesAndGroups(managerRole, user, groups, resources);
-
         createRoleHierarchyIfNotFound(managerRole, adminRole);
 
         Role childRole1 = createRoleIfNotFound("ROLE_USER", "일반사용자");
@@ -98,22 +97,59 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         groups = createGroupsIfNotFound("사용자그룹");
         resources = createResourceIfNotFound("/users/**", "");
         createRolesAndResourcesAndGroups(childRole1, user, groups, resources);
-
         createRoleHierarchyIfNotFound(childRole1, managerRole);
+
+        childRole1 = createRoleIfNotFound("ROLE_USER", "일반사용자");
+        groups = createGroupsIfNotFound("사용자그룹");
+        resources = createResourceIfNotFound("/board/**","");
+        createRolesAndResourcesAndGroups(childRole1, null, groups, resources);
 
         Role anonymousRole = createRoleIfNotFound("ROLE_ANONYMOUS", "익명사용자");
         groups = createGroupsIfNotFound("사용자그룹");
         resources = createResourceIfNotFound("/users/registration*", "");
         createRolesAndResourcesAndGroups(anonymousRole, null, groups, resources);
-
         createRoleHierarchyIfNotFound(anonymousRole, childRole1);
 
         Role childRole2 = createRoleIfNotFound("ROLE_USER2", "일반사용자2");
         user = createUserIfNotFound("user2", "user2@test.com", "userFirst2", "userLast2", "pass", childRole2);
         groups = createGroupsIfNotFound("사용자그룹");
         resources = createResourceIfNotFound("/users/**","");
-
         createRolesAndResourcesAndGroups(childRole2, user, groups, resources);
+
+        Role facebookRole = createRoleIfNotFound("ROLE_FACEBOOK", "페이스북사용자");
+        groups = createGroupsIfNotFound("사용자그룹");
+        resources = createResourceIfNotFound("/facebook","");
+        createRolesAndResourcesAndGroups(facebookRole, null, groups, resources);
+
+        facebookRole = createRoleIfNotFound("ROLE_FACEBOOK", "페이스북사용자");
+        groups = createGroupsIfNotFound("사용자그룹");
+        resources = createResourceIfNotFound("/board/**","");
+        createRolesAndResourcesAndGroups(facebookRole, null, groups, resources);
+
+        Role googleRole = createRoleIfNotFound("ROLE_GOOGLE", "구글사용자");
+        groups = createGroupsIfNotFound("사용자그룹");
+        resources = createResourceIfNotFound("/google","");
+        createRolesAndResourcesAndGroups(googleRole, null, groups, resources);
+
+        googleRole = createRoleIfNotFound("ROLE_GOOGLE", "구글사용자");
+        groups = createGroupsIfNotFound("사용자그룹");
+        resources = createResourceIfNotFound("/board/**","");
+        createRolesAndResourcesAndGroups(googleRole, null, groups, resources);
+
+        Role kakaoRole = createRoleIfNotFound("ROLE_KAKAO", "카카오사용자");
+        groups = createGroupsIfNotFound("사용자그룹");
+        resources = createResourceIfNotFound("/kakao","");
+        createRolesAndResourcesAndGroups(kakaoRole, null, groups, resources);
+
+        kakaoRole = createRoleIfNotFound("ROLE_KAKAO", "카카오사용자");
+        groups = createGroupsIfNotFound("사용자그룹");
+        resources = createResourceIfNotFound("/board/**","");
+        createRolesAndResourcesAndGroups(kakaoRole, null, groups, resources);
+
+        Role boardRole = createRoleIfNotFound("ROLE_FACEBOOK", "페이스북사용자");
+        groups = createGroupsIfNotFound("사용자그룹");
+        resources = createResourceIfNotFound("/board/**","");
+        createRolesAndResourcesAndGroups(facebookRole, null, groups, resources);
 
         anonymousRole = createRoleIfNotFound("ROLE_ANONYMOUS", "익명사용자");
         groups = createGroupsIfNotFound("사용자그룹");
@@ -123,6 +159,46 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         anonymousRole = createRoleIfNotFound("ROLE_ANONYMOUS", "익명사용자");
         groups = createGroupsIfNotFound("사용자그룹");
         resources = createResourceIfNotFound("/users/console*", "");
+        createRolesAndResourcesAndGroups(anonymousRole, null, groups, resources);
+
+        anonymousRole = createRoleIfNotFound("ROLE_ANONYMOUS", "익명사용자");
+        groups = createGroupsIfNotFound("사용자그룹");
+        resources = createResourceIfNotFound("/", "");
+        createRolesAndResourcesAndGroups(anonymousRole, null, groups, resources);
+
+        anonymousRole = createRoleIfNotFound("ROLE_ANONYMOUS", "익명사용자");
+        groups = createGroupsIfNotFound("사용자그룹");
+        resources = createResourceIfNotFound("/login", "");
+        createRolesAndResourcesAndGroups(anonymousRole, null, groups, resources);
+
+        anonymousRole = createRoleIfNotFound("ROLE_ANONYMOUS", "익명사용자");
+        groups = createGroupsIfNotFound("사용자그룹");
+        resources = createResourceIfNotFound("/oauth2/**", "");
+        createRolesAndResourcesAndGroups(anonymousRole, null, groups, resources);
+
+        anonymousRole = createRoleIfNotFound("ROLE_ANONYMOUS", "익명사용자");
+        groups = createGroupsIfNotFound("사용자그룹");
+        resources = createResourceIfNotFound("/login/**", "");
+        createRolesAndResourcesAndGroups(anonymousRole, null, groups, resources);
+
+        anonymousRole = createRoleIfNotFound("ROLE_ANONYMOUS", "익명사용자");
+        groups = createGroupsIfNotFound("사용자그룹");
+        resources = createResourceIfNotFound("/css/**", "");
+        createRolesAndResourcesAndGroups(anonymousRole, null, groups, resources);
+
+        anonymousRole = createRoleIfNotFound("ROLE_ANONYMOUS", "익명사용자");
+        groups = createGroupsIfNotFound("사용자그룹");
+        resources = createResourceIfNotFound("/images/**", "");
+        createRolesAndResourcesAndGroups(anonymousRole, null, groups, resources);
+
+        anonymousRole = createRoleIfNotFound("ROLE_ANONYMOUS", "익명사용자");
+        groups = createGroupsIfNotFound("사용자그룹");
+        resources = createResourceIfNotFound("/js/**", "");
+        createRolesAndResourcesAndGroups(anonymousRole, null, groups, resources);
+
+        anonymousRole = createRoleIfNotFound("ROLE_ANONYMOUS", "익명사용자");
+        groups = createGroupsIfNotFound("사용자그룹");
+        resources = createResourceIfNotFound("/console/**", "");
         createRolesAndResourcesAndGroups(anonymousRole, null, groups, resources);
 
         anonymousRole = createRoleIfNotFound("ROLE_ANONYMOUS", "익명사용자");

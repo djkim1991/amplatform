@@ -1,26 +1,22 @@
 package io.anymobi.configs;
 
 import io.anymobi.common.ProfileHeaderInterceptor;
-import io.anymobi.common.validator.EmailValidator;
-import io.anymobi.common.validator.PasswordMatchesValidator;
+import io.anymobi.common.resolver.UserArgumentResolver;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
-import org.springframework.web.context.request.RequestContextListener;
-import org.springframework.web.multipart.MultipartResolver;
-import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.LocaleResolver;
-import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 
+import java.util.List;
 import java.util.Locale;
 
 @Configuration
@@ -32,13 +28,16 @@ public class WebConfig implements WebMvcConfigurer {
     @Autowired
     private MessageSource messageSource;
 
+    @Autowired
+    private UserArgumentResolver userArgumentResolver;
+
     public WebConfig() {
         super();
     }
 
     @Override
     public void addViewControllers(final ViewControllerRegistry registry) {
-        registry.addViewController("/").setViewName("forward:/login");
+        registry.addViewController("/").setViewName("home");
         registry.addViewController("/login");
         registry.addViewController("/users/loginRememberMe.html");
         registry.addViewController("/users/customLogin.html");
@@ -59,6 +58,11 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addViewController("/users/changePassword.html");
         registry.addViewController("/users/users.html");
         registry.addViewController("/users/qrcode.html");
+    }
+
+    @Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
+        argumentResolvers.add(userArgumentResolver);
     }
 
     @Bean

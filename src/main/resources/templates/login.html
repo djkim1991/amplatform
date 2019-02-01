@@ -1,7 +1,9 @@
-<html xmlns:th="http://www.thymeleaf.org">
-
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"/>
+<link rel="stylesheet" th:href="@{/css/base.css}" />
+<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+<script th:src="@{/js/jquery.min.js}"></script>
 <title th:text="#{label.pages.home.title}">Title</title>
 <script th:inline="javascript">
 	function validate() {
@@ -21,6 +23,13 @@
             return false;
         }
     }
+
+    $(function(){
+        $('.btn_social').click(function () {
+            var socialType = $(this).data('social');
+            location.href="/oauth2/authorization/"+socialType;
+        });
+    });
     
 </script>
 <style type="text/css">
@@ -62,12 +71,22 @@ label{padding-left:0 !important}
             </form>
             <br/> Current Locale :  <span th:text="${#locale}"></span><br/><br/> 
              <a class="btn btn-default" th:href="@{/users/registration.html}" th:text="#{label.form.loginSignUp}">signup</a>
-             <br/>
+
              <a class="btn btn-default" th:href="@{/users/registrationCaptcha.html}" th:text="#{label.form.loginSignUpCaptcha}">captcha signup</a>
-             <br/><br/>
+
             <a class="btn btn-default" th:href="@{/users/forgetPassword.html}" th:text="#{message.resetPassword}">reset</a>
         </div>
     </div>
+    <div th:replace="layout/header::header"></div>
+
+    <div class="container" style="text-align: center;">
+        <br/>
+        <a href="javascript:;" class="btn_social" data-social="facebook"><img th:src="@{/images/facebook.png}" width="40px" height="40px"/></a>
+        <a href="javascript:;" class="btn_social" data-social="google"><img th:src="@{/images/google.png}" width="40px" height="40px"/></a>
+        <a href="javascript:;" class="btn_social" data-social="kakao"><img th:src="@{/images/kakao.png}" width="40px" height="40px"/></a>
+    </div>
+
+    <div th:replace="layout/footer::footer"></div>
 </body>
 
 </html>

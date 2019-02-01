@@ -8,6 +8,7 @@ import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.SecurityConfig;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Slf4j
+@Component
 public class FilterMetadataSource implements FilterInvocationSecurityMetadataSource {
 
     @Autowired

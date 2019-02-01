@@ -4,11 +4,13 @@ import io.anymobi.common.annotation.SocialUser;
 import io.anymobi.common.enums.SocialType;
 import io.anymobi.domain.entity.users.User;
 import io.anymobi.repositories.jpa.users.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -23,9 +25,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-import static io.anymobi.common.enums.SocialType.FACEBOOK;
-import static io.anymobi.common.enums.SocialType.GOOGLE;
-import static io.anymobi.common.enums.SocialType.KAKAO;
+import static io.anymobi.common.enums.SocialType.*;
 
 @Component
 public class UserArgumentResolver implements HandlerMethodArgumentResolver {
