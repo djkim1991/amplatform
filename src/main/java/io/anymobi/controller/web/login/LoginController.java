@@ -28,6 +28,11 @@ public class LoginController {
         return "redirect:/board/list";
     }
 
+    @GetMapping("/loginFailure")
+    public String loginFailure() {
+        return "redirect:/login";
+    }
+
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public String logout(HttpServletRequest request, HttpServletResponse response) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
