@@ -5,13 +5,14 @@ import io.anymobi.common.enums.UserRole;
 import io.anymobi.domain.entity.sec.Authorities;
 import io.anymobi.domain.entity.sec.GroupsUser;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = "USERNAME"))
@@ -21,7 +22,7 @@ import java.util.Set;
 @EqualsAndHashCode(of = "id")
 @NoArgsConstructor
 @AllArgsConstructor
-public class User implements Serializable {
+public class User implements OAuth2User, Serializable {
 
     @Id
     @GeneratedValue
@@ -70,4 +71,33 @@ public class User implements Serializable {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private List<GroupsUser> groupUsers = new ArrayList<>();
+
+    @Transient
+    private List<GrantedAuthority> authorities =
+            AuthorityUtils.createAuthorityList("ROLE_USER");
+
+    @Transient
+    private Map<String, Object> attributes;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.authorities;
+    }
+
+    @Override
+    public Map<String, Object> getAttributes() {
+        if (this.attributes == null) {
+            this.attributes = new HashMap<>();
+            this.attributes.put("id", this.getId());
+            this.attributes.put("name", this.getUsername());
+            this.attributes.put("email", this.getEmail());
+            this.attributes.put("principalName", this.getUsername());
+        }
+        return attributes;
+    }
+
+    @Override
+    public String getName() {
+        return username;
+    }
 }
