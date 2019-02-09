@@ -1,6 +1,6 @@
 package io.anymobi;
 
-import io.anymobi.common.listener.security.CacheManager;
+import io.anymobi.common.listener.security.AuthoritiesManager;
 import org.springframework.amqp.core.Queue;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -52,8 +52,8 @@ public class AMPApplication {
     }
 
     @Bean
-    public CacheManager cacheManager() {
-        return new CacheManager();
+    public AuthoritiesManager authoritiesManager() {
+        return new AuthoritiesManager();
     }
 }
 

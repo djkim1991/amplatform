@@ -1,7 +1,7 @@
 package io.anymobi.services.jpa.security.impl;
 
 import io.anymobi.common.init.ApplicationInitializer;
-import io.anymobi.common.listener.security.CacheManager;
+import io.anymobi.common.listener.security.AuthoritiesManager;
 import io.anymobi.domain.dto.security.AuthoritiesDto;
 import io.anymobi.domain.entity.sec.RoleResources;
 import io.anymobi.repositories.jpa.security.RoleResourcesRepository;
@@ -26,7 +26,7 @@ public class RoleResourceServiceImpl implements RoleResourceService {
     private RoleResourcesRepository roleResourcesRepository;
 
     @Autowired
-    private CacheManager cacheManager;
+    private AuthoritiesManager authoritiesManager;
 
     @Autowired
     ApplicationInitializer applicationInitializer;
@@ -51,7 +51,7 @@ public class RoleResourceServiceImpl implements RoleResourceService {
     @Transactional
     public void resourcesReload() {
 
-        List<AuthoritiesDto> authorities = cacheManager.getAuthorities();
+        List<AuthoritiesDto> authorities = authoritiesManager.getAuthorities();
         List<AuthoritiesDto> allResources = findAllResources();
 
         authorities.clear();

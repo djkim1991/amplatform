@@ -1,6 +1,6 @@
 package io.anymobi.common.filter;
 
-import io.anymobi.common.listener.security.CacheManager;
+import io.anymobi.common.listener.security.AuthoritiesManager;
 import io.anymobi.domain.dto.security.AuthoritiesDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +20,13 @@ import java.util.List;
 public class FilterMetadataSource implements FilterInvocationSecurityMetadataSource {
 
     @Autowired
-    private CacheManager cacheManager;
+    private AuthoritiesManager authoritiesManager;
 
     @Override
     public Collection<ConfigAttribute> getAttributes(Object object) throws IllegalArgumentException {
 
         HttpServletRequest request = ((FilterInvocation)object).getRequest();
-        List<AuthoritiesDto> authorities = cacheManager.getAuthorities();
+        List<AuthoritiesDto> authorities = authoritiesManager.getAuthorities();
         boolean isMatch = false;
         List<String> roleNames = new ArrayList<>();
 

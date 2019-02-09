@@ -5,7 +5,7 @@ import org.springframework.context.ApplicationListener;
 
 import java.util.List;
 
-public class CacheManager implements ApplicationListener<CacheEventMessage> {
+public class AuthoritiesManager implements ApplicationListener<AuthoritiesEvent> {
 
     private List<AuthoritiesDto> authorities;
 
@@ -14,7 +14,7 @@ public class CacheManager implements ApplicationListener<CacheEventMessage> {
     }
 
     @Override
-    public void onApplicationEvent(CacheEventMessage event) {
+    public void onApplicationEvent(AuthoritiesEvent event) {
         authorities = event.getAuthoritiesDto();
     }
 }

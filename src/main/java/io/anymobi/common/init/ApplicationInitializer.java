@@ -2,7 +2,7 @@ package io.anymobi.common.init;
 
 import io.anymobi.common.enums.BoardType;
 import io.anymobi.common.enums.SocialType;
-import io.anymobi.common.listener.security.CacheEventMessage;
+import io.anymobi.common.listener.security.AuthoritiesEvent;
 import io.anymobi.domain.dto.security.AuthoritiesDto;
 import io.anymobi.domain.entity.board.Board;
 import io.anymobi.domain.entity.users.User;
@@ -77,7 +77,7 @@ public class ApplicationInitializer implements ApplicationRunner {
     }
 
     public void publishEvent(List<AuthoritiesDto> authorities) {
-        applicationContext.publishEvent(new CacheEventMessage(this, authorities));
+        applicationContext.publishEvent(new AuthoritiesEvent(this, authorities));
     }
 
     private void setRoleHierarchy() {

@@ -3,7 +3,7 @@ package io.anymobi.services.jpa.security.impl;
 import io.anymobi.AMPApplication;
 import io.anymobi.common.annotation.Description;
 import io.anymobi.common.init.ApplicationInitializer;
-import io.anymobi.common.listener.security.CacheManager;
+import io.anymobi.common.listener.security.AuthoritiesManager;
 import io.anymobi.domain.dto.security.AuthoritiesDto;
 import io.anymobi.domain.entity.sec.Role;
 import io.anymobi.domain.entity.sec.RoleResources;
@@ -44,7 +44,7 @@ public class RoleResourceServiceImplTest {
     private ResourcesRepository resourcesRepository;
 
     @Autowired
-    private CacheManager cacheManager;
+    private AuthoritiesManager authoritiesManager;
 
     @Autowired
     ApplicationInitializer applicationInitializer;
@@ -53,7 +53,7 @@ public class RoleResourceServiceImplTest {
     @Test
     public void resourcesReload(){
 
-        List<AuthoritiesDto> authorities = cacheManager.getAuthorities();
+        List<AuthoritiesDto> authorities = authoritiesManager.getAuthorities();
         List<AuthoritiesDto> allResources = roleResourceService.findAllResources();
 
         authorities.clear();
@@ -69,7 +69,7 @@ public class RoleResourceServiceImplTest {
 
         roleResourceService.resourcesDelete(15L);
 
-        assertThat(cacheManager.getAuthorities().size()).isEqualTo(2);
+        assertThat(authoritiesManager.getAuthorities().size()).isEqualTo(2);
     }
 
     @Test
