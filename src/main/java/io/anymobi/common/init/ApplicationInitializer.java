@@ -59,7 +59,7 @@ public class ApplicationInitializer implements ApplicationRunner {
         User user = userRepository.save(User.builder()
                 .username("onjsdnjs")
                 .password("pass")
-                .email("onjsdnjs@gmail.com")
+                .email("onjsdnjs@naver.com")
                 .socialType(SocialType.GOOGLE)
                 .createdDate(LocalDateTime.now())
                 .build());
