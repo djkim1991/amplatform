@@ -1,6 +1,7 @@
 package io.anymobi.common.init;
 
 import io.anymobi.common.enums.BoardType;
+import io.anymobi.common.enums.SocialType;
 import io.anymobi.common.listener.security.CacheEventMessage;
 import io.anymobi.domain.dto.security.AuthoritiesDto;
 import io.anymobi.domain.entity.board.Board;
@@ -59,6 +60,7 @@ public class ApplicationInitializer implements ApplicationRunner {
                 .username("onjsdnjs")
                 .password("pass")
                 .email("onjsdnjs@gmail.com")
+                .socialType(SocialType.GOOGLE)
                 .createdDate(LocalDateTime.now())
                 .build());
 
