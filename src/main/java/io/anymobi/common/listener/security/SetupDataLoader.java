@@ -106,9 +106,6 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         createRolesAndResourcesAndGroups(childRole1, null, groups, resources);
 
         Role anonymousRole = createRoleIfNotFound("ROLE_ANONYMOUS", "익명사용자");
-//        groups = createGroupsIfNotFound("사용자그룹");
-//        resources = createResourceIfNotFound("/users/registration*", "");
-//        createRolesAndResourcesAndGroups(anonymousRole, null, groups, resources);
         createRoleHierarchyIfNotFound(anonymousRole, childRole1);
 
         Role childRole2 = createRoleIfNotFound("ROLE_USER2", "일반사용자2");
@@ -151,56 +148,6 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         groups = createGroupsIfNotFound("사용자그룹");
         resources = createResourceIfNotFound("/board/**","");
         createRolesAndResourcesAndGroups(facebookRole, null, groups, resources);
-
-//        anonymousRole = createRoleIfNotFound("ROLE_ANONYMOUS", "익명사용자");
-//        groups = createGroupsIfNotFound("사용자그룹");
-//        resources = createResourceIfNotFound("/users/success*","");
-//        createRolesAndResourcesAndGroups(anonymousRole, null, groups, resources);
-//
-//        anonymousRole = createRoleIfNotFound("ROLE_ANONYMOUS", "익명사용자");
-//        groups = createGroupsIfNotFound("사용자그룹");
-//        resources = createResourceIfNotFound("/users/console*", "");
-//        createRolesAndResourcesAndGroups(anonymousRole, null, groups, resources);
-//
-//        anonymousRole = createRoleIfNotFound("ROLE_ANONYMOUS", "익명사용자");
-//        groups = createGroupsIfNotFound("사용자그룹");
-//        resources = createResourceIfNotFound("/", "");
-//        createRolesAndResourcesAndGroups(anonymousRole, null, groups, resources);
-//
-//        anonymousRole = createRoleIfNotFound("ROLE_ANONYMOUS", "익명사용자");
-//        groups = createGroupsIfNotFound("사용자그룹");
-//        resources = createResourceIfNotFound("/login*", "");
-//        createRolesAndResourcesAndGroups(anonymousRole, null, groups, resources);
-//
-//        anonymousRole = createRoleIfNotFound("ROLE_ANONYMOUS", "익명사용자");
-//        groups = createGroupsIfNotFound("사용자그룹");
-//        resources = createResourceIfNotFound("/oauth2/**", "");
-//        createRolesAndResourcesAndGroups(anonymousRole, null, groups, resources);
-//
-//        anonymousRole = createRoleIfNotFound("ROLE_ANONYMOUS", "익명사용자");
-//        groups = createGroupsIfNotFound("사용자그룹");
-//        resources = createResourceIfNotFound("/login/**", "");
-//        createRolesAndResourcesAndGroups(anonymousRole, null, groups, resources);
-//
-//        anonymousRole = createRoleIfNotFound("ROLE_ANONYMOUS", "익명사용자");
-//        groups = createGroupsIfNotFound("사용자그룹");
-//        resources = createResourceIfNotFound("/css/**", "");
-//        createRolesAndResourcesAndGroups(anonymousRole, null, groups, resources);
-//
-//        anonymousRole = createRoleIfNotFound("ROLE_ANONYMOUS", "익명사용자");
-//        groups = createGroupsIfNotFound("사용자그룹");
-//        resources = createResourceIfNotFound("/images/**", "");
-//        createRolesAndResourcesAndGroups(anonymousRole, null, groups, resources);
-//
-//        anonymousRole = createRoleIfNotFound("ROLE_ANONYMOUS", "익명사용자");
-//        groups = createGroupsIfNotFound("사용자그룹");
-//        resources = createResourceIfNotFound("/js/**", "");
-//        createRolesAndResourcesAndGroups(anonymousRole, null, groups, resources);
-//
-//        anonymousRole = createRoleIfNotFound("ROLE_ANONYMOUS", "익명사용자");
-//        groups = createGroupsIfNotFound("사용자그룹");
-//        resources = createResourceIfNotFound("/console/**", "");
-//        createRolesAndResourcesAndGroups(anonymousRole, null, groups, resources);
 
         anonymousRole = createRoleIfNotFound("ROLE_ANONYMOUS", "익명사용자");
         groups = createGroupsIfNotFound("사용자그룹");

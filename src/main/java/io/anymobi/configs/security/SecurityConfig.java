@@ -6,7 +6,6 @@ import io.anymobi.common.handler.security.CustomOAuth2Provider;
 import io.anymobi.common.handler.security.authentication.CustomAuthenticationProvider;
 import io.anymobi.common.handler.security.authentication.CustomRememberMeServices;
 import io.anymobi.common.handler.security.authentication.CustomWebAuthenticationDetailsSource;
-import io.anymobi.domain.entity.users.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
@@ -117,9 +116,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
             .and()
                 .oauth2Login()
-                .userInfoEndpoint()
-                //.customUserType(User.class, "google")
-            .and()
                 .defaultSuccessUrl("/loginSuccess")
                 .failureUrl("/loginFailure")
 
@@ -135,7 +131,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .and()
                 .formLogin()
                 .loginPage("/login")
-                .defaultSuccessUrl("/homepage.html")
+                .defaultSuccessUrl("/home.html")
                 .failureUrl("/login?error=true")
                 .successHandler(authenticationSuccessHandler)
                 .failureHandler(authenticationFailureHandler)

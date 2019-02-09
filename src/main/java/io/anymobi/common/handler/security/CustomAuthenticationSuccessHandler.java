@@ -72,7 +72,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
             }
 
             LoggedUser user = new LoggedUser(username, activeUserStore);
-            session.setAttribute("user", user);
+            session.setAttribute("loggedUser", user);
             request.setAttribute("authentication", authentication);
 
             ModelMap model = new ModelMap();
@@ -162,7 +162,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
                 username = authentication.getName();
             }
 
-            targetUrl = "/homepage.html?user=" + username;
+            targetUrl = "/home.html?user=" + username;
         } else if (isAdmin) {
             targetUrl = "/users/console.html";
         } else {
