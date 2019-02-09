@@ -118,7 +118,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .and()
                 .oauth2Login()
                 .userInfoEndpoint()
-                .customUserType(User.class, "google")
+                //.customUserType(User.class, "google")
             .and()
                 .defaultSuccessUrl("/loginSuccess")
                 .failureUrl("/loginFailure")
