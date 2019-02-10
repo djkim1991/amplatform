@@ -2,6 +2,7 @@ package io.anymobi.services.mybatis.board;
 
 import io.anymobi.domain.dto.board.BoardDto;
 import io.anymobi.repositories.mybatis.CommonSqlRepository;
+import io.anymobi.repositories.mybatis.mapper.board.BoardMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,7 +13,7 @@ import java.util.List;
 public class BoardServiceImpl implements BoardService {
 
     @Autowired
-    BoardService boardMapper;
+    BoardMapper boardMapper;
 
     @Autowired
     protected CommonSqlRepository commonSqlRepository;
@@ -25,8 +26,8 @@ public class BoardServiceImpl implements BoardService {
 
     @Transactional
     @Override
-    public BoardDto selectBoard(int id){
-        return boardMapper.selectBoard(id);
+    public BoardDto selectBoard(long idx){
+        return boardMapper.selectBoard(idx);
     }
 
     @Override

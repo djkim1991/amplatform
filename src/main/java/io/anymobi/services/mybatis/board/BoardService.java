@@ -18,7 +18,7 @@ public interface BoardService {
 	
 	List<BoardDto> selectBoardList(BoardDto boardDto) ;
 
-	BoardDto selectBoard(int id) ;
+	BoardDto selectBoard(long idx) ;
 	
 	void insertBoard(BoardDto boardDto) ;
 	

@@ -105,6 +105,11 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         resources = createResourceIfNotFound("/board/**","");
         createRolesAndResourcesAndGroups(childRole1, null, groups, resources);
 
+        childRole1 = createRoleIfNotFound("ROLE_USER", "일반사용자");
+        groups = createGroupsIfNotFound("사용자그룹");
+        resources = createResourceIfNotFound("/boards/**","");
+        createRolesAndResourcesAndGroups(childRole1, null, groups, resources);
+
         Role anonymousRole = createRoleIfNotFound("ROLE_ANONYMOUS", "익명사용자");
         createRoleHierarchyIfNotFound(anonymousRole, childRole1);
 
@@ -124,6 +129,11 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         resources = createResourceIfNotFound("/board/**","");
         createRolesAndResourcesAndGroups(facebookRole, null, groups, resources);
 
+        facebookRole = createRoleIfNotFound("ROLE_FACEBOOK", "페이스북사용자");
+        groups = createGroupsIfNotFound("사용자그룹");
+        resources = createResourceIfNotFound("/boards/**","");
+        createRolesAndResourcesAndGroups(facebookRole, null, groups, resources);
+
         Role googleRole = createRoleIfNotFound("ROLE_GOOGLE", "구글사용자");
         groups = createGroupsIfNotFound("사용자그룹");
         resources = createResourceIfNotFound("/google","");
@@ -132,6 +142,11 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         googleRole = createRoleIfNotFound("ROLE_GOOGLE", "구글사용자");
         groups = createGroupsIfNotFound("사용자그룹");
         resources = createResourceIfNotFound("/board/**","");
+        createRolesAndResourcesAndGroups(googleRole, null, groups, resources);
+
+        googleRole = createRoleIfNotFound("ROLE_GOOGLE", "구글사용자");
+        groups = createGroupsIfNotFound("사용자그룹");
+        resources = createResourceIfNotFound("/boards/**","");
         createRolesAndResourcesAndGroups(googleRole, null, groups, resources);
 
         Role kakaoRole = createRoleIfNotFound("ROLE_KAKAO", "카카오사용자");
@@ -144,10 +159,10 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         resources = createResourceIfNotFound("/board/**","");
         createRolesAndResourcesAndGroups(kakaoRole, null, groups, resources);
 
-        Role boardRole = createRoleIfNotFound("ROLE_FACEBOOK", "페이스북사용자");
+        kakaoRole = createRoleIfNotFound("ROLE_KAKAO", "카카오사용자");
         groups = createGroupsIfNotFound("사용자그룹");
-        resources = createResourceIfNotFound("/board/**","");
-        createRolesAndResourcesAndGroups(facebookRole, null, groups, resources);
+        resources = createResourceIfNotFound("/boards/**","");
+        createRolesAndResourcesAndGroups(kakaoRole, null, groups, resources);
 
         anonymousRole = createRoleIfNotFound("ROLE_ANONYMOUS", "익명사용자");
         groups = createGroupsIfNotFound("사용자그룹");

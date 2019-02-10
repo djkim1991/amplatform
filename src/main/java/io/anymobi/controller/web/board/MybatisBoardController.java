@@ -27,22 +27,22 @@ public class MybatisBoardController {
     BoardService boardService;
 
     @GetMapping(value = "/{idx}")
-    public String selectBoard(@PathVariable int idx, Model model) {
+    public String selectBoard(@PathVariable long idx, Model model) {
         model.addAttribute("board", boardService.selectBoard(idx));
-        return "/board/form";
+        return "board/forms";
     }
 
     @GetMapping(value = {"","/"})
     public String selectBoardList(BoardDto boardDto, Model model) {
         model.addAttribute("boardList", boardService.selectBoardList(boardDto));
-        return "/board/list";
+        return "board/lists";
     }
 
     @PostMapping(value="/")
     public String insertBoard(BoardDto boardDto) {
 
         boardService.insertBoard(boardDto);
-        return "/board/list";
+        return "board/lists";
 
     }
 
@@ -56,6 +56,6 @@ public class MybatisBoardController {
     public String updateBoard(@PathVariable long idx, BoardDto boardDto) {
         boardDto.setIdx(idx);
         boardService.updateBoard(boardDto);
-        return "/board/list";
+        return "board/lists";
     }
 }

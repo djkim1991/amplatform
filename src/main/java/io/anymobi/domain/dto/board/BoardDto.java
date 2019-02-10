@@ -1,30 +1,26 @@
 package io.anymobi.domain.dto.board;
 
-import io.anymobi.common.enums.BoardType;
-import io.anymobi.domain.entity.users.User;
 import lombok.*;
 import org.apache.ibatis.type.Alias;
 
-import javax.persistence.*;
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(of = "idx")
 @Getter
 @Setter
 @Alias("board")
-public class BoardDto implements Serializable {
+public class BoardDto {
 
     private Long idx;
     private String title;
-    private String subTitle;
+    private String sub_title;
     private String content;
-    @Enumerated(EnumType.STRING)
-    private BoardType boardType;
-    private LocalDateTime createdDate;
-    private LocalDateTime updatedDate;
-    private User user;
+    private String board_type;
+    private LocalDateTime created_date;
+    private LocalDateTime updated_date;
+    private String user_id;
 
 }
