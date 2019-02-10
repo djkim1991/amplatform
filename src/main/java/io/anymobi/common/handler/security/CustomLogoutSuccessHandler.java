@@ -18,6 +18,7 @@ public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
         final HttpSession session = request.getSession();
         if (session != null) {
             session.removeAttribute("user");
+            session.invalidate();
         }
 
         response.sendRedirect("/logout.html?logSucc=true");

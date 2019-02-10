@@ -3,20 +3,16 @@ package io.anymobi.common.resolver;
 import io.anymobi.common.annotation.SocialUser;
 import io.anymobi.common.enums.SocialType;
 import io.anymobi.common.handler.security.authentication.UserDetailsServiceImpl;
-import io.anymobi.domain.entity.sec.Authorities;
 import io.anymobi.domain.entity.users.User;
 import io.anymobi.repositories.jpa.users.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -26,8 +22,9 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 import static io.anymobi.common.enums.SocialType.*;
 
@@ -107,12 +104,6 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
         Set<String> roles = UserDetailsServiceImpl.getRoles(user);
         roles.add(user.getSocialType().getRoleType());
         String[] userRoles = roles.toArray(new String[]{});
-        //String userRoles = String.join(",", UserDetailsServiceImpl.getRoles(user).toArray(new String[]{}));
-
-
-//        List<String> roles = user.getUserRoles().stream().map(r -> r.getRole().getRoleName()).collect(Collectors.toList());
-//        String[] rolesArray = roles.toArray(new String[]{});
-//        List<String> roles = user.getGroupUsers().stream().map(r -> r.getGroups().getGroupRoles()).collect(Collectors.toList());
 
         if(!authentication.getAuthorities().contains(new SimpleGrantedAuthority(user.getSocialType().getRoleType()))) {
             SecurityContextHolder.getContext().setAuthentication(
