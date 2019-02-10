@@ -7,9 +7,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-/**
- * Created by KimYJ on 2017-07-13.
- */
 @Service
 public class BoardService {
 

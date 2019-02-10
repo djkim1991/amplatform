@@ -12,9 +12,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- * Created by KimYJ on 2017-09-13.
- */
 @Controller
 public class LoginController {
 

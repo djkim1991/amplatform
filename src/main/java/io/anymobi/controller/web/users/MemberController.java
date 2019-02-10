@@ -26,19 +26,19 @@ public class MemberController {
 	MemberService memberService;
 
 	@GetMapping(value="/members/home")
-	public String members() throws Exception {
+	public String members() {
 
 		return "test/index";
 	}
 
 	@GetMapping(value="/members/join")
-	public String memberJoin() throws Exception {
+	public String memberJoin() {
 
 		return "test/member";
 	}
 	
 	@PostMapping(value="/members")
-	public String registerMember(MemberDto member) throws Exception {
+	public String registerMember(MemberDto member) {
 
 		memberService.insertMember(member);
 		return "test/index";
@@ -46,26 +46,26 @@ public class MemberController {
 	}
 	
 	@GetMapping(value="/members/{id}")
-	public MemberDto selectMember(@PathVariable int id) throws Exception {
+	public MemberDto selectMember(@PathVariable int id) {
 
 		MemberDto Member = memberService.selectMember(id);
 		return Member;
 	}
 
 	@GetMapping(value="/members")
-	public List<MemberDto> selectMemberList(MemberDto member) throws Exception {
+	public List<MemberDto> selectMemberList(MemberDto member) {
 		
 		return memberService.selectMemberList(member);
 	}
 
 	@GetMapping(value="/members/edit")
-	public String memberEdit() throws Exception {
+	public String memberEdit() {
 
 		return "test/member_edit";
 	}
 
 	@PostMapping(value="/members/{id}")
-	public String editMember(@PathVariable int id, MemberDto memberDto) throws Exception {
+	public String editMember(@PathVariable int id, MemberDto memberDto) {
 		memberDto.setId(id);
 		memberService.updateMember(memberDto);
 		return "test/index";

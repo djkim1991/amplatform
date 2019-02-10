@@ -48,7 +48,7 @@ public class RegistrationController {
     }
 
     @RequestMapping(value = "/users/registrationConfirm", method = RequestMethod.GET)
-    public String confirmRegistration(final HttpServletRequest request, final Model model, @RequestParam("token") final String token) throws UnsupportedEncodingException {
+    public String confirmRegistration(final HttpServletRequest request, final Model model, @RequestParam("token") final String token) {
         Locale locale = request.getLocale();
         final String result = userService.validateVerificationToken(token);
         if (result.equals("valid")) {
