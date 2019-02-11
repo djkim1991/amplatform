@@ -1,10 +1,13 @@
 package io.anymobi.common.listener.security;
 
+import io.anymobi.common.enums.BoardType;
 import io.anymobi.common.enums.SocialType;
 import io.anymobi.domain.dto.event.EventDto;
+import io.anymobi.domain.entity.board.Board;
 import io.anymobi.domain.entity.event.Event;
 import io.anymobi.domain.entity.sec.*;
 import io.anymobi.domain.entity.users.User;
+import io.anymobi.repositories.jpa.board.BoardRepository;
 import io.anymobi.repositories.jpa.event.EventRepository;
 import io.anymobi.repositories.jpa.security.*;
 import io.anymobi.repositories.jpa.users.UserRepository;
@@ -17,6 +20,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.stream.IntStream;
 
 @Component
 public class SetupDataLoader implements ApplicationListener<ContextRefreshedEvent> {
@@ -51,6 +55,9 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     private RoleHierarchyRepository roleHierarchyRepository;
 
     @Autowired
+    private BoardRepository boardRepository;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
@@ -67,6 +74,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
             return;
         }
 
+        setupBoard();
         setupSecurityResources();
 
         for(int i=1; i<=30; i++){
@@ -76,6 +84,28 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         }
 
         alreadySetup = true;
+    }
+
+    private void setupBoard() {
+
+//        User user = userRepository.save(User.builder()
+//                .username("onjsdnjs")
+//                .password("pass")
+//                .email("onjsdnjs@naver.com")
+//                .socialType(SocialType.GOOGLE)
+//                .createdDate(LocalDateTime.now())
+//                .build());
+//
+//        IntStream.rangeClosed(1, 200).forEach(index ->
+//                boardRepository.save(Board.builder()
+//                        .title("게시글"+index)
+//                        .subTitle("순서"+index)
+//                        .content("컨텐츠")
+//                        .boardType(BoardType.free)
+//                        .createdDate(LocalDateTime.now())
+//                        .updatedDate(LocalDateTime.now())
+//                        .user(user).build())
+//        );
     }
 
     private void setupSecurityResources() {
@@ -114,10 +144,10 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         createRoleHierarchyIfNotFound(anonymousRole, childRole1);
 
         Role childRole2 = createRoleIfNotFound("ROLE_USER2", "일반사용자2");
-        user = createUserIfNotFound("user2", "onjsdnjs@facebook.com", SocialType.FACEBOOK,"userFirst2", "userLast2", "pass", childRole2);
+        User user2 = createUserIfNotFound("user2", "onjsdnjs@facebook.com", SocialType.FACEBOOK,"userFirst2", "userLast2", "pass", childRole2);
         groups = createGroupsIfNotFound("사용자그룹");
         resources = createResourceIfNotFound("/users/**","");
-        createRolesAndResourcesAndGroups(childRole2, user, groups, resources);
+        createRolesAndResourcesAndGroups(childRole2, user2, groups, resources);
 
         Role facebookRole = createRoleIfNotFound("ROLE_FACEBOOK", "페이스북사용자");
         groups = createGroupsIfNotFound("사용자그룹");
@@ -173,9 +203,22 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         createRolesAndResourcesAndGroups(childRole1, null, groups, resources);
         resources = createResourceIfNotFound("/api/**", "POST");
         createRolesAndResourcesAndGroups(childRole1, null, groups, resources);
+
+        User finalUser = user;
+        IntStream.rangeClosed(1, 200).forEach(index ->
+                boardRepository.save(Board.builder()
+                        .title("게시글"+index)
+                        .subTitle("순서"+index)
+                        .content("컨텐츠")
+                        .boardType(BoardType.free)
+                        .createdDate(LocalDateTime.now())
+                        .updatedDate(LocalDateTime.now())
+                        .user(finalUser).build())
+        );
     }
 
-    private void createRolesAndResourcesAndGroups(Role role, User user, Groups groups, Resources resources) {
+    @Transactional
+    public void createRolesAndResourcesAndGroups(Role role, User user, Groups groups, Resources resources) {
         if (user != null) {
             createAuthoritiesIfNotFound(role, user);
             createGroupsUserIfNotFound(groups, user);
@@ -218,7 +261,8 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         return userRepository.save(user);
     }
 
-    private Resources createResourceIfNotFound(String resourceName, String httpMethod) {
+    @Transactional
+    public Resources createResourceIfNotFound(String resourceName, String httpMethod) {
         Resources resources = resourcesRepository.findByResourceNameAndHttpMethod(resourceName, httpMethod);
 
         if (resources == null) {
@@ -230,7 +274,8 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         return resourcesRepository.save(resources);
     }
 
-    private Groups createGroupsIfNotFound(String groupName) {
+    @Transactional
+    public Groups createGroupsIfNotFound(String groupName) {
         Groups groups = groupsRepository.findByGroupName(groupName);
 
         if (groups == null) {
@@ -280,7 +325,8 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         return groupsUserRepository.save(groupsUser);
     }
 
-    private RoleResources createRoleResourceIfNotFound(Role role, Resources resources) {
+    @Transactional
+    public RoleResources createRoleResourceIfNotFound(Role role, Resources resources) {
 
         RoleResources roleResource = roleResourcesRepository.findByRoleIdAndResourcesId(role.getId(), resources.getId());
         if (roleResource == null) {

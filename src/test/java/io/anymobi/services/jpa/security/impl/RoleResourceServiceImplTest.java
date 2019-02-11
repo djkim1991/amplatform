@@ -2,7 +2,7 @@ package io.anymobi.services.jpa.security.impl;
 
 import io.anymobi.AMPApplication;
 import io.anymobi.common.annotation.Description;
-import io.anymobi.common.init.ApplicationInitializer;
+import io.anymobi.common.handler.security.init.SecurityInitializer;
 import io.anymobi.common.listener.security.AuthoritiesManager;
 import io.anymobi.domain.dto.security.AuthoritiesDto;
 import io.anymobi.domain.entity.sec.Role;
@@ -47,7 +47,7 @@ public class RoleResourceServiceImplTest {
     private AuthoritiesManager authoritiesManager;
 
     @Autowired
-    ApplicationInitializer applicationInitializer;
+    SecurityInitializer securityInitializer;
 
     @Description("자원권한 재 로딩")
     @Test

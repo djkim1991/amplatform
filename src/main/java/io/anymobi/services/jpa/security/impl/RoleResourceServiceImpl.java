@@ -1,6 +1,6 @@
 package io.anymobi.services.jpa.security.impl;
 
-import io.anymobi.common.init.ApplicationInitializer;
+import io.anymobi.common.handler.security.init.SecurityInitializer;
 import io.anymobi.common.listener.security.AuthoritiesManager;
 import io.anymobi.domain.dto.security.AuthoritiesDto;
 import io.anymobi.domain.entity.sec.RoleResources;
@@ -29,7 +29,7 @@ public class RoleResourceServiceImpl implements RoleResourceService {
     private AuthoritiesManager authoritiesManager;
 
     @Autowired
-    ApplicationInitializer applicationInitializer;
+    SecurityInitializer securityInitializer;
 
     @Override
     @Transactional
@@ -58,7 +58,7 @@ public class RoleResourceServiceImpl implements RoleResourceService {
         authorities.addAll(allResources);
         allResources.clear();
 
-        applicationInitializer.publishEvent(authorities);
+        securityInitializer.publishEvent(authorities);
         log.info("Role Resources Authorities - Role and Resources reloaded at Runtime!");
     }
 
