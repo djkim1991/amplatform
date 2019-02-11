@@ -1,6 +1,6 @@
 package io.anymobi.controller.rest.users;
 
-import io.anymobi.common.ErrorResource;
+import io.anymobi.common.hateoas.ErrorResource;
 import io.anymobi.common.annotation.CurrentUser;
 import io.anymobi.domain.entity.sec.ActiveUserStore;
 import io.anymobi.domain.entity.users.User;

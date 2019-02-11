@@ -1,7 +1,7 @@
 package io.anymobi.controller.rest.event;
 
 
-import io.anymobi.common.ErrorResource;
+import io.anymobi.common.hateoas.ErrorResource;
 import io.anymobi.common.validator.EventValidator;
 import io.anymobi.domain.dto.event.EventDto;
 import io.anymobi.domain.entity.event.Event;

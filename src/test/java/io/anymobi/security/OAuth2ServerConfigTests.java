@@ -1,6 +1,6 @@
 package io.anymobi.security;
 
-import io.anymobi.common.AppSecurityProperties;
+import io.anymobi.common.props.AppSecurityProperties;
 import io.anymobi.services.jpa.users.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;

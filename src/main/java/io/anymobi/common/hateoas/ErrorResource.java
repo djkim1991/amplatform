@@ -1,4 +1,4 @@
-package io.anymobi.common;
+package io.anymobi.common.hateoas;
 
 import io.anymobi.controller.rest.RestIndexController;
 import org.springframework.hateoas.Link;

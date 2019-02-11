@@ -1,9 +1,9 @@
 package io.anymobi.controller.event;
 
-import io.anymobi.common.AppSecurityProperties;
 import io.anymobi.common.BaseControllerTests;
 import io.anymobi.common.enums.EventStatus;
 import io.anymobi.common.enums.UserRole;
+import io.anymobi.common.props.AppSecurityProperties;
 import io.anymobi.domain.dto.event.EventDto;
 import io.anymobi.domain.entity.event.Event;
 import io.anymobi.domain.entity.users.User;

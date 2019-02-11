@@ -1,4 +1,4 @@
-package io.anymobi.common;
+package io.anymobi.common.props;
 
 import lombok.Getter;
 import lombok.Setter;
