@@ -28,7 +28,7 @@ public class JpaBoardController {
     }
 
     @PostMapping(value = "/boards", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Board> board(@RequestBody BoardDto boardDto) {
+    public ResponseEntity<Board> createBoard(@RequestBody BoardDto boardDto) {
 
         User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Board board = modelMapper.map(boardDto, Board.class);

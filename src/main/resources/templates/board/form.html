@@ -82,7 +82,8 @@
                            "Authorization": "Basic " + btoa("havi" + ":" + "test")
                        },
                        dataType: "json",
-                           success: function () {
+                           success: function (data) {
+                               console.log(data);
                                alert('저장 성공!');
                                location.href = '/board/list';
                        },
