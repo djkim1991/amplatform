@@ -4,19 +4,39 @@
 <mapper namespace="io.anymobi.repositories.mybatis.mapper.board.BoardMapper" >
 	
 	<select id="selectBoardList" resultType="board">
-		SELECT * FROM board limit 10
+		SELECT
+
+			title,
+			sub_title as subTitle,
+			content,
+			board_type as boardType,
+			created_date as createdDate,
+			updated_date as updatedDate,
+			user_id as userId
+
+		FROM board limit 10
 	</select>
 
 	<select id="selectBoard" parameterType="Long" resultType="board">
-		SELECT * FROM board WHERE idx = #{idx}
+		SELECT
+
+			title,
+			sub_title as subTitle,
+			content,
+			board_type as boardType,
+			created_date as createdDate,
+			updated_date as updatedDate,
+			user_id as userId
+
+		FROM board WHERE idx = #{idx}
 	</select>
 	
 	<insert id="insertBoard" parameterType="board">
 		INSERT INTO board(
 				title,
-				subTitle,
+				sub_title,
 				content,
-				boardType,
+				board_type,
 				created_date,
 				user_id
 					)
@@ -33,9 +53,9 @@
 	<update id="updateBoard" parameterType="board">
 		UPDATE board SET
 			title = #{title},
-			subTitle = #{sub_title},
+			sub_title = #{sub_title},
 			content = #{content},
-			boardType = #{board_type},
+			board_type = #{board_type},
 			updated_date = now(),
 			user_id = #{user_id}
 		WHERE idx = #{idx}

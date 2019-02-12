@@ -16,11 +16,11 @@ public class BoardDto {
 
     private Long idx;
     private String title;
-    private String sub_title;
+    private String subTitle;
     private String content;
-    private String board_type;
-    private LocalDateTime created_date;
-    private LocalDateTime updated_date;
+    private String boardType;
+    private LocalDateTime createdDate;
+    private LocalDateTime updatedDate;
     private String user_id;
 
 }

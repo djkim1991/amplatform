@@ -31,10 +31,10 @@
                 <tbody>
                     <tr th:each="board : ${boardList}">
                         <td th:text="${board.idx}"></td>
-                        <td th:text="${board.board_type}"></td>
+                        <td th:text="${board.boardType.value}"></td>
                         <td><a th:href="'/boards/'+${board.idx}" th:text="${board.title}"></a></td>
-                        <td th:text="${board.created_date} ? ${#temporals.format(board.created_date,'yyyy-MM-dd HH:mm')} : ${board.created_date}"></td>
-                        <td th:text="${board.updated_date} ? ${#temporals.format(board.updated_date,'yyyy-MM-dd HH:mm')} : ${board.updated_date}"></td>
+                        <td th:text="${board.createdDate} ? ${#temporals.format(board.createdDate,'yyyy-MM-dd HH:mm')} : ${board.createdDate}"></td>
+                        <td th:text="${board.updatedDate} ? ${#temporals.format(board.updatedDate,'yyyy-MM-dd HH:mm')} : ${board.updatedDate}"></td>
                     </tr>
                 </tbody>
             </table>
