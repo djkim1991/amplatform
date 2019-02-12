@@ -3,7 +3,11 @@ package io.anymobi.common.resolver;
 import io.anymobi.common.annotation.SocialUser;
 import io.anymobi.common.enums.SocialType;
 import io.anymobi.common.handler.security.authentication.UserDetailsServiceImpl;
+import io.anymobi.domain.entity.sec.Authorities;
+import io.anymobi.domain.entity.sec.Role;
 import io.anymobi.domain.entity.users.User;
+import io.anymobi.repositories.jpa.security.AuthoritiesRepository;
+import io.anymobi.repositories.jpa.security.RoleRepository;
 import io.anymobi.repositories.jpa.users.UserRepository;
 import org.springframework.core.MethodParameter;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,9 +26,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static io.anymobi.common.enums.SocialType.*;
 
@@ -34,8 +36,14 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
 
     private UserRepository userRepository;
 
-    public UserArgumentResolver(UserRepository userRepository) {
+    private RoleRepository roleRepository;
+
+    private AuthoritiesRepository authoritiesRepository;
+
+    public UserArgumentResolver(UserRepository userRepository, RoleRepository roleRepository, AuthoritiesRepository authoritiesRepository) {
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
+        this.authoritiesRepository = authoritiesRepository;
     }
 
     @Override
@@ -101,13 +109,29 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
 
     private void setRoleIfNotSame(User user, OAuth2AuthenticationToken authentication, Map<String, Object> map) {
 
-        Set<String> roles = UserDetailsServiceImpl.getRoles(user);
-        roles.add(user.getSocialType().getRoleType());
+        Set<String> roles = new HashSet<>();
+        if(user.getUserRoles() != null && user.getGroupUsers() != null) {
+            roles = UserDetailsServiceImpl.getRoles(user);
+
+        }else{
+
+            Role role1 = roleRepository.findByRoleName("ROLE_USER");
+            Role role2 = roleRepository.findByRoleName(user.getSocialType().getRoleType());
+
+            Authorities authorities1 = Authorities.builder().role(role1).user(user).build();
+            Authorities authorities2 = Authorities.builder().role(role2).user(user).build();
+
+            user.setUserRoles(Arrays.asList(authoritiesRepository.save(authorities1),authoritiesRepository.save(authorities2)));
+
+            roles.add(role1.getRoleName());
+            roles.add(role2.getRoleName());
+        }
+
         String[] userRoles = roles.toArray(new String[]{});
 
         if(!authentication.getAuthorities().contains(new SimpleGrantedAuthority(user.getSocialType().getRoleType()))) {
             SecurityContextHolder.getContext().setAuthentication(
-                    new UsernamePasswordAuthenticationToken(map, "N/A", AuthorityUtils.createAuthorityList(userRoles)));
+                    new UsernamePasswordAuthenticationToken(user, "N/A", AuthorityUtils.createAuthorityList(userRoles)));
         }
     }
 }

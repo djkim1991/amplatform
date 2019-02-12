@@ -101,7 +101,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         createRoleHierarchyIfNotFound(managerRole, adminRole);
 
         Role childRole1 = createRoleIfNotFound("ROLE_USER", "일반사용자");
-        user = createUserIfNotFound("user1", "onjsdnjs@gmail.com", SocialType.GOOGLE,"userFirst1", "userLast1", "pass", childRole1);
+        user = createUserIfNotFound("user1", "leaven@gmail.com", SocialType.GOOGLE,"userFirst1", "userLast1", "pass", childRole1);
         groups = createGroupsIfNotFound("사용자그룹");
         resources = createResourceIfNotFound("/users/**", "");
         createRolesAndResourcesAndGroups(childRole1, user, groups, resources);

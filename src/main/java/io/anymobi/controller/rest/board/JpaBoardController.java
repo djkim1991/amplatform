@@ -29,10 +29,10 @@ public class JpaBoardController {
     public ResponseEntity<Board> board(@RequestBody BoardDto boardDto) {
 
         User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
         Board board = modelMapper.map(boardDto, Board.class);
         board.setUser(user);
         Board saveBoard = boardService.save(board);
+
         return ResponseEntity.ok().body(saveBoard);
     }
 
