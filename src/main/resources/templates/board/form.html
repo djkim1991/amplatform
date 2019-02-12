@@ -82,11 +82,12 @@
                            "Authorization": "Basic " + btoa("havi" + ":" + "test")
                        },
                        dataType: "json",
-                       success: function () {
+                           success: function () {
                                alert('저장 성공!');
                                location.href = '/board/list';
                        },
-                       error: function () {
+                       error: function (e) {
+                           console.log(e);
                            alert('저장 실패!');
                        }
                    });

@@ -5,6 +5,7 @@ import io.anymobi.domain.entity.board.Board;
 import io.anymobi.domain.entity.users.User;
 import io.anymobi.services.jpa.board.BoardService;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,15 +25,15 @@ public class JpaBoardController {
         this.modelMapper = modelMapper;
     }
 
-    @PostMapping("/boards")
-    public ResponseEntity board(@RequestBody BoardDto boardDto) {
+    @PostMapping(value = "/boards", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<Board> board(@RequestBody BoardDto boardDto) {
 
         User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         Board board = modelMapper.map(boardDto, Board.class);
         board.setUser(user);
-        boardService.save(board);
-        return ResponseEntity.ok().body("success");
+        Board saveBoard = boardService.save(board);
+        return ResponseEntity.ok().body(saveBoard);
     }
 
 }

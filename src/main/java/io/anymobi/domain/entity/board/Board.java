@@ -1,6 +1,8 @@
 package io.anymobi.domain.entity.board;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.anymobi.common.enums.BoardType;
+import io.anymobi.controller.rest.users.UserSerializer;
 import io.anymobi.domain.entity.users.User;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,6 +18,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Entity
 @Table
+
 public class Board implements Serializable {
 
     @Id
@@ -42,6 +45,7 @@ public class Board implements Serializable {
     @Column
     private LocalDateTime updatedDate;
 
+    @JsonSerialize(using = UserSerializer.class)
     @OneToOne(fetch= FetchType.LAZY)
     private User user;
 
