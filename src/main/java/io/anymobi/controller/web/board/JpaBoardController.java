@@ -4,6 +4,7 @@ import io.anymobi.common.annotation.SocialUser;
 import io.anymobi.domain.entity.users.User;
 import io.anymobi.services.jpa.board.BoardService;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,7 +28,7 @@ public class JpaBoardController {
     }
 
     @GetMapping("/list")
-    public String list(@PageableDefault Pageable pageable, @SocialUser User user, Model model) {
+    public String list(@PageableDefault(sort={"createdDate"}, direction = Sort.Direction.DESC) Pageable pageable, @SocialUser User user, Model model) {
         model.addAttribute("boardList", boardService.findBoardList(pageable));
         return "/board/list";
     }

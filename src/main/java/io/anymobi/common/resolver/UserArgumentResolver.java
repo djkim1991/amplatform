@@ -110,6 +110,7 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
     private void setRoleIfNotSame(User user, OAuth2AuthenticationToken authentication, Map<String, Object> map) {
 
         Set<String> roles = new HashSet<>();
+
         if(user.getUserRoles() != null && user.getGroupUsers() != null) {
             roles = UserDetailsServiceImpl.getRoles(user);
 

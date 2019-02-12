@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
+
 @RestController
 @RequestMapping("/api")
 public class JpaBoardController {
@@ -31,6 +33,8 @@ public class JpaBoardController {
         User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Board board = modelMapper.map(boardDto, Board.class);
         board.setUser(user);
+        board.setCreatedDate(LocalDateTime.now());
+        board.setUpdatedDate(LocalDateTime.now());
         Board saveBoard = boardService.save(board);
 
         return ResponseEntity.ok().body(saveBoard);
