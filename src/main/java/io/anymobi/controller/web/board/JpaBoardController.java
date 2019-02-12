@@ -28,7 +28,7 @@ public class JpaBoardController {
     }
 
     @GetMapping("/list")
-    public String list(@PageableDefault(sort={"createdDate"}, direction = Sort.Direction.DESC) Pageable pageable, @SocialUser User user, Model model) {
+    public String list(@PageableDefault Pageable pageable, @SocialUser User user, Model model) {
         model.addAttribute("boardList", boardService.findBoardList(pageable));
         return "/board/list";
     }
