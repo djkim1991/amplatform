@@ -1,4 +1,4 @@
-package io.anymobi.common.hateoas;
+package io.anymobi.common.serializer;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;

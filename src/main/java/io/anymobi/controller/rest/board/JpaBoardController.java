@@ -1,6 +1,7 @@
 package io.anymobi.controller.rest.board;
 
-import io.anymobi.common.hateoas.ErrorResource;
+import io.anymobi.common.hateoas.resources.BoardResource;
+import io.anymobi.common.hateoas.HateoasHolder;
 import io.anymobi.domain.dto.board.BoardDto;
 import io.anymobi.domain.entity.board.Board;
 import io.anymobi.domain.entity.users.User;
@@ -37,7 +38,7 @@ public class JpaBoardController {
 
         Board board = boardService.findBoardByIdx(idx);
         if (board == null) {
-            return notFoundResponse();
+            return HateoasHolder.notFoundResponse();
         }
         return ResponseEntity.ok().body(null);
     }
@@ -46,7 +47,7 @@ public class JpaBoardController {
     public ResponseEntity createBoard(@Valid @RequestBody BoardDto boardDto, BindingResult errors, @AuthenticationPrincipal User user) {
 
         if (errors.hasErrors()) {
-            return badRequestResponse(errors);
+            return HateoasHolder.badRequestResponse(errors);
         }
 
         Board board = modelMapper.map(boardDto, Board.class);
@@ -56,7 +57,7 @@ public class JpaBoardController {
         Board newBoard = boardService.save(board);
 
         BoardResource boardResource = new BoardResource(newBoard);
-        boardResource.add(linkToProfile("resources-boards-create"));
+        boardResource.add(HateoasHolder.linkToProfile("resources-boards-create"));
         boardResource.add(linkToUpdate(newBoard));
 
         URI newBoardLocation = linkTo(methodOn(this.getClass()).getBoard(newBoard.getIdx())).toUri();
@@ -64,28 +65,12 @@ public class JpaBoardController {
     }
 
     @PutMapping("/{idx}")
-    public ResponseEntity update(@PathVariable Long idx, @Valid @RequestBody BoardDto baordDto, BindingResult errors, User currentUser) {
+    public ResponseEntity update(@PathVariable Long idx, @Valid @RequestBody BoardDto baordDto, BindingResult errors, @AuthenticationPrincipal User user) {
         
         return ResponseEntity.ok().body(null);
     }
 
-    private ResponseEntity<Object> notFoundResponse() {
-        return ResponseEntity.notFound().build();
-    }
-
-    private ResponseEntity<ErrorResource> badRequestResponse(BindingResult errors) {
-        return ResponseEntity.badRequest().body(new ErrorResource(errors));
-    }
-
-    private Link linkToProfile(String anchor) {
-        String linkValue = "</docs/index.html>; rel=\"profile\";";
-        if (anchor != null) {
-            linkValue = "</docs/index.html#" + anchor + ">; rel=\"profile\";";
-        }
-        return Link.valueOf(linkValue);
-    }
-
-    private Link linkToUpdate(Board newBoard) {
+    public Link linkToUpdate(Board newBoard) {
         return linkTo(methodOn(JpaBoardController.class).update(newBoard.getIdx(), null, null, null)).withRel("update");
     }
 

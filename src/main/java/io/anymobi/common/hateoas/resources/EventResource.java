@@ -1,5 +1,6 @@
-package io.anymobi.controller.rest.event;
+package io.anymobi.common.hateoas.resources;
 
+import io.anymobi.controller.rest.event.EventController;
 import io.anymobi.domain.entity.event.Event;
 import lombok.Getter;
 import org.springframework.hateoas.Link;

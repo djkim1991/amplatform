@@ -1,5 +1,6 @@
-package io.anymobi.controller.rest.users;
+package io.anymobi.common.hateoas.resources;
 
+import io.anymobi.controller.rest.users.UserController;
 import io.anymobi.domain.entity.users.User;
 import lombok.Getter;
 import org.springframework.hateoas.Link;

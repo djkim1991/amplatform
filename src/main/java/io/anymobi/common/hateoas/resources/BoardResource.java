@@ -1,5 +1,6 @@
-package io.anymobi.controller.rest.board;
+package io.anymobi.common.hateoas.resources;
 
+import io.anymobi.controller.rest.board.JpaBoardController;
 import io.anymobi.domain.entity.board.Board;
 import lombok.Getter;
 import org.springframework.hateoas.Link;

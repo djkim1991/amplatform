@@ -2,7 +2,7 @@ package io.anymobi.domain.entity.board;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.anymobi.common.enums.BoardType;
-import io.anymobi.controller.rest.users.UserSerializer;
+import io.anymobi.common.serializer.UserSerializer;
 import io.anymobi.domain.entity.users.User;
 import lombok.Builder;
 import lombok.Getter;

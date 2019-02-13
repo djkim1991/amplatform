@@ -1,6 +1,6 @@
 package io.anymobi.configs;
 
-import io.anymobi.common.hateoas.ProfileHeaderInterceptor;
+import io.anymobi.common.interceptor.ProfileHeaderInterceptor;
 import io.anymobi.common.resolver.UserArgumentResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;

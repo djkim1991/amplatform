@@ -1,4 +1,4 @@
-package io.anymobi.common.hateoas;
+package io.anymobi.common.interceptor;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
