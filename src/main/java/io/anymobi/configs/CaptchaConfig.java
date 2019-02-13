@@ -1,4 +1,4 @@
-package io.anymobi.configs.security;
+package io.anymobi.configs;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

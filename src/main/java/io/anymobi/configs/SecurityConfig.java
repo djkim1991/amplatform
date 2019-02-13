@@ -1,4 +1,4 @@
-package io.anymobi.configs.security;
+package io.anymobi.configs;
 
 import io.anymobi.common.filter.CsrfHeaderFilter;
 import io.anymobi.common.handler.security.CustomAccessDeniedHandler;
