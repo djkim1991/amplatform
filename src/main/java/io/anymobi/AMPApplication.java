@@ -1,11 +1,8 @@
 package io.anymobi;
 
-import io.anymobi.common.listener.security.AuthoritiesManager;
-import org.springframework.amqp.core.Queue;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
@@ -25,20 +22,6 @@ public class AMPApplication {
     }
 
     @Bean
-    @Profile("docker")
-    Queue queueEamilConfirm() {
-
-        return new Queue("email_confirm", false);
-    }
-
-    @Bean
-    @Profile("docker")
-    Queue queueWebSocket() {
-
-        return new Queue("websock_message", false);
-    }
-
-    @Bean
     public HttpMessageConverter<String> responseBodyConverter() {
         return new StringHttpMessageConverter(Charset.forName("UTF-8"));
     }
@@ -51,9 +34,5 @@ public class AMPApplication {
         return characterEncodingFilter;
     }
 
-    @Bean
-    public AuthoritiesManager authoritiesManager() {
-        return new AuthoritiesManager();
-    }
 }
 

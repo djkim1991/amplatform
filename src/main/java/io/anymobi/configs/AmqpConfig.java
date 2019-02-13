@@ -1,6 +1,7 @@
 package io.anymobi.configs;
 
 import com.fasterxml.jackson.databind.SerializationFeature;
+import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.annotation.RabbitListenerConfigurer;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
@@ -11,6 +12,7 @@ import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.handler.annotation.support.DefaultMessageHandlerMethodFactory;
 
@@ -57,5 +59,17 @@ public class AmqpConfig implements RabbitListenerConfigurer {
         factory.setConcurrentConsumers(3);
         factory.setMaxConcurrentConsumers(10);
         return factory;
+    }
+
+    @Bean
+    @Profile("docker")
+    Queue queueEamilConfirm() {
+        return new Queue("email_confirm", false);
+    }
+
+    @Bean
+    @Profile("docker")
+    Queue queueWebSocket() {
+        return new Queue("websock_message", false);
     }
 }
