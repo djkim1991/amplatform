@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.access.AccessDecisionVoter;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.access.vote.AffirmativeBased;
@@ -58,6 +59,7 @@ import java.util.stream.Collectors;
 @EnableWebSecurity
 @EnableRedisHttpSession
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
+@Profile("!OAuth")
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -96,12 +98,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
+    protected void configure(final AuthenticationManagerBuilder auth) {
         auth.authenticationProvider(authProvider());
     }
 
     @Override
-    public void configure(final WebSecurity web) throws Exception {
+    public void configure(final WebSecurity web) {
         web.ignoring().antMatchers("/resources/mybatis/**");
         web.ignoring().antMatchers("/resources/static/**");
     }
@@ -110,7 +112,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(final HttpSecurity http) throws Exception {
         CharacterEncodingFilter filter = new CharacterEncodingFilter();
         http
-            .csrf().disable()
             .authorizeRequests()
                 .anyRequest().authenticated()
 

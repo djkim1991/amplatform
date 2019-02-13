@@ -383,7 +383,7 @@ public class EventControllerTests extends BaseControllerTests {
                 .closeEnrollmentDateTime(LocalDateTime.of(2018, 11, 3, 23, 59))
                 .beginEventDateTime(LocalDateTime.of(2018, 11, 10, 9, 0))
                 .endEventDateTime(LocalDateTime.of(2018, 11, 10, 14, 0))
-                .location("Inflean")
+                .location("anymobi")
                 .basePrice(50000)
                 .maxPrice(10000)
                 .build();
@@ -404,7 +404,7 @@ public class EventControllerTests extends BaseControllerTests {
         User user = User.builder()
                 .email(email)
                 .password(password)
-               // .roles(roleSet)
+                .roles(roleSet)
                 .build();
 
         User newUser = userService.createUser(user);

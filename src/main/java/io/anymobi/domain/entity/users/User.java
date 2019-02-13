@@ -2,6 +2,7 @@ package io.anymobi.domain.entity.users;
 
 import io.anymobi.common.enums.SocialType;
 import io.anymobi.common.enums.UserRole;
+import io.anymobi.domain.entity.board.Board;
 import io.anymobi.domain.entity.sec.Authorities;
 import io.anymobi.domain.entity.sec.GroupsUser;
 import lombok.*;
@@ -65,9 +66,12 @@ public class User implements Serializable {
     private Set<UserRole> roles;
 
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
     private List<Authorities> userRoles = new ArrayList<>();
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
     private List<GroupsUser> groupUsers = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Board> boards = new ArrayList<>();
 }

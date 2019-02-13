@@ -51,7 +51,7 @@ public class Board implements Serializable {
     private LocalDateTime updatedDate;
 
     @JsonSerialize(using = UserSerializer.class)
-    @OneToOne(fetch= FetchType.LAZY)
+    @ManyToOne(fetch= FetchType.LAZY)
     private User user;
 
     @Builder
