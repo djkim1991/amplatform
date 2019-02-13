@@ -1,4 +1,4 @@
-package io.anymobi.controller.web.board;
+package io.anymobi.controller.rest.board;
 
 import io.anymobi.domain.entity.board.Board;
 import lombok.Getter;
@@ -14,7 +14,7 @@ public class BoardResource extends Resource<Board> {
     public BoardResource(Board board, Link... links) {
         super(board, links);
         add(linkTo(JpaBoardController.class).withRel("board"));
-       // add(linkTo(methodOn(JpaBoardController.class).getBoard(board.getIdx(), null)).withSelfRel());
+        add(linkTo(methodOn(JpaBoardController.class).getBoard(board.getIdx())).withSelfRel());
     }
 
 }

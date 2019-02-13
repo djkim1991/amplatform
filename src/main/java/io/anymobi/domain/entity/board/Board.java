@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -17,8 +19,6 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table
-
 public class Board implements Serializable {
 
     @Id
@@ -27,12 +27,15 @@ public class Board implements Serializable {
     private Long idx;
 
     @Column
+    @NotEmpty
     private String title;
 
     @Column
+    @NotEmpty
     private String subTitle;
 
     @Column
+    @NotEmpty
     private String content;
 
     @Column
@@ -40,9 +43,11 @@ public class Board implements Serializable {
     private BoardType boardType;
 
     @Column
+    @NotNull
     private LocalDateTime createdDate;
 
     @Column
+    @NotNull
     private LocalDateTime updatedDate;
 
     @JsonSerialize(using = UserSerializer.class)
