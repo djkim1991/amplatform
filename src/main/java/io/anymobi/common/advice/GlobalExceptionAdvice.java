@@ -1,4 +1,4 @@
-package io.anymobi.common.advice.exception;
+package io.anymobi.common.advice;
 
 import io.anymobi.domain.dto.exception.ExceptionDto;
 import io.anymobi.domain.dto.exception.ExceptionType;
@@ -14,7 +14,7 @@ import java.sql.SQLException;
 
 @Slf4j
 @ControllerAdvice
-public class WebControllerAdvice{
+public class GlobalExceptionAdvice {
 
     @ExceptionHandler(SQLException.class)
     public String sqlException(HttpServletRequest request, HttpServletResponse response, Exception e) {

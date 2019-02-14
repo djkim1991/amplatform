@@ -4,10 +4,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.anymobi.common.enums.BoardType;
 import io.anymobi.common.serializer.UserSerializer;
 import io.anymobi.domain.entity.users.User;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -18,6 +15,8 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 public class Board implements Serializable {
 
@@ -54,14 +53,4 @@ public class Board implements Serializable {
     @ManyToOne(fetch= FetchType.LAZY)
     private User user;
 
-    @Builder
-    public Board(String title, String subTitle, String content, BoardType boardType, LocalDateTime createdDate, LocalDateTime updatedDate, User user) {
-        this.title = title;
-        this.subTitle = subTitle;
-        this.content = content;
-        this.boardType = boardType;
-        this.createdDate = createdDate;
-        this.updatedDate = updatedDate;
-        this.user = user;
-    }
 }

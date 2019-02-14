@@ -19,8 +19,9 @@
         </p>
         <br/>
         <p align="right">
-            <a class="btn btn-primary btn-lg" href="/board/list">시작하기(JPA)</a>
-            <a class="btn btn-primary btn-lg" href="/boards/">시작하기(Mybatis)</a>
+            <a class="btn btn-primary btn-lg" href="/board/list">시작하기(WEB-JPA)</a>
+            <a class="btn btn-primary btn-lg" href="/boards/">시작하기(WEB-Mybatis)</a>
+            <a class="btn btn-primary btn-lg" id="list" href="/api/boards">시작하기(REST-JPA)</a>
         </p>
     </div>
     <div class="container">
@@ -41,5 +42,23 @@
 <!--/body-->
 
 <div th:replace="layout/footer::footer"></div>
+
+<script th:src="@{/js/jquery.min.js}"></script>
+<script>
+    $('#list').click(function () {
+        $.ajax({
+            url: "http://localhost:8080/api/boards",
+            type: "GET",
+            contentType: "application/json",
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+            },
+            error: function (e) {
+                console.log(e);
+            }
+        });
+    });
+</script>
 </body>
 </html>
