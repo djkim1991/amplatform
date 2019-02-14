@@ -53,7 +53,7 @@ public class JpaBoardController {
         Page<Board> boardList = boardService.findBoardList(pageable);
         PagedResources<BoardResource> resources = assembler.toResource(boardList, entity -> new BoardResource(entity));
         resources.add(linkTo(this.getClass()).withRel("boards"));
-        resources.add(linkTo(methodOn(this.getClass()).getBoard(0l)).withRel("get-an-board"));
+        resources.add(linkTo(methodOn(this.getClass()).getBoard(null)).withRel("get-an-board"));
 
         if (user != null) {
             resources.add(linkTo(methodOn(this.getClass()).createBoard(null, null, null)).withRel("create-new-board"));
@@ -63,14 +63,14 @@ public class JpaBoardController {
         return ResponseEntity.ok().body(resources);
     }
 
-    @GetMapping(value = "/boards/{idx}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(value = "/boards/{idx}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity getBoard(@PathVariable Long idx) {
 
         Board board = boardService.findBoardByIdx(idx);
         if (board == null) {
             return HateoasHolder.notFoundResponse();
         }
-        return ResponseEntity.ok().body(null);
+        return ResponseEntity.ok().body(board);
     }
 
     @PostMapping(value = "/boards", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

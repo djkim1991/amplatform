@@ -13,6 +13,8 @@ public class UserSerializer extends JsonSerializer<User> {
     public void serialize(User user, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
         jsonGenerator.writeStartObject();
         jsonGenerator.writeNumberField("id", user.getId());
+        jsonGenerator.writeStringField("username", user.getUsername());
+        jsonGenerator.writeStringField("email", user.getEmail());
         jsonGenerator.writeEndObject();
     }
 }
