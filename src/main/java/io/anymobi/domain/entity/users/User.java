@@ -48,7 +48,7 @@ public class User implements Serializable {
     private String secret;
 
     @Column
-    private String pincipal;
+    private String principal;
 
     @Column
     @Enumerated(EnumType.STRING)
