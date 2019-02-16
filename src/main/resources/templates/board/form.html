@@ -109,11 +109,13 @@
                        data: jsonData,
                        contentType: "application/json",
                        dataType: "json",
-                       success: function () {
+                       success: function (data) {
+                           console.log(data);
                            alert('수정 성공!');
                            location.href = '/board/list';
                        },
-                       error: function () {
+                       error: function (e) {
+                           console.log(e);
                            alert('수정 실패!');
                        }
                    });

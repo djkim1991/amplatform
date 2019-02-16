@@ -32,7 +32,8 @@
                     <tr th:each="board : ${boardList}">
                         <td th:text="${board.idx}"></td>
                         <td th:text="${board.boardType.value}"></td>
-                        <td><a th:href="'/board?idx='+${board.idx}" th:text="${board.title}"></a></td>
+                        <td><a th:href="'/board?idx='+${board.idx}" th:text="${board.title + '(WEB)'}"></a> |
+                        <a th:onclick="'getBoard(\'' +${board.idx} +'\');'" href="#" th:text="${board.title + '(REST)'}"></a></td>
                         <td th:text="${board.createdDate} ? ${#temporals.format(board.createdDate,'yyyy-MM-dd HH:mm')} : ${board.createdDate}"></td>
                         <td th:text="${board.updatedDate} ? ${#temporals.format(board.updatedDate,'yyyy-MM-dd HH:mm')} : ${board.updatedDate}"></td>
                     </tr>
@@ -62,5 +63,25 @@
     </div>
 
     <div th:replace="layout/footer::footer"></div>
+
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script>
+
+        function getBoard(idx) {
+            $.ajax({
+                url: "http://localhost:8080/api/boards/"+encodeURI(idx),
+                type: "GET",
+                contentType: "application/json",
+                dataType: "json",
+                success: function (data) {
+                    console.log(data);
+                },
+                error: function (e) {
+                    console.log(e);
+                }
+            });
+        }
+    </script>
+
 </body>
 </html>

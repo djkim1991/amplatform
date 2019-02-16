@@ -15,7 +15,7 @@ public class BoardResource extends Resource<Board> {
     public BoardResource(Board board, Link... links) {
         super(board, links);
         add(linkTo(JpaBoardController.class).withRel("board"));
-        add(linkTo(methodOn(JpaBoardController.class).getBoard(board.getIdx())).withSelfRel());
+        add(linkTo(methodOn(JpaBoardController.class).getBoard(board.getIdx(),null)).withSelfRel());
     }
 
 }
