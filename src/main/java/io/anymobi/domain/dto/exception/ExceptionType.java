@@ -2,6 +2,7 @@ package io.anymobi.domain.dto.exception;
 
 
 public enum ExceptionType {
+
 	SQL("Code"), SERVER("Exception");
 	
 	final private String title;

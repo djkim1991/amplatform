@@ -1,12 +1,9 @@
 package io.anymobi.controller.rest.board;
 
-import io.anymobi.common.annotation.SocialUser;
 import io.anymobi.common.hateoas.HateoasHolder;
 import io.anymobi.common.hateoas.resources.BoardResource;
-import io.anymobi.common.hateoas.resources.EventResource;
 import io.anymobi.domain.dto.board.BoardDto;
 import io.anymobi.domain.entity.board.Board;
-import io.anymobi.domain.entity.event.Event;
 import io.anymobi.domain.entity.users.User;
 import io.anymobi.services.jpa.board.BoardService;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +24,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;

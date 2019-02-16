@@ -1,7 +1,6 @@
 package io.anymobi.controller.rest;
 
 import io.anymobi.controller.rest.board.JpaBoardController;
-import io.anymobi.controller.rest.event.EventController;
 import org.springframework.hateoas.ResourceSupport;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

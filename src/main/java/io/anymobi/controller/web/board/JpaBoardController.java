@@ -37,7 +37,6 @@ public class JpaBoardController {
 
         Page<Board> boardList = boardService.findBoardList(pageable);
         model.addAttribute("boardList", boardList);
-
         return "/board/list";
     }
 }
