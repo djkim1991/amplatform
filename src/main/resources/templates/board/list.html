@@ -75,6 +75,7 @@
                 dataType: "json",
                 success: function (data) {
                     console.log(data);
+                    location.href = '/board?idx='+idx;
                 },
                 error: function (e) {
                     console.log(e);

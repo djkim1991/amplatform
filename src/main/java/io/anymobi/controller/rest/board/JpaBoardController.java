@@ -125,16 +125,25 @@ public class JpaBoardController {
             return HateoasHolder.notFoundResponse();
         }
 
-        if (user != null) {
+        if (user == null) {
             return new ResponseEntity(HttpStatus.FORBIDDEN);
         }
 
         modelMapper.map(boardDto, board);
+        board.setUpdatedDate(LocalDateTime.now());
+        Board saveBoard = boardService.save(board);
 
-        BoardResource boardResource = new BoardResource(board);
+        BoardResource boardResource = new BoardResource(saveBoard);
         boardResource.add(HateoasHolder.linkToProfile("resources-boards-update"));
 
         return ResponseEntity.ok().body(boardResource);
+    }
+
+    @DeleteMapping(value = "/boards/{idx}")
+    public ResponseEntity delete(@PathVariable Long idx) {
+
+        boardService.delete(idx);
+        return ResponseEntity.ok().body("{\"state\":\"success\"}");
     }
 
     public Link linkToUpdate(Board newBoard) {

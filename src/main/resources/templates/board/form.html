@@ -97,6 +97,7 @@
     <script th:if="${board?.idx}">
         $('#update').click(function () {
             var jsonData = JSON.stringify({
+                idx: $('#board_idx').val(),
                 title: $('#board_title').val(),
                 subTitle: $('#board_sub_title').val(),
                 content: $('#board_content').val(),
