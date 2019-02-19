@@ -35,7 +35,7 @@ public class RegistrationCaptchaController {
 
     // Registration
 
-    @PostMapping(value = "/users/registrationCaptcha")
+    @PostMapping(value = "/registrationCaptcha")
     public GenericResponse captchaRegisterUserAccount(@Valid final UserDto accountDto, final HttpServletRequest request) {
 
         final String response = request.getParameter("g-recaptcha-response");

@@ -22,7 +22,7 @@ public class MailMqListener {
     }
 
     @RabbitListener(queues = "email_confirm")
-    public void onEmailConfirmMessage(final EmailConfirm emailConfirm) throws UnsupportedEncodingException {
+    public void onEmailConfirmMessage(final EmailConfirm emailConfirm) {
         try {
             log.error("* email_confirm::onMessage : {}", emailConfirm);
             mailService.confirmRegistration(emailConfirm);

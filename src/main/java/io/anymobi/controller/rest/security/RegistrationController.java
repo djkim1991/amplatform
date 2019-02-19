@@ -53,7 +53,7 @@ public class RegistrationController {
 
     // Registration
 
-    @PostMapping(value = "/users/registration")
+    @PostMapping(value = "/registration")
     public GenericResponse registerUserAccount(@Valid final UserDto accountDto, final HttpServletRequest request) {
         LOGGER.debug("Registering user account with information: {}", accountDto);
         final User registered = userService.registerNewUserAccount(accountDto);
@@ -63,7 +63,7 @@ public class RegistrationController {
 
     // user activation - verification
 
-    @GetMapping(value = "/users/resendRegistrationToken")
+    @GetMapping(value = "/resendRegistrationToken")
     public GenericResponse resendRegistrationToken(final HttpServletRequest request, @RequestParam("token") final String existingToken) {
         final VerificationToken newToken = userService.generateNewVerificationToken(existingToken);
         final User user = userService.getUser(newToken.getToken());
@@ -113,7 +113,7 @@ public class RegistrationController {
     // ============== NON-API ============
 
     private SimpleMailMessage constructResendVerificationTokenEmail(final String contextPath, final Locale locale, final VerificationToken newToken, final User user) {
-        final String confirmationUrl = contextPath + "/users/registrationConfirm.html?token=" + newToken.getToken();
+        final String confirmationUrl = contextPath + "/registrationConfirm.html?token=" + newToken.getToken();
         final String message = messages.getMessage("message.resendToken", null, locale);
         return constructEmail("Resend Registration Token", message + " \r\n" + confirmationUrl, user);
     }
