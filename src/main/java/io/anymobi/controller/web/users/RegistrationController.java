@@ -47,7 +47,7 @@ public class RegistrationController {
         return "/users/users";
     }
 
-    @RequestMapping(value = "/users/registrationConfirm", method = RequestMethod.GET)
+    @RequestMapping(value = "/registrationConfirm", method = RequestMethod.GET)
     public String confirmRegistration(final HttpServletRequest request, final Model model, @RequestParam("token") final String token) {
         Locale locale = request.getLocale();
         final String result = userService.validateVerificationToken(token);

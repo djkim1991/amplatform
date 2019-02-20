@@ -36,7 +36,7 @@ abstract public class AbstractMailService {
 
         final String recipientAddress = mail;
         final String subject = "Registration Confirmation";
-        final String confirmationUrl = url + "/users/registrationConfirm?token=" + token;
+        final String confirmationUrl = url + "/registrationConfirm?token=" + token;
         final String message = messages.getMessage("message.regSucc", null, locale);
         final SimpleMailMessage email = new SimpleMailMessage();
         email.setTo(recipientAddress);

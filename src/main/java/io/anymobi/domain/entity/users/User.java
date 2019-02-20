@@ -17,7 +17,7 @@ import java.util.Set;
 @Entity
 @Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = "USERNAME"))
 @Data
-@ToString(exclude = {"userRoles", "groupUsers", "roles"})
+@ToString(exclude = {"userRoles", "groupUsers", "roles", "boards"})
 @Builder
 @EqualsAndHashCode(of = "id")
 @NoArgsConstructor

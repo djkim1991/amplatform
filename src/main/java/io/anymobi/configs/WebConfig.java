@@ -40,24 +40,24 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addViewController("/").setViewName("home");
         registry.addViewController("/login");
         registry.addViewController("/users/loginRememberMe.html");
-        registry.addViewController("/users/customLogin.html");
-        registry.addViewController("/users/registration.html");
-        registry.addViewController("/users/registrationCaptcha.html");
+        registry.addViewController("/customLogin.html");
+        registry.addViewController("/registration.html");
+        registry.addViewController("/registrationCaptcha.html");
         registry.addViewController("/logout.html");
         registry.addViewController("/homepage.html");
         registry.addViewController("/users/expiredAccount.html");
-        registry.addViewController("/users/badUser.html");
-        registry.addViewController("/users/emailError.html");
+        registry.addViewController("/badUser.html");
+        registry.addViewController("/emailError.html");
         registry.addViewController("/home.html");
         registry.addViewController("/users/invalidSession.html");
         registry.addViewController("/users/console.html");
         registry.addViewController("/admin/admin.html");
-        registry.addViewController("/users/successRegister.html");
+        registry.addViewController("/successRegister.html");
         registry.addViewController("/users/forgetPassword.html");
         registry.addViewController("/users/updatePassword.html");
         registry.addViewController("/users/changePassword.html");
         registry.addViewController("/users/users.html");
-        registry.addViewController("/users/qrcode.html");
+        registry.addViewController("/qrcode.html");
     }
 
     @Override

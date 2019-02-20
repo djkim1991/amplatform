@@ -29,7 +29,7 @@ public class JpaBoardController {
     @GetMapping(value = {"", "/"}, produces = MediaType.APPLICATION_JSON_VALUE)
     public String getBoard(@RequestParam(value = "idx", defaultValue = "0") Long idx, Model model) {
         model.addAttribute("board", boardService.findBoardByIdx(idx));
-        return "/board/form";
+        return "board/form";
     }
 
     @GetMapping("/list")
@@ -37,6 +37,6 @@ public class JpaBoardController {
 
         Page<Board> boardList = boardService.findBoardList(pageable);
         model.addAttribute("boardList", boardList);
-        return "/board/list";
+        return "board/list";
     }
 }
