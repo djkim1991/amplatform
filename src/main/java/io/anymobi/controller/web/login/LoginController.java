@@ -17,7 +17,7 @@ public class LoginController {
 
     @GetMapping("/login")
     public String login() {
-        return "login";
+        return "users/login";
     }
 
     @GetMapping("/loginSuccess")
@@ -36,13 +36,13 @@ public class LoginController {
         if (auth != null) {
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }
-        return "redirect:/login";
+        return "users/logout.html";
     }
 
     @RequestMapping(value = "/denied")
     public String denied(Model model) {
         model.addAttribute("roles", SecurityContextHolder.getContext().getAuthentication().getAuthorities());
-        return "denied";
+        return "users/denied";
     }
 }
 

@@ -60,8 +60,8 @@ public class GetLoggedUsersIntegrationTest {
 
         RestAssured.port = port;
         RestAssured.baseURI = "http://localhost";
-        LOGGED_USERS_URL = "/loggedUsers";
-        SESSION_REGISTRY_LOGGED_USERS_URL = "/loggedUsersFromSessionRegistry";
+        LOGGED_USERS_URL = "/users/loggedUsers";
+        SESSION_REGISTRY_LOGGED_USERS_URL = "/users/loggedUsersFromSessionRegistry";
         formConfig = new FormAuthConfig("/login", "username", "password");
     }
 

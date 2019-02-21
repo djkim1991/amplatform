@@ -61,8 +61,6 @@ public class RegistrationController {
         return new GenericResponse("success");
     }
 
-    // user activation - verification
-
     @GetMapping(value = "/resendRegistrationToken")
     public GenericResponse resendRegistrationToken(final HttpServletRequest request, @RequestParam("token") final String existingToken) {
         final VerificationToken newToken = userService.generateNewVerificationToken(existingToken);
