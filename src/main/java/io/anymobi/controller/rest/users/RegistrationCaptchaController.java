@@ -1,4 +1,4 @@
-package io.anymobi.controller.rest.security;
+package io.anymobi.controller.rest.users;
 
 import io.anymobi.common.handler.security.captcha.ICaptchaService;
 import io.anymobi.common.listener.security.OnRegistrationCompleteEvent;
