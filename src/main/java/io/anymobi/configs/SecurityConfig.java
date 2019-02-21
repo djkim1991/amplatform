@@ -6,6 +6,7 @@ import io.anymobi.common.handler.security.CustomOAuth2Provider;
 import io.anymobi.common.handler.security.authentication.CustomAuthenticationProvider;
 import io.anymobi.common.handler.security.authentication.CustomRememberMeServices;
 import io.anymobi.common.handler.security.authentication.CustomWebAuthenticationDetailsSource;
+import io.anymobi.common.handler.security.voter.IpAddressVoter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
@@ -253,8 +254,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public AffirmativeBased affirmativeBased() {
         List<AccessDecisionVoter<? extends Object>> accessDecisionVoters = new ArrayList<>();
         accessDecisionVoters.add(roleVoter());
+        accessDecisionVoters.add(ipVoter());
         AffirmativeBased affirmativeBased = new AffirmativeBased(accessDecisionVoters);
         return affirmativeBased;
+    }
+
+    @Bean
+    public IpAddressVoter ipVoter() {
+        IpAddressVoter ipAddressVoter = new IpAddressVoter();
+        return ipAddressVoter;
     }
 
     @Bean
