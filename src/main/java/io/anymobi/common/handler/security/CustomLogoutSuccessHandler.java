@@ -21,6 +21,6 @@ public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
             session.invalidate();
         }
 
-        response.sendRedirect("/logout.html?logSucc=true");
+        response.sendRedirect("/users/logout.html?logSucc=true");
     }
 }

@@ -1,4 +1,4 @@
-package io.anymobi.controller.rest.security;
+package io.anymobi.controller.rest.users;
 
 import io.anymobi.common.exception.InvalidOldPasswordException;
 import io.anymobi.common.listener.security.OnRegistrationCompleteEvent;
@@ -60,8 +60,6 @@ public class RegistrationController {
         eventPublisher.publishEvent(new OnRegistrationCompleteEvent(registered, request.getLocale(), getAppUrl(request)));
         return new GenericResponse("success");
     }
-
-    // user activation - verification
 
     @GetMapping(value = "/resendRegistrationToken")
     public GenericResponse resendRegistrationToken(final HttpServletRequest request, @RequestParam("token") final String existingToken) {

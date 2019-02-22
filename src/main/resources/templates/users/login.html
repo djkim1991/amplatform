@@ -70,9 +70,9 @@ label{padding-left:0 !important}
 
             </form>
             <br/> Current Locale :  <span th:text="${#locale}"></span><br/><br/>
-             <a class="btn btn-default" th:href="@{/registration.html}" th:text="#{label.form.loginSignUp}">signup</a>
+             <a class="btn btn-default" th:href="@{/users/registration.html}" th:text="#{label.form.loginSignUp}">signup</a>
 
-             <a class="btn btn-default" th:href="@{/registrationCaptcha.html}" th:text="#{label.form.loginSignUpCaptcha}">captcha signup</a>
+             <a class="btn btn-default" th:href="@{/users/registrationCaptcha.html}" th:text="#{label.form.loginSignUpCaptcha}">captcha signup</a>
 
             <a class="btn btn-default" th:href="@{/users/forgetPassword.html}" th:text="#{message.resetPassword}">reset</a>
         </div>
