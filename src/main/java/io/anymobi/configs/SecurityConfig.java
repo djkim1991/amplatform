@@ -257,7 +257,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    @Profile("affirmative") //
+    @Profile("affirmative")
     public AffirmativeBased affirmativeBased() {
         AffirmativeBased affirmativeBased = new AffirmativeBased(getAccessDecisionVoters());
         return affirmativeBased;
