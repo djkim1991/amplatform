@@ -191,6 +191,11 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         resources = createResourceIfNotFound("/users/logout*","");
         createRolesAndResourcesAndGroups(anonymousRole, null, groups, resources);
 
+        anonymousRole = createRoleIfNotFound("IP_LOCAL_HOST", "IP주소");
+        groups = createGroupsIfNotFound("사용자그룹");
+        resources = createResourceIfNotFound("/board/**","");
+        createRolesAndResourcesAndGroups(anonymousRole, null, groups, resources);
+
         resources = createResourceIfNotFound("/api/**", "PUT");
         createRolesAndResourcesAndGroups(childRole1, null, groups, resources);
         resources = createResourceIfNotFound("/api/**", "POST");

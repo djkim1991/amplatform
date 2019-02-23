@@ -1,4 +1,4 @@
-package io.anymobi.common.handler.security.init;
+package io.anymobi.common.handler.security;
 
 import io.anymobi.common.listener.security.AuthoritiesEvent;
 import io.anymobi.domain.dto.security.AuthoritiesDto;

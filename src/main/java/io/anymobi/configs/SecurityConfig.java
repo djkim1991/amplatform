@@ -13,10 +13,13 @@ import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2Clien
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.access.AccessDecisionVoter;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.access.vote.AffirmativeBased;
+import org.springframework.security.access.vote.ConsensusBased;
 import org.springframework.security.access.vote.RoleHierarchyVoter;
+import org.springframework.security.access.vote.UnanimousBased;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -86,6 +89,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private FilterInvocationSecurityMetadataSource filterInvocationSecurityMetadataSource;
+
+    @Autowired
+    private AccessDecisionManager accessDecisionManager;
 
     @Bean
     @Override
@@ -246,17 +252,29 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         FilterSecurityInterceptor filterSecurityInterceptor = new FilterSecurityInterceptor();
         filterSecurityInterceptor.setAuthenticationManager(authenticationManager);
         filterSecurityInterceptor.setSecurityMetadataSource(filterInvocationSecurityMetadataSource);
-        filterSecurityInterceptor.setAccessDecisionManager(affirmativeBased());
+        filterSecurityInterceptor.setAccessDecisionManager(accessDecisionManager);
         return filterSecurityInterceptor;
     }
 
     @Bean
+    @Profile("affirmative") //
     public AffirmativeBased affirmativeBased() {
-        List<AccessDecisionVoter<? extends Object>> accessDecisionVoters = new ArrayList<>();
-        accessDecisionVoters.add(roleVoter());
-        accessDecisionVoters.add(ipVoter());
-        AffirmativeBased affirmativeBased = new AffirmativeBased(accessDecisionVoters);
+        AffirmativeBased affirmativeBased = new AffirmativeBased(getAccessDecisionVoters());
         return affirmativeBased;
+    }
+
+    @Bean
+    @Profile("unanimous")
+    public UnanimousBased unanimousBased() {
+        UnanimousBased unanimousBased = new UnanimousBased(getAccessDecisionVoters());
+        return unanimousBased;
+    }
+
+    @Bean
+    @Profile("consensus")
+    public ConsensusBased consensusBased() {
+        ConsensusBased consensusBased = new ConsensusBased(getAccessDecisionVoters());
+        return consensusBased;
     }
 
     @Bean
@@ -276,6 +294,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public RoleHierarchyImpl roleHierarchy() {
         RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
         return roleHierarchy;
+    }
+
+    private List<AccessDecisionVoter<?>> getAccessDecisionVoters() {
+        List<AccessDecisionVoter<? extends Object>> accessDecisionVoters = new ArrayList<>();
+        accessDecisionVoters.add(roleVoter());
+        accessDecisionVoters.add(ipVoter());
+        return accessDecisionVoters;
     }
 
 }

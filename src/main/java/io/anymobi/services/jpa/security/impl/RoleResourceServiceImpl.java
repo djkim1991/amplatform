@@ -1,6 +1,6 @@
 package io.anymobi.services.jpa.security.impl;
 
-import io.anymobi.common.handler.security.init.SecurityInitializer;
+import io.anymobi.common.handler.security.SecurityInitializer;
 import io.anymobi.common.listener.security.AuthoritiesManager;
 import io.anymobi.domain.dto.security.AuthoritiesDto;
 import io.anymobi.domain.entity.sec.RoleResources;
