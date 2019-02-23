@@ -1,4 +1,4 @@
-package io.anymobi.common.handler.security;
+package io.anymobi.common.handler.security.authentication;
 
 import io.anymobi.domain.entity.sec.ActiveUserStore;
 import io.anymobi.domain.entity.users.User;

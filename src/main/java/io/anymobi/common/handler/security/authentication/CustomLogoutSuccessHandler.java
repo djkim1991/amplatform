@@ -1,4 +1,4 @@
-package io.anymobi.common.handler.security;
+package io.anymobi.common.handler.security.authentication;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;

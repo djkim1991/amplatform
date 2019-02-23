@@ -1,8 +1,8 @@
 package io.anymobi.configs;
 
 import io.anymobi.common.filter.CsrfHeaderFilter;
-import io.anymobi.common.handler.security.CustomAccessDeniedHandler;
-import io.anymobi.common.handler.security.CustomOAuth2Provider;
+import io.anymobi.common.handler.security.authentication.CustomAccessDeniedHandler;
+import io.anymobi.common.handler.security.authentication.CustomOAuth2Provider;
 import io.anymobi.common.handler.security.authentication.CustomAuthenticationProvider;
 import io.anymobi.common.handler.security.authentication.CustomRememberMeServices;
 import io.anymobi.common.handler.security.authentication.CustomWebAuthenticationDetailsSource;

@@ -1,4 +1,4 @@
-package io.anymobi.common.handler.security;
+package io.anymobi.common.handler.security.authentication;
 
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;

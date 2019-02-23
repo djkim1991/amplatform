@@ -1,4 +1,4 @@
-package io.anymobi.common.handler.security;
+package io.anymobi.common.handler.security.authentication;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
