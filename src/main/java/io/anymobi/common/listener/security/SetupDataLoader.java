@@ -101,7 +101,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         createRoleHierarchyIfNotFound(managerRole, adminRole);
 
         Role childRole1 = createRoleIfNotFound("ROLE_USER", "일반사용자");
-        user = createUserIfNotFound("user1", "leaven@gmail.com", SocialType.GOOGLE,"userFirst1", "userLast1", "pass", childRole1);
+        user = createUserIfNotFound("onjsdnjs@gmail.com", "onjsdnjs@gmail.com", SocialType.GOOGLE,"userFirst1", "userLast1", "pass", childRole1);
         groups = createGroupsIfNotFound("사용자그룹");
         resources = createResourceIfNotFound("/users/**", "");
         createRolesAndResourcesAndGroups(childRole1, user, groups, resources);
@@ -173,7 +173,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 
         anonymousRole = createRoleIfNotFound("ROLE_ANONYMOUS", "익명사용자");
         groups = createGroupsIfNotFound("사용자그룹");
-        resources = createResourceIfNotFound("/api/**","");
+        resources = createResourceIfNotFound("/api/**","GET");
         createRolesAndResourcesAndGroups(anonymousRole, null, groups, resources);
 
         anonymousRole = createRoleIfNotFound("ROLE_ANONYMOUS", "익명사용자");
@@ -201,10 +201,10 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         resources = createResourceIfNotFound("/board/**","");
         createRolesAndResourcesAndGroups(anonymousRole, null, groups, resources);
 
-//        resources = createResourceIfNotFound("/api/**", "PUT");
-//        createRolesAndResourcesAndGroups(childRole1, null, groups, resources);
-//        resources = createResourceIfNotFound("/api/**", "POST");
-//        createRolesAndResourcesAndGroups(childRole1, null, groups, resources);
+        resources = createResourceIfNotFound("/api/**", "PUT");
+        createRolesAndResourcesAndGroups(childRole1, null, groups, resources);
+        resources = createResourceIfNotFound("/api/**", "POST");
+        createRolesAndResourcesAndGroups(childRole1, null, groups, resources);
 
         User finalUser = user;
         IntStream.rangeClosed(1, 200).forEach(index ->
