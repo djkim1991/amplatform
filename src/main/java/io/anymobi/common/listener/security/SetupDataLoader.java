@@ -173,7 +173,12 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 
         anonymousRole = createRoleIfNotFound("ROLE_ANONYMOUS", "익명사용자");
         groups = createGroupsIfNotFound("사용자그룹");
-        resources = createResourceIfNotFound("/api/**","GET");
+        resources = createResourceIfNotFound("/api/**","");
+        createRolesAndResourcesAndGroups(anonymousRole, null, groups, resources);
+
+        anonymousRole = createRoleIfNotFound("ROLE_ANONYMOUS", "익명사용자");
+        groups = createGroupsIfNotFound("사용자그룹");
+        resources = createResourceIfNotFound("/oauth/token","");
         createRolesAndResourcesAndGroups(anonymousRole, null, groups, resources);
 
         anonymousRole = createRoleIfNotFound("ROLE_ANONYMOUS", "익명사용자");
@@ -196,10 +201,10 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         resources = createResourceIfNotFound("/board/**","");
         createRolesAndResourcesAndGroups(anonymousRole, null, groups, resources);
 
-        resources = createResourceIfNotFound("/api/**", "PUT");
-        createRolesAndResourcesAndGroups(childRole1, null, groups, resources);
-        resources = createResourceIfNotFound("/api/**", "POST");
-        createRolesAndResourcesAndGroups(childRole1, null, groups, resources);
+//        resources = createResourceIfNotFound("/api/**", "PUT");
+//        createRolesAndResourcesAndGroups(childRole1, null, groups, resources);
+//        resources = createResourceIfNotFound("/api/**", "POST");
+//        createRolesAndResourcesAndGroups(childRole1, null, groups, resources);
 
         User finalUser = user;
         IntStream.rangeClosed(1, 200).forEach(index ->

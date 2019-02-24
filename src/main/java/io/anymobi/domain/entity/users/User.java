@@ -60,7 +60,7 @@ public class User implements Serializable {
     @Column
     private LocalDateTime updatedDate;
 
-    @Transient
+    //@Transient
     @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
     private Set<UserRole> roles;

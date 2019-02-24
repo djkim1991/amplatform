@@ -58,9 +58,9 @@ public class Event {
     @Enumerated(EnumType.STRING)
     EventStatus eventStatus = EventStatus.DRAFT;
 
-    @JsonSerialize(using = UserSerializer.class)
-    @ManyToOne
-    User manager;
+//    @JsonSerialize(using = UserSerializer.class)
+//    @ManyToOne
+//    User manager;
 
     public void update() {
         if (this.maxPrice == null || this.maxPrice == 0) {
@@ -73,6 +73,6 @@ public class Event {
 
     public void update(User currentUser) {
         this.update();
-        this.manager = currentUser;
+        //this.manager = currentUser;
     }
 }

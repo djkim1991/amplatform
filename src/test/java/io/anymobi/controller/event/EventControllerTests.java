@@ -163,10 +163,10 @@ public class EventControllerTests extends BaseControllerTests {
         String email = "manager@email.com";
         String originalPassword = "manager";
         User manager = userService.createUser(
-                User.builder().email(email).password(originalPassword).roles(roleSet).build()
+                User.builder().email(email).username(email).password(originalPassword).roles(roleSet).build()
         );
         Event sampleEvent = this.createSampleEvent();
-        sampleEvent.setManager(manager);
+        //sampleEvent.setManager(manager);
         Event newEvent = this.eventRepository.save(sampleEvent);
 
         // When & Then
@@ -258,11 +258,11 @@ public class EventControllerTests extends BaseControllerTests {
         String email = "manager@email.com";
         String originalPassword = "manager";
         User manager = userService.createUser(
-                User.builder().email(email).password(originalPassword).roles(roleSet).build()
+                User.builder().email(email).username(email).password(originalPassword).roles(roleSet).build()
         );
 
         Event sampleEvent = this.createSampleEvent();
-        sampleEvent.setManager(manager);
+        //sampleEvent.setManager(manager);
         Event existingEvent = this.eventRepository.save(sampleEvent);
 
         String newName = RandomString.make(10);
@@ -321,17 +321,17 @@ public class EventControllerTests extends BaseControllerTests {
         String managerEmail = "manager@email.com";
         String managerPassword = "manager";
         User manager = userService.createUser(
-            User.builder().email(managerEmail).password(managerPassword).roles(roleSet).build()
+            User.builder().email(managerEmail).username(managerEmail).password(managerPassword).roles(roleSet).build()
         );
 
         String userEmail = "anotherUser@email.com";
         String userPassword = "user";
         User user = userService.createUser(
-            User.builder().email(userEmail).password(userPassword).roles(roleSet).build()
+            User.builder().email(userEmail).username(userEmail).password(userPassword).roles(roleSet).build()
         );
 
         Event sampleEvent = this.createSampleEvent();
-        sampleEvent.setManager(manager);
+        //sampleEvent.setManager(manager);
         Event existingEvent = this.eventRepository.save(sampleEvent);
 
         String newName = RandomString.make(10);
@@ -403,6 +403,7 @@ public class EventControllerTests extends BaseControllerTests {
 
         User user = User.builder()
                 .email(email)
+                .username(email)
                 .password(password)
                 .roles(roleSet)
                 .build();

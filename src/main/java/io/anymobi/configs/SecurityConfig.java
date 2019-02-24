@@ -63,7 +63,7 @@ import java.util.stream.Collectors;
 @EnableWebSecurity
 @EnableRedisHttpSession
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
-@Profile("!OAuth")
+//@Profile("!OAuth")
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -257,7 +257,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    @Profile("affirmative")
+    //@Profile("affirmative")
     public AffirmativeBased affirmativeBased() {
         AffirmativeBased affirmativeBased = new AffirmativeBased(getAccessDecisionVoters());
         return affirmativeBased;

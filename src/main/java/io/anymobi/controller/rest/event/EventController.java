@@ -72,9 +72,9 @@ public class EventController {
 
         Event event = byId.get();
         EventResource eventResource = new EventResource(event);
-        if (currentUser != null && currentUser.equals(event.getManager())) {
-            eventResource.add(linkToUpdate(event));
-        }
+        //if (currentUser != null && currentUser.equals(event.getManager())) {
+           // eventResource.add(linkToUpdate(event));
+        //}
         eventResource.add(linkToProfile("resources-events-get"));
         return ResponseEntity.ok().body(eventResource);
     }
@@ -119,9 +119,9 @@ public class EventController {
         }
 
         Event event = byId.get();
-        if (currentUser != null && !currentUser.equals(event.getManager())) {
-            return new ResponseEntity(HttpStatus.FORBIDDEN);
-        }
+        //if (currentUser != null && !currentUser.equals(event.getManager())) {
+      //      return new ResponseEntity(HttpStatus.FORBIDDEN);
+       // }
 
         modelMapper.map(eventDto, event);
         event.update();
