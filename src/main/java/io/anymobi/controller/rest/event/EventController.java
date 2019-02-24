@@ -1,6 +1,7 @@
 package io.anymobi.controller.rest.event;
 
 
+import io.anymobi.common.annotation.CurrentUser;
 import io.anymobi.common.hateoas.resources.ErrorResource;
 import io.anymobi.common.hateoas.resources.EventResource;
 import io.anymobi.common.validator.EventValidator;
@@ -56,7 +57,7 @@ public class EventController {
         PagedResources<EventResource> resources = assembler.toResource(events, entity -> new EventResource(entity));
         resources.add(linkTo(EventController.class).withRel("events"));
         resources.add(linkTo(methodOn(EventController.class).getEvent(null, null)).withRel("get-an-event"));
-        if (currentUser != null) {
+        if (currentUser != null && currentUser.getId() != null) {
             resources.add(linkTo(methodOn(EventController.class).createEvent(null, null, null)).withRel("create-new-event"));
         }
         resources.add(linkToProfile("resources-events-list"));
@@ -72,9 +73,9 @@ public class EventController {
 
         Event event = byId.get();
         EventResource eventResource = new EventResource(event);
-        //if (currentUser != null && currentUser.equals(event.getManager())) {
-           // eventResource.add(linkToUpdate(event));
-        //}
+//        if (currentUser != null && currentUser.equals(event.getManager())) {
+//            eventResource.add(linkToUpdate(event));
+//        }
         eventResource.add(linkToProfile("resources-events-get"));
         return ResponseEntity.ok().body(eventResource);
     }
@@ -119,9 +120,9 @@ public class EventController {
         }
 
         Event event = byId.get();
-        //if (currentUser != null && !currentUser.equals(event.getManager())) {
-      //      return new ResponseEntity(HttpStatus.FORBIDDEN);
-       // }
+//        if (currentUser != null && !currentUser.equals(event.getManager())) {
+//            return new ResponseEntity(HttpStatus.FORBIDDEN);
+//        }
 
         modelMapper.map(eventDto, event);
         event.update();

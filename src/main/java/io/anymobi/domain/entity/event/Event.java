@@ -59,7 +59,7 @@ public class Event {
     EventStatus eventStatus = EventStatus.DRAFT;
 
 //    @JsonSerialize(using = UserSerializer.class)
-//    @ManyToOne
+//    @ManyToOne(fetch=FetchType.LAZY)
 //    User manager;
 
     public void update() {
