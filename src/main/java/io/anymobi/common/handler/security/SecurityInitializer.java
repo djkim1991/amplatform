@@ -33,7 +33,7 @@ public class SecurityInitializer implements ApplicationRunner {
 
     @Override
     @Transactional
-    public void run(ApplicationArguments args) throws Exception {
+    public void run(ApplicationArguments args) {
 
         // 권한자원 초기화
         List<AuthoritiesDto> authorities = roleResourceService.findAllResources();
