@@ -57,6 +57,7 @@ public class DeviceService {
 
         String ip = extractIp(request);
         String location = getIpLocation(ip);
+//        String location = "대한민국";
 
         String deviceDetails = getDeviceDetails(request.getHeader("user-agent"));
 
