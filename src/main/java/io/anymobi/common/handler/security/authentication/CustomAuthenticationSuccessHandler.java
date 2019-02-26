@@ -2,6 +2,7 @@ package io.anymobi.common.handler.security.authentication;
 
 import io.anymobi.domain.entity.sec.ActiveUserStore;
 import io.anymobi.domain.entity.users.User;
+import io.anymobi.services.jpa.security.DeviceService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -39,6 +40,9 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 
     @Autowired
     ActiveUserStore activeUserStore;
+
+    @Autowired
+    private DeviceService deviceService;
 
     public CustomAuthenticationSuccessHandler() {
         useReferer = false;
@@ -79,6 +83,19 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
             model.addAttribute("authentication", authentication);
         }
         clearAuthenticationAttributes(request);
+        loginNotification(authentication, request);
+    }
+
+    private void loginNotification(Authentication authentication, HttpServletRequest request) {
+        try {
+            if (authentication.getPrincipal() instanceof User) {
+                deviceService.verifyDevice(((User)authentication.getPrincipal()), request);
+            }
+        } catch (Exception e) {
+            log.error("An error occurred while verifying device or location", e);
+            throw new RuntimeException(e);
+        }
+
     }
 
     protected void handle(final HttpServletRequest request, final HttpServletResponse response, final Authentication authentication) throws IOException {
