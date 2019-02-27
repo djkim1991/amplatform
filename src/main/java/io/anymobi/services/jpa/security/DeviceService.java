@@ -66,11 +66,12 @@ public class DeviceService {
         if (Objects.isNull(existingDevice)) {
             unknownDeviceNotification(deviceDetails, location, ip, user.getEmail(), request.getLocale());
 
-            DeviceMetadata deviceMetadata = new DeviceMetadata();
-            deviceMetadata.setUserId(user.getId());
-            deviceMetadata.setLocation(location);
-            deviceMetadata.setDeviceDetails(deviceDetails);
-            deviceMetadata.setLastLoggedIn(new Date());
+            DeviceMetadata deviceMetadata = DeviceMetadata.builder()
+                                            .userId(user.getId())
+                                            .location(location)
+                                            .deviceDetails(deviceDetails)
+                                            .lastLoggedIn(new Date())
+                                            .build();
             deviceMetadataRepository.save(deviceMetadata);
         } else {
             existingDevice.setLastLoggedIn(new Date());
