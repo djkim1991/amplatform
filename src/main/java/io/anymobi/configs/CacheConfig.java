@@ -29,7 +29,7 @@ import java.util.Map;
  */
 @Configuration
 @EnableCaching
-public class RedisConfig extends CachingConfigurerSupport {
+public class CacheConfig extends CachingConfigurerSupport {
 
     @Bean
     public KeyGenerator simpleKeyGenerator() {
