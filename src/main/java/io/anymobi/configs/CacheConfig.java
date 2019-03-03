@@ -28,7 +28,7 @@ import java.util.Map;
  * Github : http://github.com/onjsdnjs
  */
 @Configuration
-@EnableCaching
+@EnableCaching(proxyTargetClass = true)
 public class CacheConfig extends CachingConfigurerSupport {
 
     @Bean
