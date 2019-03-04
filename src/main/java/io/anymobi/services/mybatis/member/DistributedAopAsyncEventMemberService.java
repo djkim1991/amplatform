@@ -20,7 +20,7 @@ public class DistributedAopAsyncEventMemberService extends AbstractMemberService
     @Autowired
     private MemberMapper memberMapper;
 
-    @PublishEvent(eventType = DistributedAopAsyncMemberJoinedEvent.class, params = "#{T(com.parfait.study.simpleevent.model.SendableParameter).create(email, phoneNo)}")
+    @PublishEvent(eventType = DistributedAopAsyncMemberJoinedEvent.class, params = "#{T(io.anymobi.domain.dto.SendableParameter).create(email, phoneNo)}")
     public MemberDto join(MemberDto member) {
 
         memberMapper.insert(member);
