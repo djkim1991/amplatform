@@ -1,6 +1,6 @@
 package io.anymobi.services.mybatis.sms;
 
-import com.parfait.study.simpleevent.model.sms.SmsTemplateType;
+import io.anymobi.domain.dto.sms.SmsTemplateType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;

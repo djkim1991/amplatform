@@ -1,11 +1,11 @@
 package io.anymobi.common.listener.member;
 
-import com.parfait.study.simpleevent.model.email.EmailTemplateType;
-import com.parfait.study.simpleevent.model.member.Member;
-import com.parfait.study.simpleevent.model.sms.SmsTemplateType;
-import com.parfait.study.simpleevent.service.email.EmailService;
-import com.parfait.study.simpleevent.service.member.AsyncEventMemberJoinService.AsyncMemberJoinedEvent;
-import com.parfait.study.simpleevent.service.sms.SmsService;
+import io.anymobi.domain.dto.email.EmailTemplateType;
+import io.anymobi.domain.dto.sms.SmsTemplateType;
+import io.anymobi.domain.dto.users.MemberDto;
+import io.anymobi.services.mybatis.email.EmailService;
+import io.anymobi.services.mybatis.member.AsyncEventMemberService;
+import io.anymobi.services.mybatis.sms.SmsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -21,9 +21,9 @@ public class AsyncMemberJoinedEventListener {
     private EmailService emailService;
 
     @Async
-    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT, classes = AsyncMemberJoinedEvent.class)
-    public void handle(AsyncMemberJoinedEvent event) {
-        Member member = event.getMember();
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT, classes = AsyncEventMemberService.AsyncMemberJoinedEvent.class)
+    public void handle(AsyncEventMemberService.AsyncMemberJoinedEvent event) {
+        MemberDto member = event.getMember();
         emailService.sendEmail(member.getEmail(), EmailTemplateType.JOIN);
         smsService.sendSms(member.getPhoneNo(), SmsTemplateType.JOIN);
     }

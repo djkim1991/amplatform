@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Profile("aop-async-event")
 @Service
 @Transactional
-class AopAsyncEventMemberService extends AbstractMemberService {
+public class AopAsyncEventMemberService extends AbstractMemberService {
 
     @Autowired
     private MemberMapper memberMapper;

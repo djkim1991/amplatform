@@ -65,7 +65,7 @@ public class MemberController {
 	}
 
 	@PostMapping(value="/members/{id}")
-	public String editMember(@PathVariable int id, MemberDto memberDto) {
+	public String editMember(@PathVariable long id, MemberDto memberDto) {
 		memberDto.setId(id);
 		memberService.updateMember(memberDto);
 		return "test/index";

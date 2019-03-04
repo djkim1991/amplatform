@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Profile("event")
 @Service
 @Transactional
-class EventMemberJoinService extends AbstractMemberService implements ApplicationEventPublisherAware {
+public class EventMemberJoinService extends AbstractMemberService implements ApplicationEventPublisherAware {
 
     @Autowired
     private MemberMapper memberMapper;

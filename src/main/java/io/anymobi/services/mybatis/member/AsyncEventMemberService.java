@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Profile("async-event")
 @Service
 @Transactional
-class AsyncEventMemberService extends AbstractMemberService implements ApplicationEventPublisherAware {
+public class AsyncEventMemberService extends AbstractMemberService implements ApplicationEventPublisherAware {
 
     @Autowired
     private MemberMapper memberMapper;

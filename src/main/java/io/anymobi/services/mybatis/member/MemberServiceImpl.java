@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-public class MemberServiceImpl extends AbstractMemberService implements MemberService {
+public class MemberServiceImpl /*extends AbstractMemberService*/ {
 
     @Autowired
     MemberMapper memberMapper;
@@ -19,24 +19,24 @@ public class MemberServiceImpl extends AbstractMemberService implements MemberSe
     protected CommonSqlRepository commonSqlRepository;
 
     @Transactional
-    @Override
+    /*@Override*/
     public List<MemberDto> selectMemberList(MemberDto memberDto) {
         return memberMapper.selectMemberList(memberDto);
     }
 
     @Transactional
-    @Override
+    /*@Override*/
     public MemberDto selectMember(int id){
         return memberMapper.selectMember(id);
     }
 
-    @Override
+    /*@Override*/
     public void insertMember(MemberDto memberDto) {
         memberMapper.insertMember(memberDto);
     }
 
     @Transactional
-    @Override
+    /*@Override*/
     public void updateMember(MemberDto memberDto) {
         commonSqlRepository.update("io.anymobi.repositories.mybatis.mapper.member.MemberMapper.updateMember", memberDto);
     }

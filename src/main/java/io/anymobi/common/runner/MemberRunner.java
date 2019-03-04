@@ -26,6 +26,7 @@ public class MemberRunner implements ApplicationRunner {
         try {
             MemberDto member = MemberDto.builder()
                     .email("test@test.com")
+                    .phoneNo("010-1111-1111")
                     .password("1234")
                     .build();
             memberService.join(member);

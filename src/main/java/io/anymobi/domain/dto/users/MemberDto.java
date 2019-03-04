@@ -12,7 +12,7 @@ import org.apache.ibatis.type.Alias;
 @Alias("member")
 public class MemberDto {
 
-    private int id;
+    private Long id;
     private String email;
     private String phoneNo;
     private String password;

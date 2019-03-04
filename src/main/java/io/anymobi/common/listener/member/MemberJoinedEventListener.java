@@ -1,11 +1,11 @@
 package io.anymobi.common.listener.member;
 
-import com.parfait.study.simpleevent.model.email.EmailTemplateType;
-import com.parfait.study.simpleevent.model.member.Member;
-import com.parfait.study.simpleevent.model.sms.SmsTemplateType;
-import com.parfait.study.simpleevent.service.email.EmailService;
-import com.parfait.study.simpleevent.service.member.EventMemberJoinService;
-import com.parfait.study.simpleevent.service.sms.SmsService;
+import io.anymobi.domain.dto.email.EmailTemplateType;
+import io.anymobi.domain.dto.sms.SmsTemplateType;
+import io.anymobi.domain.dto.users.MemberDto;
+import io.anymobi.services.mybatis.email.EmailService;
+import io.anymobi.services.mybatis.member.EventMemberJoinService;
+import io.anymobi.services.mybatis.sms.SmsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
@@ -21,7 +21,7 @@ public class MemberJoinedEventListener {
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT, classes = EventMemberJoinService.MemberJoinedEvent.class)
     public void handle(EventMemberJoinService.MemberJoinedEvent event) {
-        Member member = event.getMember();
+        MemberDto member = event.getMember();
         emailService.sendEmail(member.getEmail(), EmailTemplateType.JOIN);
         smsService.sendSms(member.getPhoneNo(), SmsTemplateType.JOIN);
     }

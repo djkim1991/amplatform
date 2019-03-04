@@ -18,7 +18,7 @@ public interface MemberMapper {
 	
 	void insertMember(MemberDto Member);
 
-	@Insert("INSERT INTO member(email, phoneNo, password) VALUES (#{email}, #{phoneNo}, #{password})")
+	@Insert("INSERT INTO member(email, phone_no, password) VALUES (#{email}, #{phoneNo}, #{password})")
 	@SelectKey(statement = "SELECT currval('member_sequence')", resultType = Long.class, keyProperty = "id", before = false)
 	int insert(MemberDto member);
 
