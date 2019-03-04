@@ -1,6 +1,6 @@
 package io.anymobi.common.annotation;
 
-import io.anymobi.domain.dto.event.EventHoldingValue;
+import io.anymobi.services.mybatis.member.EventHoldingValue;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

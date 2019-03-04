@@ -1,7 +1,7 @@
 package io.anymobi.services.mybatis.member;
 
-import io.anymobi.domain.dto.email.EmailTemplateType;
-import io.anymobi.domain.dto.sms.SmsTemplateType;
+import io.anymobi.common.enums.EmailTemplateType;
+import io.anymobi.common.enums.SmsTemplateType;
 import io.anymobi.domain.dto.users.MemberDto;
 import io.anymobi.repositories.mybatis.mapper.member.MemberMapper;
 import io.anymobi.services.mybatis.email.EmailService;

@@ -1,4 +1,4 @@
-package io.anymobi.domain.dto.event;
+package io.anymobi.services.mybatis.member;
 
 public interface EventHoldingValue<T> {
 

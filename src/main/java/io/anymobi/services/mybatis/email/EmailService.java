@@ -1,6 +1,6 @@
 package io.anymobi.services.mybatis.email;
 
-import io.anymobi.domain.dto.email.EmailTemplateType;
+import io.anymobi.common.enums.EmailTemplateType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

@@ -1,7 +1,7 @@
 package io.anymobi.services.mybatis.sms;
 
 
-import io.anymobi.domain.dto.sms.SmsTemplateType;
+import io.anymobi.common.enums.SmsTemplateType;
 
 public interface SmsService {
 

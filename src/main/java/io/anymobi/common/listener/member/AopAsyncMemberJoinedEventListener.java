@@ -1,8 +1,8 @@
 package io.anymobi.common.listener.member;
 
 import io.anymobi.domain.dto.SendableParameter;
-import io.anymobi.domain.dto.email.EmailTemplateType;
-import io.anymobi.domain.dto.sms.SmsTemplateType;
+import io.anymobi.common.enums.EmailTemplateType;
+import io.anymobi.common.enums.SmsTemplateType;
 import io.anymobi.services.mybatis.email.EmailService;
 import io.anymobi.services.mybatis.member.AopAsyncEventMemberService;
 import io.anymobi.services.mybatis.sms.SmsService;

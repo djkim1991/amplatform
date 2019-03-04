@@ -1,5 +1,7 @@
 package io.anymobi.domain.dto.exception;
 
+import io.anymobi.common.enums.ExceptionType;
+
 public class ExceptionDto {
 
 	private String msg;

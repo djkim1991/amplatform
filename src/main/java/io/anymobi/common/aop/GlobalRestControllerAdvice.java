@@ -1,7 +1,7 @@
 package io.anymobi.common.aop;
 
 import io.anymobi.domain.dto.exception.ExceptionDto;
-import io.anymobi.domain.dto.exception.ExceptionType;
+import io.anymobi.common.enums.ExceptionType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

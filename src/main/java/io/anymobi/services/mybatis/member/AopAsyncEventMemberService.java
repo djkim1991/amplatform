@@ -2,7 +2,6 @@ package io.anymobi.services.mybatis.member;
 
 import io.anymobi.common.annotation.PublishEvent;
 import io.anymobi.domain.dto.SendableParameter;
-import io.anymobi.domain.dto.event.EventHoldingValue;
 import io.anymobi.domain.dto.users.MemberDto;
 import io.anymobi.repositories.mybatis.mapper.member.MemberMapper;
 import lombok.Getter;

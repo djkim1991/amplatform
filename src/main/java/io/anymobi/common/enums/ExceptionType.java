@@ -1,4 +1,4 @@
-package io.anymobi.domain.dto.exception;
+package io.anymobi.common.enums;
 
 
 public enum ExceptionType {

@@ -1,4 +1,4 @@
-package io.anymobi.domain.dto.email;
+package io.anymobi.common.enums;
 
 public enum EmailTemplateType {
     JOIN

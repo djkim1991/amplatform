@@ -1,7 +1,7 @@
 package io.anymobi.domain.dto;
 
-import io.anymobi.domain.dto.email.EmailTemplateType;
-import io.anymobi.domain.dto.sms.SmsTemplateType;
+import io.anymobi.common.enums.EmailTemplateType;
+import io.anymobi.common.enums.SmsTemplateType;
 import lombok.Data;
 
 @Data
