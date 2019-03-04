@@ -3,7 +3,7 @@ package io.anymobi.controller.rest.users;
 import io.anymobi.common.exception.InvalidOldPasswordException;
 import io.anymobi.common.listener.security.OnRegistrationCompleteEvent;
 import io.anymobi.domain.dto.security.PasswordDto;
-import io.anymobi.domain.dto.security.UserDto;
+import io.anymobi.domain.dto.users.UserDto;
 import io.anymobi.domain.entity.sec.VerificationToken;
 import io.anymobi.domain.entity.users.User;
 import io.anymobi.services.jpa.users.IUserService;

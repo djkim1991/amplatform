@@ -3,7 +3,7 @@ package io.anymobi.services.jpa.users;
 import io.anymobi.common.exception.UserAlreadyExistException;
 import io.anymobi.common.provider.MqPublisher;
 import io.anymobi.domain.dto.security.MessagePacketDto;
-import io.anymobi.domain.dto.security.UserDto;
+import io.anymobi.domain.dto.users.UserDto;
 import io.anymobi.domain.entity.sec.*;
 import io.anymobi.domain.entity.users.User;
 import io.anymobi.repositories.jpa.security.*;

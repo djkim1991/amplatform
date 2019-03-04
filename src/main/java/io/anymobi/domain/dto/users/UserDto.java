@@ -1,4 +1,4 @@
-package io.anymobi.domain.dto.security;
+package io.anymobi.domain.dto.users;
 
 import io.anymobi.common.annotation.PasswordMatches;
 import io.anymobi.common.annotation.ValidEmail;

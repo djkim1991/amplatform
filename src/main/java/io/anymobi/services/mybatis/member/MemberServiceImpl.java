@@ -1,6 +1,6 @@
 package io.anymobi.services.mybatis.member;
 
-import io.anymobi.domain.dto.security.MemberDto;
+import io.anymobi.domain.dto.users.MemberDto;
 import io.anymobi.repositories.mybatis.CommonSqlRepository;
 import io.anymobi.repositories.mybatis.mapper.member.MemberMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-public class MemberServiceImpl implements MemberService {
+public class MemberServiceImpl extends AbstractMemberService implements MemberService {
 
     @Autowired
     MemberMapper memberMapper;

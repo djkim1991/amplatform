@@ -8,6 +8,7 @@ import ua_parser.Parser;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 
 @Configuration
 public class LoginNotificationConfig {
@@ -22,6 +23,7 @@ public class LoginNotificationConfig {
         File database = ResourceUtils
                 .getFile("classpath:maxmind/GeoLite2-City.mmdb");
         return new DatabaseReader.Builder(database)
+                .locales(Collections.singletonList("ko_KR"))
                 .build();
     }
 }

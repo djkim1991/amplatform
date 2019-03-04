@@ -1,6 +1,6 @@
 package io.anymobi.controller.web.users;
 
-import io.anymobi.domain.dto.security.MemberDto;
+import io.anymobi.domain.dto.users.MemberDto;
 import io.anymobi.services.mybatis.member.MemberService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package io.anymobi.domain.dto.security;
+package io.anymobi.domain.dto.users;
 
 import lombok.*;
 import org.apache.ibatis.type.Alias;
@@ -14,6 +14,7 @@ public class MemberDto {
 
     private int id;
     private String email;
+    private String phoneNo;
     private String password;
 
 }

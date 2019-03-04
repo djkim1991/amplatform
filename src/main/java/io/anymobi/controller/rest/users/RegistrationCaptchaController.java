@@ -2,7 +2,7 @@ package io.anymobi.controller.rest.users;
 
 import io.anymobi.common.handler.security.captcha.ICaptchaService;
 import io.anymobi.common.listener.security.OnRegistrationCompleteEvent;
-import io.anymobi.domain.dto.security.UserDto;
+import io.anymobi.domain.dto.users.UserDto;
 import io.anymobi.domain.entity.users.User;
 import io.anymobi.services.jpa.users.IUserService;
 import io.anymobi.utils.GenericResponse;

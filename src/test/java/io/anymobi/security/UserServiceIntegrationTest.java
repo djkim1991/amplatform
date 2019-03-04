@@ -2,7 +2,7 @@ package io.anymobi.security;
 
 import io.anymobi.common.exception.UserAlreadyExistException;
 import io.anymobi.common.validator.EmailExistsException;
-import io.anymobi.domain.dto.security.UserDto;
+import io.anymobi.domain.dto.users.UserDto;
 import io.anymobi.domain.entity.sec.VerificationToken;
 import io.anymobi.domain.entity.users.User;
 import io.anymobi.repositories.jpa.security.RoleRepository;

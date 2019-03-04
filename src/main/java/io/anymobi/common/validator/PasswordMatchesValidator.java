@@ -1,7 +1,7 @@
 package io.anymobi.common.validator;
 
 import io.anymobi.common.annotation.PasswordMatches;
-import io.anymobi.domain.dto.security.UserDto;
+import io.anymobi.domain.dto.users.UserDto;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

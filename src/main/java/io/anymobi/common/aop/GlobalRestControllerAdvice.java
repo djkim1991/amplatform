@@ -1,4 +1,4 @@
-package io.anymobi.common.advice;
+package io.anymobi.common.aop;
 
 import io.anymobi.domain.dto.exception.ExceptionDto;
 import io.anymobi.domain.dto.exception.ExceptionType;

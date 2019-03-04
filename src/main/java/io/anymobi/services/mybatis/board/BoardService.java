@@ -1,7 +1,6 @@
 package io.anymobi.services.mybatis.board;
 
 import io.anymobi.domain.dto.board.BoardDto;
-import io.anymobi.domain.dto.security.MemberDto;
 
 import java.util.List;
 

@@ -1,7 +1,6 @@
 package io.anymobi.services.mybatis.member;
 
-import io.anymobi.domain.dto.security.MemberDto;
-import org.apache.ibatis.annotations.Mapper;
+import io.anymobi.domain.dto.users.MemberDto;
 
 import java.util.List;
 
@@ -16,11 +15,13 @@ import java.util.List;
 
 public interface MemberService {
 	
-	List<MemberDto> selectMemberList(MemberDto user) ;
+	List<MemberDto> selectMemberList(MemberDto memberDto) ;
 
 	MemberDto selectMember(int id) ;
 	
-	void insertMember(MemberDto user) ;
+	void insertMember(MemberDto memberDto) ;
 	
 	void updateMember(MemberDto memberDto);
+
+	MemberDto join(MemberDto memberDto);
 }

@@ -111,7 +111,7 @@ public class DeviceService {
 
         String location = UNKNOWN;
 
-        InetAddress ipAddress = InetAddress.getByName(ip);
+        InetAddress ipAddress = InetAddress.getByName("10.0.75.1");
 
         CityResponse cityResponse = databaseReader.city(ipAddress);
         if (Objects.nonNull(cityResponse) &&
