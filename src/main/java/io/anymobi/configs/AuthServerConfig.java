@@ -16,7 +16,7 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 
 @Configuration
 @EnableAuthorizationServer
-//@Profile("OAuth")
+@Profile("OAuth")
 public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
 
     @Autowired
