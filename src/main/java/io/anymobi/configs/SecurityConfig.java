@@ -63,7 +63,7 @@ import java.util.stream.Collectors;
 @EnableWebSecurity
 @EnableRedisHttpSession
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
-//@Profile("!OAuth")
+@Profile("!OAuth")
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
