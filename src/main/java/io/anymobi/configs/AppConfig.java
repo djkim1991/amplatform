@@ -7,12 +7,20 @@ import io.anymobi.domain.entity.sec.ActiveUserStore;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
 
 @Configuration
+@EnableAsync(proxyTargetClass = true)
+@EnableAspectJAutoProxy(proxyTargetClass = true)
+@EnableJpaRepositories(basePackages = "io.anymobi.repositories.jpa")
+@EnableTransactionManagement
 public class AppConfig {
 
     @Bean
