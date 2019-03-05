@@ -13,6 +13,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.client.RestOperations;
@@ -28,6 +29,7 @@ import java.util.Collections;
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 @EnableJpaRepositories(basePackages = "io.anymobi.repositories.jpa")
 @EnableTransactionManagement
+@EnableScheduling
 public class AppConfig {
 
     @Bean
