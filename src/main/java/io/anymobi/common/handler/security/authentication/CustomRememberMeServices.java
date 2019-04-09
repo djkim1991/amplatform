@@ -11,7 +11,6 @@ import org.springframework.security.core.authority.mapping.NullAuthoritiesMapper
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.security.web.authentication.rememberme.InMemoryTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentRememberMeToken;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
@@ -27,7 +26,7 @@ public class CustomRememberMeServices extends PersistentTokenBasedRememberMeServ
 
     private GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
     private AuthenticationDetailsSource<HttpServletRequest, ?> authenticationDetailsSource = new WebAuthenticationDetailsSource();
-    private PersistentTokenRepository tokenRepository = new InMemoryTokenRepositoryImpl();
+    private PersistentTokenRepository tokenRepository;
     private String key;
 
     public CustomRememberMeServices(String key, UserDetailsService userDetailsService, PersistentTokenRepository tokenRepository) {

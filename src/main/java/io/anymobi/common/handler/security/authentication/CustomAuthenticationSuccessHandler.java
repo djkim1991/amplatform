@@ -83,7 +83,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
             model.addAttribute("authentication", authentication);
         }
         clearAuthenticationAttributes(request);
-        loginNotification(authentication, request);
+        //loginNotification(authentication, request);
     }
 
     private void loginNotification(Authentication authentication, HttpServletRequest request) {
