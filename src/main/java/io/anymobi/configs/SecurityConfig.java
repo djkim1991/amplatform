@@ -151,8 +151,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .and()
                 .sessionManagement()
                 .invalidSessionUrl("/users/invalidSession.html")
-                .maximumSessions(1)
-                .maxSessionsPreventsLogin(false)
+                .maximumSessions(1) // -1 : 무제한 로그인 세션 허용
+                .maxSessionsPreventsLogin(false) // false : 동시 로그인을 하지 못하도록 차단함
                 .expiredUrl("/login?expired=true")
                 .sessionRegistry(sessionRegistry()).and()
                 .sessionFixation().migrateSession()
