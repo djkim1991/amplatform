@@ -21,7 +21,7 @@ public class BatchExecutor {
         this.userService = userService;
     }
 
-    @Scheduled(fixedDelay=500000, initialDelay=500000)
+    @Scheduled(fixedDelay=50000000, initialDelay=50000000)
     private synchronized void execSocketService() {
 
         String key = environment.getActiveProfiles()[0] + "_userConfirmPublish";

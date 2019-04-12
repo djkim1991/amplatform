@@ -1,12 +1,10 @@
 package io.anymobi.configs;
 
 import io.anymobi.common.filter.CsrfHeaderFilter;
-import io.anymobi.common.handler.security.authentication.CustomAccessDeniedHandler;
-import io.anymobi.common.handler.security.authentication.CustomOAuth2Provider;
-import io.anymobi.common.handler.security.authentication.CustomAuthenticationProvider;
-import io.anymobi.common.handler.security.authentication.CustomRememberMeServices;
-import io.anymobi.common.handler.security.authentication.CustomWebAuthenticationDetailsSource;
+import io.anymobi.common.handler.security.authentication.*;
 import io.anymobi.common.handler.security.voter.IpAddressVoter;
+import io.anymobi.repositories.jpa.security.JpaPersistentTokenRepository;
+import io.anymobi.repositories.jpa.security.RememberMeTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
@@ -47,10 +45,11 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
-import org.springframework.security.web.authentication.rememberme.InMemoryTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
@@ -92,6 +91,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private AccessDecisionManager accessDecisionManager;
+
+    @Autowired
+    private RememberMeServices rememberMeServices;
 
     @Bean
     @Override
@@ -151,9 +153,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .invalidSessionUrl("/users/invalidSession.html")
                 .maximumSessions(1)
                 .maxSessionsPreventsLogin(false)
-                //.expiredUrl("/error")
+                .expiredUrl("/login?expired=true")
                 .sessionRegistry(sessionRegistry()).and()
-                .sessionFixation().none()
+                .sessionFixation().migrateSession()
 
             .and()
                 .logout()
@@ -164,7 +166,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
 
             .and()
-                .rememberMe().rememberMeServices(rememberMeServices()).key("theKey")
+                .rememberMe().rememberMeServices(rememberMeServices).key("theKey")
 
             .and()
                 .addFilterBefore(filter, CsrfFilter.class)
@@ -242,9 +244,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public RememberMeServices rememberMeServices() {
-        CustomRememberMeServices rememberMeServices = new CustomRememberMeServices("theKey", userDetailsService, new InMemoryTokenRepositoryImpl());
+    public RememberMeServices rememberMeServices(PersistentTokenRepository ptr) {
+        CustomRememberMeServices rememberMeServices = new CustomRememberMeServices("theKey", userDetailsService, ptr);
         return rememberMeServices;
+    }
+
+    @Bean
+    public PersistentTokenRepository persistentTokenRepository(RememberMeTokenRepository rmtr) {
+        return new JpaPersistentTokenRepository(rmtr);
     }
 
     @Bean
@@ -299,8 +306,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private List<AccessDecisionVoter<?>> getAccessDecisionVoters() {
         List<AccessDecisionVoter<? extends Object>> accessDecisionVoters = new ArrayList<>();
         accessDecisionVoters.add(roleVoter());
-        accessDecisionVoters.add(ipVoter());
+        //accessDecisionVoters.add(ipVoter());
         return accessDecisionVoters;
+    }
+
+    @Bean
+    public HttpSessionEventPublisher httpSessionEventPublisher() {
+        return new HttpSessionEventPublisher();
     }
 
 }

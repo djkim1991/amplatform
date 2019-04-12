@@ -193,6 +193,11 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 
         anonymousRole = createRoleIfNotFound("ROLE_ANONYMOUS", "익명사용자");
         groups = createGroupsIfNotFound("사용자그룹");
+        resources = createResourceIfNotFound("/users/loginRememberMe*","");
+        createRolesAndResourcesAndGroups(anonymousRole, null, groups, resources);
+
+        anonymousRole = createRoleIfNotFound("ROLE_ANONYMOUS", "익명사용자");
+        groups = createGroupsIfNotFound("사용자그룹");
         resources = createResourceIfNotFound("/users/logout*","");
         createRolesAndResourcesAndGroups(anonymousRole, null, groups, resources);
 
