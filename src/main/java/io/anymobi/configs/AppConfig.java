@@ -5,10 +5,7 @@ import io.anymobi.common.listener.security.AuthoritiesManager;
 import io.anymobi.common.validator.EmailValidator;
 import io.anymobi.common.validator.PasswordMatchesValidator;
 import io.anymobi.domain.entity.sec.ActiveUserStore;
-import io.anymobi.repositories.jpa.security.JpaTokenRepositoryCleaner;
-import io.anymobi.repositories.jpa.security.RememberMeTokenRepository;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
@@ -19,7 +16,6 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.client.RestOperations;
@@ -104,18 +100,6 @@ public class AppConfig {
         characterEncodingFilter.setEncoding("UTF-8");
         characterEncodingFilter.setForceEncoding(true);
         return characterEncodingFilter;
-    }
-
-    @Autowired
-    private RememberMeTokenRepository rememberMeTokenRepository;
-
-    @Scheduled(fixedRate = 6000_000)
-    public void tokenRepositoryCleaner(){
-        Thread trct = new Thread(
-                new JpaTokenRepositoryCleaner(
-                        rememberMeTokenRepository,
-                        1000_000L));
-        trct.start();
     }
 
 }

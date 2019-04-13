@@ -1,5 +1,7 @@
 package io.anymobi.common.batch;
 
+import io.anymobi.repositories.jpa.security.JpaTokenRepositoryCleaner;
+import io.anymobi.repositories.jpa.security.RememberMeTokenRepository;
 import io.anymobi.services.jpa.users.IUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
@@ -15,10 +17,12 @@ public class BatchExecutor {
 
     private final Environment environment;
     private final IUserService userService;
+    private RememberMeTokenRepository rememberMeTokenRepository;
 
-    public BatchExecutor(Environment environment, IUserService userService) {
+    public BatchExecutor(Environment environment, IUserService userService, RememberMeTokenRepository rememberMeTokenRepository) {
         this.environment = environment;
         this.userService = userService;
+        this.rememberMeTokenRepository = rememberMeTokenRepository;
     }
 
     @Scheduled(fixedDelay=50000000, initialDelay=50000000)
@@ -35,6 +39,11 @@ public class BatchExecutor {
             }
 
         log.info("### socketService end ###");
+    }
+
+    @Scheduled(fixedRate = 6000_000)
+    public void tokenRepositoryCleaner(){
+        new Thread(new JpaTokenRepositoryCleaner(rememberMeTokenRepository, 1000_000L)).start();
     }
 
 }
