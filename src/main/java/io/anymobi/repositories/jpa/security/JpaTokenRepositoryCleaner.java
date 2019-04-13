@@ -1,15 +1,12 @@
 package io.anymobi.repositories.jpa.security;
 
 import io.anymobi.domain.entity.sec.PersistentLogin;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Date;
 
-
+@Slf4j
 public class JpaTokenRepositoryCleaner implements Runnable {
-
-    private Logger logger = LoggerFactory.getLogger(getClass());
 
     private final RememberMeTokenRepository rememberMeTokenRepository;
 
@@ -30,16 +27,16 @@ public class JpaTokenRepositoryCleaner implements Runnable {
     public void run() {
         long expiredInMs = System.currentTimeMillis() - tokenValidityInMs;
 
-        logger.info("Searching for persistent logins older than {}ms", tokenValidityInMs);
+        log.info("Searching for persistent logins older than {}ms", tokenValidityInMs);
 
         try {
             Iterable<PersistentLogin> expired = rememberMeTokenRepository.findByLastUsedAfter(new Date(expiredInMs));
             for(PersistentLogin pl: expired){
-                logger.info("*** Removing persistent login for {} ***", pl.getUsername());
+                log.info("*** Removing persistent login for {} ***", pl.getUsername());
                 rememberMeTokenRepository.delete(pl);
             }
         } catch(Throwable t) {
-            logger.error("**** Could not clean up expired persistent remember me tokens. ***", t);
+            log.error("**** Could not clean up expired persistent remember me tokens. ***", t);
         }
     }
 }
