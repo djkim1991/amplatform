@@ -62,6 +62,7 @@ public class CustomRememberMeServices extends PersistentTokenBasedRememberMeServ
     }
 
     private void addCookie(PersistentRememberMeToken token, HttpServletRequest request, HttpServletResponse response) {
+        //setTokenValiditySeconds(60);
         setCookie(new String[] { token.getSeries(), token.getTokenValue() }, getTokenValiditySeconds(), request, response);
     }
 }

@@ -65,7 +65,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         final HttpSession session = request.getSession(false);
 
         if (session != null) {
-            session.setMaxInactiveInterval(30 * 60);
+            session.setMaxInactiveInterval(1 * 60);
 
             String username;
             if (authentication.getPrincipal() instanceof User) {
